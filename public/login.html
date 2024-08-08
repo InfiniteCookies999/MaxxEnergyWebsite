@@ -12,6 +12,7 @@
 
     <link rel="stylesheet" href="shared.auth.style.css">
     <link rel="stylesheet" href="login.style.css">
+    <script src="js/form.utils.code.js"></script>
     <script src="js/login.code.js"></script>
 </head>
 <body>
@@ -20,12 +21,12 @@
             <div class="p-4 centered-container">
                 <form>
                     <h1>Sign In</h1>
-                    <div class="form-group pb-2">
+                    <div class="form-group pb-3">
                         <label for="email-input">Email Address:</label>
                         <input id="email-input"
                                class="form-control input-fields" 
-                               type="email"
                                placeholder="youremail@example.com">
+                        <div id="email-error" class="info-errors"></div>
                     </div>
                     <div class="form-group">
                         <label for="password-input">Password:</label>
