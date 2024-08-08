@@ -26,17 +26,21 @@
                         <label for="password-input">Password:</label>
                         <input class="form-control" type="password" id="password-input">
                         <!-- TODO: Fix annoying issue where it shows the blue highlight on checkboxes because it does not look very good. -->
-                        <div id="show-password-check" class="form-group">
+                        <div id="show-password-check" class="form-group smaller-text">
                             <input type="checkbox" class="form-check-input" id="password-check">
                             <label class="form-check-label" for="password-check">Show Password</label>
                         </div>
-                        <a class="blue-links" href="/password_reset.html">Forgot your password?</a>
+                        <a class="smaller-text" href="/password_reset.html">Forgot your password?</a>
                     </div>
                     <div>
                         <button class="bottom-btn" id="submit-btn" type="submit">Login</button>
                         <button class="bottom-btn" onclick="location.href='/'" type="button" type="cancel">Cancel</button>
                     </div>
                     <br>
+                    <div class="smaller-text">
+                        <span>Don't have an account?</span>
+                        <a href="/register.html">click here</a>
+                    </div>
                     <p id="bottom-privacy-notice">We work hard to ensure that your information is never leaked. Privacy is key here at Maxx Energy and we guarantee the utmost security.</p>
                 </form>
             </div>
