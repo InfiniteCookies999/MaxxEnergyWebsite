@@ -4,7 +4,7 @@ body {
 
 #login-container {
   background-color: white;
-  height: 80vh;
+  height: 60vh;
   font-size: 1.6rem;
 }
 
@@ -30,4 +30,8 @@ body {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
   border-radius: 3px;
+}
+
+#bottom-privacy-notice {
+  font-size: 1rem;
 }
