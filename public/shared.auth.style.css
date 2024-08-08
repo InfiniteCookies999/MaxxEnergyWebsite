@@ -1,0 +1,13 @@
+body {
+  background-color: rgb(216, 216, 216);
+}
+
+.centered-container {
+  background-color: white;
+  height: 60vh;
+  font-size: 1.6rem;
+}
+
+.smaller-text {
+  font-size: 1.2rem;
+}
