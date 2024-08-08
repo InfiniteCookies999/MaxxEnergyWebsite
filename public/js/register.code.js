@@ -1,5 +1,10 @@
 $(document).ready(function () {
-  
+
+  $("form").submit((event) => {
+    event.preventDefault();
+    console.log("Will send register request!");
+  });
+
   // Prevent the user from inputting non-numbers into the phone number input field!
   $('#phone-number-input').keypress((event) => {
     if (event.which < 48 || event.which > 57) {
@@ -7,6 +12,7 @@ $(document).ready(function () {
     }
   });
 
+  // Insert - into the phone number.
   $('#phone-number-input').keyup((event) => {
     const input = event.target;
     

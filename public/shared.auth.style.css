@@ -10,3 +10,16 @@ body {
 .smaller-text {
   font-size: 1.2rem;
 }
+
+.bottom-btn {
+  border-style: none;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  border-radius: 3px;
+}
+
+.info-errors {
+  position: absolute;
+  font-size: 1rem;
+  color: red;
+}

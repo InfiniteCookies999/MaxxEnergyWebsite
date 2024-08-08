@@ -8,13 +8,6 @@
   background-color: rgb(44, 110, 185);
 }
 
-.bottom-btn {
-  border-style: none;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  border-radius: 3px;
-}
-
 #bottom-privacy-notice {
   font-size: 1rem;
 }
