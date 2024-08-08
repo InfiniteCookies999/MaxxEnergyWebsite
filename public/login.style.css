@@ -1,0 +1,33 @@
+body {
+  background-color: rgb(216, 216, 216);
+}
+
+#login-container {
+  background-color: white;
+  height: 80vh;
+  font-size: 1.6rem;
+}
+
+.blue-links {
+  font-size: 1.2rem;
+}
+
+#show-password-check {
+  font-size: 1.2rem;
+}
+
+#submit-btn {
+  color: rgb(243, 243, 243);
+  background-color: rgb(74, 154, 245);
+}
+
+#submit-btn:hover {
+  background-color: rgb(44, 110, 185);
+}
+
+.bottom-btn {
+  border-style: none;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  border-radius: 3px;
+}
