@@ -45,7 +45,7 @@ function checkForChangeInErrors(errContainer, input, getFlagCB) {
         }
       }
 
-      if (newErrorFlags === 0) {
+      if (errContainer.children().length === 0) {
         input.removeClass("is-invalid");
       }
     }
