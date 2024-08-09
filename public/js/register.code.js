@@ -156,6 +156,29 @@ $(document).ready(function () {
       event.preventDefault();
     }
   });
+  $('#phone-number-input').on("paste", (event) => {
+    // TODO: want to make sure this works on more machines.
+
+    function doNotPaste(event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    
+    if (event.originalEvent && event.originalEvent.clipboardData) {
+      const content = event.originalEvent.clipboardData.getData("text");
+      if (content === "" || content === undefined) {
+        doNotPaste(event); 
+        return;
+      }
+
+      if (!(/^\d+$/.test(content))) {
+        doNotPaste(event);
+      }
+
+    } else {
+      doNotPaste(event);
+    }
+  });
 
   // Insert - into the phone number.
   $('#phone-number-input').keyup((event) => {
