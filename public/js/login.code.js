@@ -13,39 +13,14 @@ $(document).ready(function () {
     event.preventDefault();
 
     const passwordErrorFlags = getPasswordErrorFlags();
-    const emailErrorFlags = getEmailErrorFlags();
+    const emailErrorFlags    = getEmailErrorFlags();
 
     // Displaying the error messages.
-    {
-      const errContainer = $('#password-error');
-
-      errContainer.data("errorFlags", passwordErrorFlags);
-      errContainer.empty();
-      
-      tryAppendError(errContainer, "Empty", passwordErrorFlags,
-        PASSWORD_EMPTY_FLAG);
-
-      /*tryAppendError(errContainer, `Too short. Min. Length: ${MIN_PASSWORD_LENGTH}`, passwordErrorFlags,
-        PASSWORD_TOO_SHORT_FLAG);
-      
-      tryAppendError(errContainer, "Missing special character", passwordErrorFlags,
-        PASSWORD_NO_SPECIAL_FLAG);
-      
-      tryAppendError(errContainer, "Missing digit", passwordErrorFlags,
-        PASSWORD_NO_DIGIT_FLAG);*/
-    }
-    {
-      const errContainer = $('#email-error');
-
-      errContainer.data("errorFlags", emailErrorFlags);
-      errContainer.empty();
-
-      tryAppendError(errContainer, "Empty", emailErrorFlags,
-        EMAIL_EMPTY_FLAG);
-
-      tryAppendError(errContainer, "Expected a valid email address", emailErrorFlags,
-        EMAIL_INVALID_PATTERN_FLAG);
-    }
+    appendErrorMessages($('#password-error'), passwordErrorFlags, (container, flags) => {
+      tryAppendError(container, "Empty", flags, PASSWORD_EMPTY_FLAG);  
+    });
+    
+    appendEmailErrorMessages($('#email-error'), emailErrorFlags);
 
     if (passwordErrorFlags !== 0) {
       $('#password-input').addClass("is-invalid");
@@ -55,7 +30,7 @@ $(document).ready(function () {
     }
 
     if (passwordErrorFlags !== 0 || emailErrorFlags !== 0) {
-      // There was errors. Do not continue.
+      // There were errors. Do not continue.
       return;
     }
 

@@ -19,3 +19,17 @@ function getEmailErrorFlags() {
 
   return errorFlags;
 }
+
+function appendErrorMessages(errContainer, errorFlags, applyCB) {
+  errContainer.data("errorFlags", errorFlags);
+  errContainer.empty();
+
+  applyCB(errContainer, errorFlags);
+}
+
+function appendEmailErrorMessages(errContainer, emailErrorFlags) {
+  appendErrorMessages(errContainer, emailErrorFlags, (container, flags) => {
+    tryAppendError(container, "Empty", flags, EMAIL_EMPTY_FLAG);
+    tryAppendError(container, "Expected a valid email address", flags, EMAIL_INVALID_PATTERN_FLAG);
+  });
+}
