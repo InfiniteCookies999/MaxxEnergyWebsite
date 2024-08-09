@@ -1,3 +1,29 @@
+const PASSWORD_SPECIAL_CHARACTER_PATTERN = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+
+const PASSWORD_TOO_SHORT_FLAG  = 0x01;
+const PASSWORD_NO_SPECIAL_FLAG = 0x02;
+const PASSWORD_NO_DIGIT_FLAG   = 0x04;
+
+function getPasswordErrorFlags() {
+  const password = $('#password-input').val();
+  let errorFlags = 0;
+
+  if (password.length < MIN_PASSWORD_LENGTH) {
+    errorFlags |= PASSWORD_TOO_SHORT_FLAG;
+  }
+
+  // See: https://stackoverflow.com/questions/32311081/check-for-special-characters-in-string
+  if (!password.match(PASSWORD_SPECIAL_CHARACTER_PATTERN)) {
+    errorFlags |= PASSWORD_NO_SPECIAL_FLAG;
+  }
+
+  if (!password.match(/\d/)) {
+    errorFlags |= PASSWORD_NO_DIGIT_FLAG;
+  }
+
+  return errorFlags;
+}
+
 $(document).ready(function () {
 
   $("form").submit((event) => {
@@ -12,6 +38,7 @@ $(document).ready(function () {
     }
   });
 
+  // TODO: Need to test for pasting code.
   // Insert - into the phone number.
   $('#phone-number-input').keyup((event) => {
     const input = event.target;
