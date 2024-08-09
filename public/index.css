@@ -42,7 +42,14 @@ padding-top: 30px;
     color: white;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; /* Centers horizontally */
+    justify-content: center; /* Centers vertically */
+    height: 200px; /* Ensure this is set to allow vertical centering */
+}
+  .mission-h{
+  font-size: 22px;
+  width: 80%;
+  text-align: center;
   }
   .states{
     display: flex;
