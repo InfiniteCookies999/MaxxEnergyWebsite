@@ -3,16 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-		
+	
+  
 	<link rel="stylesheet" type="text/css" href="index.css">
 
   <title>Homepage</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="js/header.code.js"></script>
+
 </head>
 <body>
+  <!--Added header here-->
+  <div data-include="header"></div>
+
   <div class="homepage-background">
     <div>
-    <h1>Innovative Clean Energy Solutions for a Sustainable Future.</h1>
-    <p1>Leading the charge in sustainable energy with cutting-edge technology and eco-friendly solutions.</p1>
+    <h1 class="hero">Innovative Clean Energy Solutions for a Sustainable Future.</h1>
+    <p class="hero-p">Leading the charge in sustainable energy with cutting-edge technology and eco-friendly solutions.</p>
   </div>
   </div>
 
@@ -24,7 +31,7 @@
 
   
   <div class="states">
-    <h3>20 years of providing solar and wind energy to the residents of:</h3>
+    <h2>20 years of providing solar and wind energy to the residents of:</h2>
     <div class="flex-row">
       <p>Virginia</p>
       <p>Maryland</p>
@@ -36,9 +43,10 @@
     </div>
   </div>
 
+  <div class="background-container">
   <div class="container">
     <div class="fl-column">
-      <img src="who-are-we.jpg">
+      <img src="images/who-are-we.jpg">
     </div>
     <div class="fr-column">
       <div><h2>Who We Are</h2></div>
@@ -48,7 +56,7 @@
     <button class="learn-more">Learn More</button>
     </div>
     </div>
-    </div>
+
 
 
 <div class="container">
@@ -61,42 +69,39 @@
 
 </div>
 <div class="fr-column">
-  <div><img src="why-choose-maxx.png"></div>
+  <div><img src="images/why-choose-maxx.png"></div>
+</div>
 </div>
 </div>
 </div>
 
 <div class="middle">
-<div><h1>Our Services</h1></div>
-<div><p>What we offer</p></div>
+<div><h1>OUR SERVICES</h1></div>
+<div><h3 class="what-we-offer">WHAT WE OFFER</h3></div>
 </div>
 
 <div class="flex-row">
 
   <div class="flex-column">
     <p class="para-top">Solar Energy Solutions</p>
-    <img class="pictures" src="pic1.jpg">
+    <img class="pictures" src="images/pic1.jpg">
     <p class="para-bottom">Harness the power of the sun to reduce energy costs and your carbon footprint.</p>
     <p class="learn-service"><a href="your-link-url-here">LEARN MORE</a></p>
 </div>
 
 <div class="flex-column">
     <p class="para-top">Wind Energy Solutions</p>
-    <img class="pictures" src="pic2.jpg">
+    <img class="pictures" src="images/pic2.jpg">
     <p class="para-bottom">Reliable wind power to fuel your home or business with sustainable energy.</p>
     <p class="learn-service"><a href="your-link-url-here">LEARN MORE</a></p>
 </div>
 
 <div class="flex-column">
     <p class="para-top">Hydro Power Solutions</p>
-    <img class="pictures" src="pic3.jpg">
+    <img class="pictures" src="images/pic3.jpg">
     <p class="para-bottom">Efficient water-powered energy systems for a clean, renewable future.</p>
     <p class="learn-service"><a href="your-link-url-here">LEARN MORE</a></p>
 </div>
-
-
-
-
 
 </body>
 </html>
