@@ -9,6 +9,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "bootstrap": "^5.3.3",
+    "boxicons": "^2.1.4",
     "express": "^4.19.2"
   }
 }
