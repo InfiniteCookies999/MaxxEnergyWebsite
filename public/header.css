@@ -1,0 +1,29 @@
+.navbar {
+    background-color: rgb(74, 154, 245);
+    border-bottom: 5px solid orange;
+    padding: 15px 20px;
+}
+.navbar .navbar-brand {
+    color: white; 
+    font-weight: bold; 
+    font-size: 30px;
+}
+.navbar .nav-link {
+    color: white; 
+    margin-right: 20px;
+    text-decoration: none;
+    padding-bottom: 4px; 
+}
+.navbar .nav-link:hover {
+    color: orange; 
+    border-bottom: 2px solid white; 
+}
+.navbar .navbar-toggler {
+    border: none;
+    background-color: orange;
+}
+.navbar .navbar-toggler-icon {
+    /*How to add hamburger menu here?*/
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba%28255, 255, 255, 1%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+
+}
