@@ -1,0 +1,17 @@
+
+#submit-btn {
+  color: rgb(243, 243, 243);
+  background-color: rgb(74, 154, 245);
+}
+
+#submit-btn:hover {
+  background-color: rgb(44, 110, 185);
+}
+
+#bottom-privacy-notice {
+  font-size: 1rem;
+}
+
+.input-fields {
+  width: 50%;
+}
