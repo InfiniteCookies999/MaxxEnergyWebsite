@@ -1,5 +1,5 @@
-body {
-  background-color: rgb(216, 216, 216);
+.navbar {
+  position: relative !important;
 }
 
 .centered-container {
@@ -32,4 +32,5 @@ body {
 .outer-container {
   display: flex;
   flex-direction: column;
+  background-color: rgb(216, 216, 216);
 }
