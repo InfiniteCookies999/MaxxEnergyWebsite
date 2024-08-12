@@ -187,12 +187,14 @@ async function addStates() {
     let name = state.name.toLowerCase();
     name = name.charAt(0).toUpperCase() + name.slice(1);
 
-    const match = name === userState;
+    /*const match = name === userState;
     if (match) {
       selectedAbbreviation = state.abbreviation;
     }
     const selected = match ? "selected" : "";
     dropdown.append(`<option value=${state.abbreviation} ${selected}>${name}</option>`);
+*/
+    dropdown.append(`<option value=${state.abbreviation}>${name}</option>`);
   }
   dropdown.selectpicker("refresh");
   setCounties(selectedAbbreviation);
