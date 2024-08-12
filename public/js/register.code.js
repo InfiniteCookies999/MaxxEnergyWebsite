@@ -146,19 +146,68 @@ function getZipCodeErrorFlags() {
   return getFixedNumberErrorFlags($('#zip-code-input'), 5);
 }
 
-function addStates() {
+function setCounties(key) {
+  const countyList = COUNTIES[key];
+
+  const dropdown = $('#county-input');
+  dropdown.selectpicker();
+
+  dropdown.empty();
+  
+  for (const county of countyList) {
+    // TODO: should probably change the key that is used here.
+    dropdown.append(`<option value=${county}>${county}</option>`);
+  }
+
+  dropdown.selectpicker("refresh");
+}
+
+async function addStates() {
+
+  // https://ip-api.com
+  let userState = undefined;
+  try {
+    
+    const response = await fetch("http://ip-api.com/json");
+    const json = await response.json();
+
+    userState = json.regionName;
+
+  } catch (error) {
+    // Ignoring the error since this is only helpful information not essential.
+  }
+  
+  let selectedAbbreviation = "";
   const dropdown = $('#state-input');
+  dropdown.selectpicker();
   for (const state of STATES) {
     let name = state.name.toLowerCase();
     name = name.charAt(0).toUpperCase() + name.slice(1);
-    // TODO: should probably select based on computer information.
+
+    if (name === userState) {
+      selectedAbbreviation = state.abbreviation;
+    }
+
     dropdown.append(`<option value=${state.abbreviation}>${name}</option>`);
   }
+
+  dropdown.selectpicker("refresh");
+  
+  if (userState !== undefined && userState !== "") {
+    dropdown.selectpicker('val', selectedAbbreviation);
+  }
+  
+  setCounties(selectedAbbreviation);
 }
 
 $(document).ready(function () {
 
   addStates();
+
+  $('#state-input').on('change', () => {
+    const state = $(this).find("option:selected").val();
+    setCounties(state);
+  });
 
   $("form").submit((event) => {
     event.preventDefault();

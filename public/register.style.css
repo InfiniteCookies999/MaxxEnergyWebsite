@@ -3,3 +3,19 @@
   font-size: 1rem;
   color: gray;
 }
+
+.select-with-search {
+  width: 100% !important;
+}
+
+.select-with-search div {
+  width: 100% !important;
+}
+
+.select-with-search button {
+  border: 1px solid rgb(207, 207, 207);
+  display: block;
+  width: 100% !important;
+  background-color: white;
+  transform: translateY(-0.4rem);
+}
