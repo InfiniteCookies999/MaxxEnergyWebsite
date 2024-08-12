@@ -146,14 +146,56 @@ function getZipCodeErrorFlags() {
   return getFixedNumberErrorFlags($('#zip-code-input'), 5);
 }
 
-function addStates() {
+function setCounties(key) {
+  const countyList = COUNTIES[key];
+
+  const dropdown = $('#county-input');
+  dropdown.empty();
+  
+  for (const county of countyList) {
+    // TODO: should probably change the key that is used here.
+    dropdown.append(`<option value=${county}>${county}</option>`);
+  }
+}
+
+async function addStates() {
+
+  // https://ip-api.com
+  let userState = undefined;
+  try {
+    
+    const response = await fetch("http://ip-api.com/json");
+    const json = await response.json();
+
+    userState = json.regionName;
+
+  } catch (error) {
+    // Ignoring the error since this is only helpful information not essential.
+  }
+  
+  // Default to Alabama if we could not locate the user's location.
+  if (userState === undefined || userState === "") {
+    userState = "Alabama";
+  }
+
+
+  
+  let selectedAbbreviation = "";
   const dropdown = $('#state-input');
+  dropdown.selectpicker();
   for (const state of STATES) {
     let name = state.name.toLowerCase();
     name = name.charAt(0).toUpperCase() + name.slice(1);
-    // TODO: should probably select based on computer information.
-    dropdown.append(`<option value=${state.abbreviation}>${name}</option>`);
+
+    const match = name === userState;
+    if (match) {
+      selectedAbbreviation = state.abbreviation;
+    }
+    const selected = match ? "selected" : "";
+    dropdown.append(`<option value=${state.abbreviation} ${selected}>${name}</option>`);
   }
+  dropdown.selectpicker("refresh");
+  setCounties(selectedAbbreviation);
 }
 
 $(document).ready(function () {
