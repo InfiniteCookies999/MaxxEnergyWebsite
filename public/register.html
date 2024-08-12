@@ -22,6 +22,7 @@
 
     <link rel="stylesheet" href="shared.auth.style.css">
     <link rel="stylesheet" href="register.style.css">
+    <script src="js/load.anim.code.js"></script>
     <script src="js/counties.code.js"></script>
     <script src="js/form.utils.code.js"></script>
     <script src="js/shared.auth.code.js"></script>
@@ -140,9 +141,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div>
+                        <div class="bottom-btn-group">
                             <button class="bottom-btn" id="submit-btn" type="submit">Register</button>
                             <button class="bottom-btn" onclick="location.href='/'" type="button" type="cancel">Cancel</button>
+                            <canvas id="load-animation" width="25" height="25" style="display: none;"></canvas>
                         </div>
                         <div class="smaller-text">
                             <span>Already have an account?</span>

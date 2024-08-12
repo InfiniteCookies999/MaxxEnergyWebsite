@@ -1,13 +1,16 @@
 .navbar {
   position: relative !important;
 }
+
 .centered-container {
   background-color: white;
   font-size: 1.6rem;
   width: 90%;
   margin-top: 10rem;
   margin-bottom: 5rem;
+  box-shadow: 1px 1px 5px rgba(0.5, 0.5, 0.5, 0.2);
 }
+
 .smaller-text {
   font-size: 1.2rem;
 }
@@ -31,7 +34,7 @@
 .outer-container {
   display: flex;
   flex-direction: column;
-  background-color: rgb(216, 216, 216);
+  background-color: rgb(155, 153, 161);
 }
 
 #submit-btn {
@@ -39,7 +42,7 @@
   background-color: rgb(74, 154, 245);
 }
 
-#submit-btn:hover {
+#submit-btn:hover:not([disabled]) {
   background-color: rgb(44, 110, 185);
 }
 

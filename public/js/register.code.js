@@ -225,6 +225,8 @@ function onPasteEvent(cb) {
 
 $(document).ready(function () {
 
+  createLoadAnimation(document.getElementById("load-animation"));
+
   addStates();
 
   $('#state-input').on('change', () => {
@@ -318,7 +320,15 @@ $(document).ready(function () {
       return;
     }
 
-    console.log("Will send register request!");
+    $('.bottom-btn-group button').prop("disabled", true);
+    $('.bottom-btn-group canvas').css("display", "inline-block");
+
+    // !! Testing: Re-enabling after a certain amount of time to simulate server response.
+    setTimeout(() => {
+      $('.bottom-btn-group button').prop("disabled", false);
+      $('.bottom-btn-group canvas').css("display", "none");
+    }, 1500);
+    
   });
 
   // Resetting errors
