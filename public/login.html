@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Login</title>
+    <title>Login</title>
 
     <!-- TODO: Move common header links elsewhere -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -39,10 +39,9 @@
                                     class="form-control input-fields"
                                     type="password">
                             <div id="password-error" class="info-errors"></div>
-                            <br/>
-                            <!-- TODO: Fix annoying issue where it shows the blue highlight on checkboxes because it does not look very good. -->
+                            
                             <div id="show-password-check" class="form-group smaller-text">
-                                <input type="checkbox" class="form-check-input" id="password-check">
+                                <input type="checkbox" autocomplete="off" class="styled-checkbox" id="password-check">
                                 <label class="form-check-label" for="password-check">Show Password</label>
                             </div>
                             <a class="smaller-text" href="/password_reset.html">Forgot your password?</a>
@@ -51,7 +50,6 @@
                             <button class="bottom-btn" id="submit-btn" type="submit">Login</button>
                             <button class="bottom-btn" onclick="location.href='/'" type="button" type="cancel">Cancel</button>
                         </div>
-                        <br>
                         <div class="smaller-text">
                             <span>Don't have an account?</span>
                             <a href="/register.html">click here</a>

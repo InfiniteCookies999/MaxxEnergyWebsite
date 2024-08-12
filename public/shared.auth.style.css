@@ -20,7 +20,6 @@
 }
 
 .info-errors {
-  position: absolute;
   font-size: 1rem;
   color: red;
 }
@@ -33,4 +32,56 @@
   display: flex;
   flex-direction: column;
   background-color: rgb(216, 216, 216);
+}
+
+#submit-btn {
+  color: rgb(243, 243, 243);
+  background-color: rgb(74, 154, 245);
+}
+
+#submit-btn:hover {
+  background-color: rgb(44, 110, 185);
+}
+
+#show-password-check {
+  margin-top: 1.1rem;
+}
+
+#show-password-check input {
+  opacity: 0;
+  position: absolute;
+}
+
+/* See: https://www.youtube.com/watch?v=YyLzwR-iXtI */
+
+#show-password-check label {
+  display: flex;
+}
+
+#show-password-check label::before {
+  content: '';
+  width: 1.2rem;
+  height: 1.2rem;
+  min-width: 1.2rem;
+  min-height: 1.2rem;
+  border: 0.05rem solid gray;
+  border-radius: 6px;
+  margin-right: 0.4rem;
+  transform: translateY(0.4rem);
+}
+
+#show-password-check input[type='checkbox']:checked + label::before {
+  content: '\2713\0020';
+  font-size: 0.8rem;
+  width: 0;
+  height: 0;
+  background-color: rgb(74, 154, 245);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+#show-password-check label:hover, input:hover {
+  cursor: pointer;
 }

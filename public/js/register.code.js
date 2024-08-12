@@ -199,4 +199,12 @@ $(document).ready(function () {
       input.value = noDashValue;
     }
   });
+
+
+  $('#show-password-check input').click(() => {
+    const input1 = $('#password-input')[0];
+    const input2 = $('#repeat-password-input')[0];
+    input1.type = input1.type === "password" ? "text" : "password";
+    input2.type = input2.type === "password" ? "text" : "password";
+  });
 });
