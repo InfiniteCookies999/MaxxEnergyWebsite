@@ -20,7 +20,7 @@
 </head>
 <body>
     <div class="flex-container">
-        <div class="vh-100 outer-container">
+        <div class="outer-container">
             <!--Included the header-->
             <div data-include="header"></div>
             <div class="bottom-container d-flex justify-content-center align-items-center">
@@ -43,6 +43,26 @@
                                     <label for="email-input">Email Address:</label>
                                     <input class="form-control input-fields" type="text" id="email-input" placeholder="youremail@example.com">
                                     <div id="email-error" class="info-errors"></div>
+                                </div>
+                                <div class="form-group pb-3">
+                                    <label for="state-input">State:</label>
+                                    <select id="state-input" class="form-select" aria-label="Select State">
+                                    </select>
+                                </div>
+                                <div class="form-group pb-3">
+                                    <label for="address-line1-input">Address Line 1:</label>
+                                    <input class="form-control input-fields"
+                                           type="text"
+                                           id="address-line1-input"
+                                           maxlength="250">
+                                </div>
+                                <div class="form-group pb-3">
+                                    <label for="zip-code-input">Zip Code:</label>
+                                    <input class="form-control input-fields"
+                                           type="text"
+                                           id="zip-code-input"
+                                           maxlength="5">
+                                        <div id="zip-code-error" class="info-errors"></div>
                                 </div>
                                 <div class="form-group">
                                     <label for="password-input">Password:</label>
@@ -78,6 +98,25 @@
                                            id="phone-number-input"
                                            maxlength="12">
                                     <div id="phone-number-error" class="info-errors"></div>
+                                </div>
+                                <!-- TODO: convert to dropdown -->
+                                <div class="form-group pb-3">
+                                    <label for="county-input">County:</label>
+                                    <input class="form-control input-fields" 
+                                           id="county-input">
+                                </div>
+                                <div class="form-group pb-3">
+                                    <label for="address-line2-input">Address Line 2:</label>
+                                    <input class="form-control input-fields"
+                                           type="text"
+                                           id="address-line2-input"
+                                           placeholder="Optional"
+                                           maxlength="250">
+                                    <div id="address-line1-error" class="info-errors"></div>
+                                </div>
+                                <div class="form-group pb-3" style="visibility: hidden;">
+                                    <label>Ignored</label>
+                                    <input type="text" class="form-control input-fields"/>
                                 </div>
                                 <div class="form-group pb-3">
                                     <label for="repeat-password-input">Repeat Password:</label>
