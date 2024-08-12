@@ -183,7 +183,6 @@ $(document).ready(function () {
   // Insert - into the phone number.
   $('#phone-number-input').keyup((event) => {
     const input = event.target;
-    
     const value = input.value;
 
     // Remove all - from the string.
@@ -200,6 +199,16 @@ $(document).ready(function () {
     }
   });
 
+  // Making sure name inputs are alphanumeric.
+  $('#first-name-input, #last-name-input').keypress((event) => {
+    const key = event.which;
+    if (!((key >= 97 && key <= 122) ||
+          (key >= 65 && key <= 90) ||
+          (key >= 48 && key <= 57)
+        )) {
+          event.preventDefault();
+        }
+  });
 
   $('#show-password-check input').click(() => {
     const input1 = $('#password-input')[0];
