@@ -26,17 +26,17 @@ padding-top: 30px;
   color: rgb(74, 154, 245);
   }
   .homepage-background {
-  background-image: url('images/homepage.jpg'); 
-  background-size: cover;  
-  background-position: bottom center; 
-  background-repeat: no-repeat; 
-  height: 90vh; 
-  width: 100%; 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white; 
-  text-align: center;
+    background-image: url('images/homepage.jpg');
+    background-size: cover;
+    background-position: bottom center;
+    background-repeat: no-repeat;
+    height: 800px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
 }
   .mission-column{
     background-color: rgb(74, 154, 245);
@@ -198,4 +198,21 @@ padding-top: 30px;
   color: white;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
   cursor: pointer; 
+}
+/* Tablets */
+@media (min-width: 768px) and (max-width: 1300px) {
+  .homepage-background {
+    width: 100%;
+    color: black;
+}
+  .hero{
+    width: 80%;
+  }
+  .hero-p{
+    min-width: 65%;
+  }
+}
+/* Smart phones */
+@media (max-width: 767px) {
+  
 }
