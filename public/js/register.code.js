@@ -150,12 +150,16 @@ function setCounties(key) {
   const countyList = COUNTIES[key];
 
   const dropdown = $('#county-input');
+  dropdown.selectpicker();
+
   dropdown.empty();
   
   for (const county of countyList) {
     // TODO: should probably change the key that is used here.
     dropdown.append(`<option value=${county}>${county}</option>`);
   }
+
+  dropdown.selectpicker("refresh");
 }
 
 async function addStates() {
@@ -173,13 +177,6 @@ async function addStates() {
     // Ignoring the error since this is only helpful information not essential.
   }
   
-  // Default to Alabama if we could not locate the user's location.
-  if (userState === undefined || userState === "") {
-    userState = "Alabama";
-  }
-
-
-  
   let selectedAbbreviation = "";
   const dropdown = $('#state-input');
   dropdown.selectpicker();
@@ -187,22 +184,30 @@ async function addStates() {
     let name = state.name.toLowerCase();
     name = name.charAt(0).toUpperCase() + name.slice(1);
 
-    /*const match = name === userState;
-    if (match) {
+    if (name === userState) {
       selectedAbbreviation = state.abbreviation;
     }
-    const selected = match ? "selected" : "";
-    dropdown.append(`<option value=${state.abbreviation} ${selected}>${name}</option>`);
-*/
+
     dropdown.append(`<option value=${state.abbreviation}>${name}</option>`);
   }
+
   dropdown.selectpicker("refresh");
+  
+  if (userState !== undefined && userState !== "") {
+    dropdown.selectpicker('val', selectedAbbreviation);
+  }
+  
   setCounties(selectedAbbreviation);
 }
 
 $(document).ready(function () {
 
   addStates();
+
+  $('#state-input').on('change', () => {
+    const state = $(this).find("option:selected").val();
+    setCounties(state);
+  });
 
   $("form").submit((event) => {
     event.preventDefault();
