@@ -1,19 +1,19 @@
+body{
+  padding-top: 50px;
+}
 .navbar {
   position: relative !important;
 }
-
 .question {
   font-size: 1.5rem; 
   font-weight: bold;
   color: rgb(63, 134, 216);
 }
-
 .answer {
   font-size: 1.5rem;
   font-weight: bold;
   color: rgb(233, 151, 0);
 }
-
 .question-text {
   font-weight: bold;
   font-size: 1.2rem;
