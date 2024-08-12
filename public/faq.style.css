@@ -1,3 +1,7 @@
+.navbar {
+  position: relative !important;
+}
+
 .question {
   font-size: 1.5rem; 
   font-weight: bold;
@@ -21,4 +25,23 @@
 
 .text-spacing {
   margin-left: 0.5rem;
+}
+
+.qa-container {
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border-radius: 5px;
+  border: 1px solid rgb(212, 212, 212);
+}
+
+.qa-container:hover {
+  box-shadow: 1px 1px 5px rgba(0.5, 0.5, 0.5, 0.2);
+}
+
+#areas-provided {
+  margin-left: 2rem;
+}
+
+#areas-provided li::marker {
+  color: rgb(63, 134, 216);
 }

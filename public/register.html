@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Registration</title>
+    <title>Registration</title>
 
     <!-- TODO: Move common header links elsewhere -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -24,7 +24,7 @@
     <div data-include="header"></div>
 
     <div class="flex-container">
-        <div class="vh-100 outer-container">
+        <div class="outer-container">
             <div class="bottom-container d-flex justify-content-center align-items-center">
                 <div class="p-4 centered-container">
                     <h1>Registration</h1>
@@ -34,7 +34,11 @@
                             <div class="col-6">
                                 <div class="form-group pb-3">
                                     <label for="first-name-input">First Name:</label>
-                                    <input class="form-control input-fields" type="text" id="first-name-input" placeholder="Susan">
+                                    <input class="form-control input-fields"
+                                           type="text"
+                                           id="first-name-input"
+                                           placeholder="Susan"
+                                           maxlength="40">
                                     <div id="first-name-error" class="info-errors"></div>
                                 </div>
                                 <div class="form-group pb-3">
@@ -43,11 +47,35 @@
                                     <div id="email-error" class="info-errors"></div>
                                 </div>
                                 <div class="form-group pb-3">
+                                    <label for="state-input">State:</label>
+                                    <select id="state-input" class="form-select" aria-label="Select State">
+                                    </select>
+                                </div>
+                                <div class="form-group pb-3">
+                                    <label for="address-line1-input">Address Line 1:</label>
+                                    <input class="form-control input-fields"
+                                           type="text"
+                                           id="address-line1-input"
+                                           maxlength="250">
+                                </div>
+                                <div class="form-group pb-3">
+                                    <label for="zip-code-input">Zip Code:</label>
+                                    <input class="form-control input-fields"
+                                           type="text"
+                                           id="zip-code-input"
+                                           maxlength="5">
+                                        <div id="zip-code-error" class="info-errors"></div>
+                                </div>
+                                <div class="form-group">
                                     <label for="password-input">Password:</label>
                                     <input class="form-control input-fields" type="password" id="password-input">
                                     <div id="password-error" class="info-errors"></div>
                                 </div>
-                                <ul id="password-help" class="pt-3">
+                                <div id="show-password-check" class="form-group smaller-text">
+                                    <input type="checkbox" autocomplete="off" class="styled-checkbox" id="password-check">
+                                    <label class="form-check-label" for="password-check">Show Passwords</label>
+                                </div>
+                                <ul id="password-help">
                                     <li><span>Minimum length 8.</span></li>
                                     <li><span>Must contain at least one special character.</span></li>
                                     <li><span>Must contain at least one digit.</span></li>
@@ -58,7 +86,11 @@
                             <div class="col-6">
                                 <div class="form-group pb-3">
                                     <label for="last-name-input">Last Name:</label>
-                                    <input class="form-control input-fields" type="text" id="last-name-input" placeholder="Smith">
+                                    <input class="form-control input-fields"
+                                           type="text"
+                                           id="last-name-input"
+                                           placeholder="Smith"
+                                           maxlength="40">
                                     <div id="last-name-error" class="info-errors"></div>
                                 </div>
                                 <div class="form-group pb-3">
@@ -69,6 +101,25 @@
                                            maxlength="12">
                                     <div id="phone-number-error" class="info-errors"></div>
                                 </div>
+                                <!-- TODO: convert to dropdown -->
+                                <div class="form-group pb-3">
+                                    <label for="county-input">County:</label>
+                                    <input class="form-control input-fields" 
+                                           id="county-input">
+                                </div>
+                                <div class="form-group pb-3">
+                                    <label for="address-line2-input">Address Line 2:</label>
+                                    <input class="form-control input-fields"
+                                           type="text"
+                                           id="address-line2-input"
+                                           placeholder="Optional"
+                                           maxlength="250">
+                                    <div id="address-line1-error" class="info-errors"></div>
+                                </div>
+                                <div class="form-group pb-3" style="visibility: hidden;">
+                                    <label>Ignored</label>
+                                    <input type="text" class="form-control input-fields"/>
+                                </div>
                                 <div class="form-group pb-3">
                                     <label for="repeat-password-input">Repeat Password:</label>
                                     <input class="form-control input-fields" type="password" id="repeat-password-input">
@@ -76,7 +127,10 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="bottom-btn" id="submit-btn" type="submit">Register</button>
+                        <div>
+                            <button class="bottom-btn" id="submit-btn" type="submit">Register</button>
+                            <button class="bottom-btn" onclick="location.href='/'" type="button" type="cancel">Cancel</button>
+                        </div>
                         <div class="smaller-text">
                             <span>Already have an account?</span>
                             <a href="/login.html">click here</a>
