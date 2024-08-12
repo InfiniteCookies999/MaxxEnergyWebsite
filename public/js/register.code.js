@@ -200,6 +200,29 @@ async function addStates() {
   setCounties(selectedAbbreviation);
 }
 
+function onPasteEvent(cb) {
+  return (event) => {
+    const doNotPaste = () => {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    
+    if (event.originalEvent && event.originalEvent.clipboardData) {
+      const content = event.originalEvent.clipboardData.getData("text");
+      
+      if (content === "" || content === undefined) {
+        doNotPaste(event); 
+        return;
+      }
+
+      cb(content, doNotPaste);
+
+    } else {
+      doNotPaste();
+    }
+  };
+}
+
 $(document).ready(function () {
 
   addStates();
@@ -314,29 +337,11 @@ $(document).ready(function () {
       event.preventDefault();
     }
   });
-  $('#phone-number-input').on("paste", (event) => {
-    // TODO: want to make sure this works on more machines.
-
-    function doNotPaste(event) {
-      event.preventDefault();
-      event.stopPropagation();
+  $('#phone-number-input').on("paste", onPasteEvent((content, doNotPaste) => {
+    if (!(/^\d+$/.test(content))) {
+      doNotPaste();
     }
-    
-    if (event.originalEvent && event.originalEvent.clipboardData) {
-      const content = event.originalEvent.clipboardData.getData("text");
-      if (content === "" || content === undefined) {
-        doNotPaste(event); 
-        return;
-      }
-
-      if (!(/^\d+$/.test(content))) {
-        doNotPaste(event);
-      }
-
-    } else {
-      doNotPaste(event);
-    }
-  });
+  }));
 
   // Insert - into the phone number.
   $('#phone-number-input').keyup((event) => {
@@ -368,6 +373,11 @@ $(document).ready(function () {
           event.preventDefault();
         }
   });
+  $('#first-name-input, #last-name-input').on("paste", onPasteEvent((content, doNotPaste) => {
+    if (!(/^[ a-zA-Z0-9]+$/.test(content))) {
+      doNotPaste();
+    }
+  }));
 
   // Making sure zip codes only recieve numbers.
   $('#zip-code-input').keypress((event) => {
@@ -375,6 +385,33 @@ $(document).ready(function () {
       event.preventDefault();
     }
   });
+  $('#zip-code-input').on("paste", onPasteEvent((content, doNotPaste) => {
+    if (!(/^\d+$/.test(content))) {
+      doNotPaste();
+    }
+  }));
+
+  // Making sure only valid characters go into the address lines.
+  // https://fsawebenroll.ed.gov/RoboHelp/Business_Address.htm
+  $('#address-line1-input, #address-line2-input').keypress((event) => {
+    const key = event.which;
+    if (!((key >= 97 && key <= 122) || // a-z
+          (key >= 65 && key <= 90) ||  // A-Z
+          (key >= 48 && key <= 57) ||  // 0-9
+           key === 32 || key === 39 || // Special keys
+           key === 44 || key === 46 ||
+           key == 45 || key === 35 ||
+           key === 64 || key === 37 ||
+           key === 38 || key === 47)
+          ) {
+      event.preventDefault();
+    }
+  });
+  $('#address-line1-input, #address-line2-input').on("paste", onPasteEvent((content, doNotPaste) => {
+    if (!(/^[a-zA-Z0-9 .'\-#@%&]+$/.test(content))) {
+      doNotPaste();
+    }
+  }));
 
   $('#show-password-check input').click(() => {
     const input1 = $('#password-input')[0];
