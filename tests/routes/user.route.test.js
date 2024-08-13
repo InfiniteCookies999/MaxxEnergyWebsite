@@ -3,7 +3,7 @@ const createApp = require('../../create.app');
 
 const app = createApp();
 
-function getValidBody() {
+function getValidRegisterBody() {
   return {
     firstName: "Susan",
     lastName: "Smith",
@@ -17,6 +17,13 @@ function getValidBody() {
   };
 }
 
+function getValidLoginBody() {
+  return {
+    email: "susansmith@gmail.com",
+    password: "abcABC%*13"
+  };
+}
+
 function fieldContainsError(errors, fieldName, errorMessage) {
   return errors.filter((error) => error.path === fieldName)
     .filter((error) => error.msg === errorMessage).length !== 0;
@@ -26,7 +33,7 @@ describe('route POST /user/register', () => {
 
   it('firstName empty', async () => {
 
-    const body = getValidBody();
+    const body = getValidRegisterBody();
     body.firstName = "";
 
     await supertest(app)
@@ -41,7 +48,7 @@ describe('route POST /user/register', () => {
   })
   it('firstName too long', async () => {
 
-    const body = getValidBody();
+    const body = getValidRegisterBody();
     body.firstName = "ThisIsAReallyLongFirstNameAndSoItCannotBeAllowedDueItItsVeryVeryLongLengthThatExceedsTheAllowedLength";
 
     await supertest(app)
@@ -56,8 +63,8 @@ describe('route POST /user/register', () => {
   })
   it('firstName not alphanumeric', async () => {
 
-    const body = getValidBody();
-    body.firstName = "Maddie&";
+    const body = getValidRegisterBody();
+    body.firstName = "Susan&";
 
     await supertest(app)
       .post('/api/user/register')
@@ -72,7 +79,7 @@ describe('route POST /user/register', () => {
 
   it('lastName empty', async () => {
 
-    const body = getValidBody();
+    const body = getValidRegisterBody();
     body.lastName = "";
 
     await supertest(app)
@@ -87,7 +94,7 @@ describe('route POST /user/register', () => {
   })
   it('lastName too long', async () => {
 
-    const body = getValidBody();
+    const body = getValidRegisterBody();
     body.lastName = "ThisIsAReallyLongFirstNameAndSoItCannotBeAllowedDueItItsVeryVeryLongLengthThatExceedsTheAllowedLength";
 
     await supertest(app)
@@ -102,7 +109,7 @@ describe('route POST /user/register', () => {
   })
   it('lastName not alphanumeric', async () => {
 
-    const body = getValidBody();
+    const body = getValidRegisterBody();
     body.lastName = "Blah&";
 
     await supertest(app)
@@ -118,7 +125,7 @@ describe('route POST /user/register', () => {
 
   it('empty email', async () => {
 
-    const body = getValidBody();
+    const body = getValidRegisterBody();
     body.email = "";
 
     await supertest(app)
@@ -133,8 +140,8 @@ describe('route POST /user/register', () => {
   })
   it('email invalid format', async () => {
 
-    const body = getValidBody();
-    body.email = "maddie@";
+    const body = getValidRegisterBody();
+    body.email = "susan@";
 
     await supertest(app)
       .post('/api/user/register')
@@ -149,7 +156,7 @@ describe('route POST /user/register', () => {
 
   it('state empty', async () => {
 
-    const body = getValidBody();
+    const body = getValidRegisterBody();
     body.state = "";
 
     await supertest(app)
@@ -164,7 +171,7 @@ describe('route POST /user/register', () => {
   })
   it('state unknown', async () => {
 
-    const body = getValidBody();
+    const body = getValidRegisterBody();
     body.state = "ThisIsNotAState";
 
     await supertest(app)
@@ -180,7 +187,7 @@ describe('route POST /user/register', () => {
 
   it('county empty', async () => {
 
-    const body = getValidBody();
+    const body = getValidRegisterBody();
     body.county = "";
 
     await supertest(app)
@@ -195,7 +202,7 @@ describe('route POST /user/register', () => {
   })
   it('county unknown', async () => {
 
-    const body = getValidBody();
+    const body = getValidRegisterBody();
     body.county = "ThisIsNotACounty";
 
     await supertest(app)
@@ -211,7 +218,7 @@ describe('route POST /user/register', () => {
 
   it('addressLine1 empty', async () => {
 
-    const body = getValidBody();
+    const body = getValidRegisterBody();
     body.addressLine1 = "";
 
     await supertest(app)
@@ -226,7 +233,7 @@ describe('route POST /user/register', () => {
   })
   it('addressLine1 invalid character', async () => {
 
-    const body = getValidBody();
+    const body = getValidRegisterBody();
     body.addressLine1 = "Street Ave. 1321!";
 
     await supertest(app)
@@ -241,7 +248,7 @@ describe('route POST /user/register', () => {
   })
   it('addressLine1 too long', async () => {
 
-    const body = getValidBody();
+    const body = getValidRegisterBody();
     body.addressLine1 = "a".repeat(500);
 
     await supertest(app)
@@ -257,7 +264,7 @@ describe('route POST /user/register', () => {
 
   it('addressLine2 empty', async () => {
 
-    const body = getValidBody();
+    const body = getValidRegisterBody();
     body.addressLine2 = "";
 
     await supertest(app)
@@ -272,7 +279,7 @@ describe('route POST /user/register', () => {
   })
   it('addressLine2 invalid character', async () => {
 
-    const body = getValidBody();
+    const body = getValidRegisterBody();
     body.addressLine2 = "Street Ave. 1321!";
 
     await supertest(app)
@@ -287,7 +294,7 @@ describe('route POST /user/register', () => {
   })
   it('addressLine2 too long', async () => {
 
-    const body = getValidBody();
+    const body = getValidRegisterBody();
     body.addressLine2 = "a".repeat(500);
 
     await supertest(app)
@@ -303,10 +310,88 @@ describe('route POST /user/register', () => {
 
   it('successfull user registered', async () => {
 
-    const body = getValidBody();
+    const body = getValidRegisterBody();
 
     await supertest(app)
       .post('/api/user/register')
+      .send(body)
+      .set('Content-Type', 'application/json')
+      .expect(200);
+
+  })
+});
+
+
+describe('route POST /user/login', () => {
+  
+  it('email empty', async () => {
+
+    const body = getValidLoginBody();
+    body.email = "";
+
+    await supertest(app)
+      .post('/api/user/login')
+      .send(body)
+      .set('Content-Type', 'application/json')
+      .expect(400)
+      .then((res) => {
+        const errors = res.body.message.errors;
+        expect(fieldContainsError(errors, 'email', 'Expected valid email address')).toBe(true);
+      });
+  })
+  it('email invalid format', async () => {
+
+    const body = getValidLoginBody();
+    body.email = "susan@";
+
+    await supertest(app)
+      .post('/api/user/login')
+      .send(body)
+      .set('Content-Type', 'application/json')
+      .expect(400)
+      .then((res) => {
+        const errors = res.body.message.errors;
+        expect(fieldContainsError(errors, 'email', 'Expected valid email address')).toBe(true);
+      });
+  })
+
+  it('password empty', async () => {
+
+    const body = getValidLoginBody();
+    body.password = "";
+
+    await supertest(app)
+      .post('/api/user/login')
+      .send(body)
+      .set('Content-Type', 'application/json')
+      .expect(400)
+      .then((res) => {
+        const errors = res.body.message.errors;
+        expect(fieldContainsError(errors, 'password', 'Cannot be empty')).toBe(true);
+      });
+  })
+  it('password too long', async () => {
+
+    const body = getValidLoginBody();
+    body.password = "a".repeat(500);
+
+    await supertest(app)
+      .post('/api/user/login')
+      .send(body)
+      .set('Content-Type', 'application/json')
+      .expect(400)
+      .then((res) => {
+        const errors = res.body.message.errors;
+        expect(fieldContainsError(errors, 'password', 'Invalid length')).toBe(true);
+      });
+  })
+
+  it('successfull user login', async () => {
+
+    const body = getValidLoginBody();
+
+    await supertest(app)
+      .post('/api/user/login')
       .send(body)
       .set('Content-Type', 'application/json')
       .expect(200);

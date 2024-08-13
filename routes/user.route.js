@@ -79,4 +79,15 @@ router.post('/user/register',
     res.send("This is the response!");
 }));
 
+router.post('/user/login',
+  body('email').isEmail().withMessage("Expected valid email address"),
+  body('password').notEmpty().withMessage("Cannot be empty")
+    .isLength({ min: 0, max: MAX_PASSWORD_LENGTH }).withMessage("Invalid length"),
+
+  validateBody,
+  controller((req, res) => {
+    res.send("This is a response!");
+  })
+)
+
 module.exports = router;
