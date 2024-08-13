@@ -24,7 +24,7 @@
 
 .info-errors {
   font-size: 1rem;
-  color: red;
+  color: var(--site-error-color);
 }
 
 .bottom-container {
@@ -39,11 +39,15 @@
 
 #submit-btn {
   color: rgb(243, 243, 243);
-  background-color: rgb(74, 154, 245);
+  background-color: var(--site-blue-color);
 }
 
 #submit-btn:hover:not([disabled]) {
-  background-color: rgb(44, 110, 185);
+  filter: brightness(0.75);
+}
+
+.bottom-btn:hover:not([disabled]) {
+  cursor: pointer;
 }
 
 #show-password-check {
@@ -78,7 +82,7 @@
   font-size: 0.8rem;
   width: 0;
   height: 0;
-  background-color: rgb(74, 154, 245);
+  background-color: var(--site-blue-color);
   display: flex;
   justify-content: center;
   align-items: center;
