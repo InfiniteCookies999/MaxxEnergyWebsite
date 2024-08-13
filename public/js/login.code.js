@@ -34,8 +34,18 @@ $(document).ready(function () {
       return;
     }
 
-    console.log("Sending login to server!");
+    $('.bottom-btn-group button').prop("disabled", true);
+    $('.bottom-btn-group canvas').css("display", "inline-block");
+
+    // !! Testing: Re-enabling after a certain amount of time to simulate server response.
+    setTimeout(() => {
+      $('.bottom-btn-group button').prop("disabled", false);
+      $('.bottom-btn-group canvas').css("display", "none");
+    }, 1500);
+
   });
+
+  createLoadAnimation(document.getElementById("load-animation"));
 
   checkForChangeInErrors($('#password-error'), $('#password-input'), getPasswordErrorFlags);
   checkForChangeInErrors($('#email-error'), $('#email-input'), getEmailErrorFlags);
