@@ -1,6 +1,8 @@
 const getMessage = (err) => {
   switch (err.statusCode) {
-    case 400, 401:
+    case 400:
+      return JSON.parse(err.message);
+    case 401:  
       return err.message;
     case 404:
       return err.message || "Page does not exist";
