@@ -13,7 +13,7 @@ app.listen(PORT, (err) => {
 });
 
 // TODO: Move into routing sub-folder!
-app.use(express.static("public"));
+app.use(express.static("public", { extensions: ['html'] }));
 
 // Installing routes.
 app.use('/api/', userRouter);
