@@ -182,40 +182,6 @@ padding-top: 30px;
 .learn-service a:hover {
   color: rgb(44, 124, 215); 
 }
-
-.signup-container{
-  display: flex;
-  flex-direction: column;
-  width: 60%;
-  height: 180px;
-  background-color: rgb(74, 154, 245);
-  color: white;
-  justify-content: space-around;
-  align-items: center;
-  background-image: url('images/geometric-background.jpg'); 
-  background-size: cover;  
-  background-position: bottom center; 
-  background-repeat: no-repeat; 
-  border-radius: 25px;
-  font-family: Arial;
-  margin: 0 auto;
-  margin-top: 30px;
-}
-.notification-button{
-  width: 20%;
-  height: 30px;
-  border: none;
-  background-color: white;
-  color: rgb(74, 154, 245);
-  border-radius: 10px;
-  font-weight: bold;
-}
-.notification-button:hover{
-  background-color: rgb(44, 124, 215);
-  color: white;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-  cursor: pointer; 
-}
 /* Tablets */
 @media (min-width: 767px) and (max-width: 1330px) {
   .homepage-background {
@@ -309,9 +275,4 @@ padding-top: 30px;
   .fl-column2{
     order: 2;
   }
-  .signup-container{
-    text-align: center;
-  }
 }
-
-
