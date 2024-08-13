@@ -12,6 +12,8 @@ const ADDRESS_LINE_MAX_LENGTH = 250;
 const MAX_PASSWORD_LENGTH = 100;
 const PASSWORD_PATTERN = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/;
 
+const PHONE_PATTERN = /^(\d{3})\-(\d{3})\-(\d{4})$/;
+
 const VALID_STATES = [
   'AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FM',
   'FL', 'GA', 'GU', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA',
@@ -47,6 +49,8 @@ router.post('/user/register',
   validateName('firstName'),
   validateName('lastName'),
   body('email').isEmail().withMessage("Expected valid email address"),
+  body('phoneNumber').notEmpty().withMessage("Cannot be empty")
+    .matches(PHONE_PATTERN).withMessage("Invalid phone format"),
   body('state')
     .notEmpty().withMessage("Cannot be empty")
     .isIn(VALID_STATES).withMessage("Unknown state"),

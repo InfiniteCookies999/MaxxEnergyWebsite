@@ -123,7 +123,7 @@ describe('route POST /user/register', () => {
       });
   })
 
-  it('empty email', async () => {
+  it('email empty', async () => {
 
     const body = getValidRegisterBody();
     body.email = "";
@@ -151,6 +151,67 @@ describe('route POST /user/register', () => {
       .then((res) => {
         const errors = res.body.message.errors;
         expect(fieldContainsError(errors, 'email', 'Expected valid email address')).toBe(true);
+      });
+  })
+  
+  it('phoneNumber empty', async () => {
+
+    const body = getValidRegisterBody();
+    body.phoneNumber = "";
+
+    await supertest(app)
+      .post('/api/user/register')
+      .send(body)
+      .set('Content-Type', 'application/json')
+      .expect(400)
+      .then((res) => {
+        const errors = res.body.message.errors;
+        expect(fieldContainsError(errors, 'phoneNumber', 'Cannot be empty')).toBe(true);
+      });
+  })
+  it('phoneNumber no dashes', async () => {
+
+    const body = getValidRegisterBody();
+    body.phoneNumber = "7777777777";
+
+    await supertest(app)
+      .post('/api/user/register')
+      .send(body)
+      .set('Content-Type', 'application/json')
+      .expect(400)
+      .then((res) => {
+        const errors = res.body.message.errors;
+        expect(fieldContainsError(errors, 'phoneNumber', 'Invalid phone format')).toBe(true);
+      });
+  })
+  it('phoneNumber contains bad characters', async () => {
+
+    const body = getValidRegisterBody();
+    body.phoneNumber = "777-aaa-7777";
+
+    await supertest(app)
+      .post('/api/user/register')
+      .send(body)
+      .set('Content-Type', 'application/json')
+      .expect(400)
+      .then((res) => {
+        const errors = res.body.message.errors;
+        expect(fieldContainsError(errors, 'phoneNumber', 'Invalid phone format')).toBe(true);
+      });
+  })
+  it('phoneNumber too long', async () => {
+
+    const body = getValidRegisterBody();
+    body.phoneNumber = "777-777-77777";
+
+    await supertest(app)
+      .post('/api/user/register')
+      .send(body)
+      .set('Content-Type', 'application/json')
+      .expect(400)
+      .then((res) => {
+        const errors = res.body.message.errors;
+        expect(fieldContainsError(errors, 'phoneNumber', 'Invalid phone format')).toBe(true);
       });
   })
 
