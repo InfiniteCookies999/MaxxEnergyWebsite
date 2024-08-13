@@ -46,7 +46,10 @@
   text-decoration: none;
   color: white;
 }
-
+.brand-name:hover{
+  color: white;
+  text-decoration: none;
+}
 .menu-link {
   transition: 0.7s ease;
 }
@@ -69,7 +72,7 @@
   background-color: white;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1000px) {
   .menu-toggle {
     display: block;
   }
