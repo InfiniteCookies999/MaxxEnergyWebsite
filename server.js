@@ -1,6 +1,7 @@
 const express = require('express');
-const { userRouter, staticRouter } = require('./routes');
 const config = require('./config');
+const { userRouter, staticRouter } = require('./routes');
+const { errorHandler } = require('./middleware');
 
 const app = express();
 const PORT = 3000 || config.SERVER_PORT;
@@ -16,3 +17,6 @@ app.listen(PORT, (err) => {
 // Installing routes.
 app.use('/api/', userRouter);
 app.use(staticRouter);
+
+// Install middleware
+app.use(errorHandler);
