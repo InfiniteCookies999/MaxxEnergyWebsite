@@ -47,15 +47,18 @@ router.post('/user/register',
   validateName('firstName'),
   validateName('lastName'),
   body('email').isEmail().withMessage("Expected valid email address"),
-  body('state').isIn(VALID_STATES),
+  body('state')
+    .notEmpty().withMessage("Cannot be empty")
+    .isIn(VALID_STATES).withMessage("Unknown state"),
   body('county')
     .notEmpty().withMessage("Cannot be empty")
     .custom((value, { req }) => {
-      if (!req.state) {
+      const state = req.body.state;
+      if (!state) {
         // The state does not exist so cannot really check properly.
         return true;
       }
-      const countyList = COUNTIES[req.state];
+      const countyList = COUNTIES[state];
       if (!countyList) {
         // The user did not provide a valid state so cannot really check properly.
         return true;
@@ -64,7 +67,7 @@ router.post('/user/register',
       return countyList.includes(value);
     }).withMessage("Unknown county"),
   validateAddressLine('addressLine1'),
-  validateAddressLine('addressLine2'),
+  validateAddressLine('addressLine2', true),
   body('zipCode').notEmpty().withMessage("Cannot be empty")
     .isInt({ min: 0, max: 99999 }).withMessage("Expected valid integer range"),
   body('password').notEmpty().withMessage("Cannot be empty")

@@ -1,11 +1,8 @@
-const express = require('express');
-const config = require('./config');
-const { userRouter, staticRouter } = require('./routes');
-const { errorHandler } = require('./middleware');
+const createApp = require('./create.app');
 
-const app = express();
 const PORT = 3000 || config.SERVER_PORT;
 
+const app = createApp();
 app.listen(PORT, (err) => {
   if (!err) {
     console.log(`Server started on: ${PORT}`);
@@ -13,10 +10,3 @@ app.listen(PORT, (err) => {
     console.log(`Error started server: ${err}`);
   }
 });
-
-// Installing routes.
-app.use('/api/', userRouter);
-app.use(staticRouter);
-
-// Install middleware
-app.use(errorHandler);
