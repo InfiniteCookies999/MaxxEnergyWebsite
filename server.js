@@ -1,4 +1,5 @@
 const createApp = require('./create.app');
+const config = require('./config');
 
 const PORT = 3000 || config.SERVER_PORT;
 
