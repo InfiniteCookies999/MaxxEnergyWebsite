@@ -2,8 +2,8 @@ const getDBConnection = require('./connection');
 
 class User {
   constructor(firstName, lastName, email, phone, state, county,
-              address_line_1, address_line_2,
-              zip_code, password, joinDate) {
+              addressLine1, addressLine2,
+              zipCode, password, joinDate) {
     this.id = 0;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -11,9 +11,9 @@ class User {
     this.phone = phone;
     this.state = state;
     this.county = county;
-    this.address_line_1 = address_line_1;
-    this.address_line_2 = address_line_2;
-    this.zip_code = zip_code;
+    this.addressLine1 = addressLine1;
+    this.addressLine2 = addressLine2;
+    this.zipCode = zipCode;
     this.password = password;
     this.joinDate = joinDate;
   }
@@ -55,17 +55,19 @@ class UserRepository {
     // length of the raw passwords the user sends.
     await conn.query(`CREATE TABLE IF NOT EXISTS user (
       id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-      first_name VARCHAR(${this.maxNameLength()}) NOT NULL,
-      last_name VARCHAR(${this.maxNameLength()}) NOT NULL,
-      email TEXT(320) NOT NULL,
+      firstName VARCHAR(${this.maxNameLength()}) NOT NULL,
+      lastName VARCHAR(${this.maxNameLength()}) NOT NULL,
+      email VARCHAR(320) NOT NULL,
       phone CHAR(12) NOT NULL,
       state ENUM(${enumStates}) NOT NULL,
       county VARCHAR(100) NOT NULL,
-      address_line_1 VARCHAR(${this.maxAddressLineLength()}) NOT NULL,
-      address_line_2 VARCHAR(${this.maxAddressLineLength()}),
-      zip_code MEDIUMINT NOT NULL,
+      addressLine1 VARCHAR(${this.maxAddressLineLength()}) NOT NULL,
+      addressLine2 VARCHAR(${this.maxAddressLineLength()}),
+      zipCode MEDIUMINT NOT NULL,
       password VARCHAR(120) NOT NULL,
-      join_date DATE NOT NULL
+      joinDate DATE NOT NULL,
+      
+      UNIQUE (email)
       )`);
   }
 
@@ -73,11 +75,29 @@ class UserRepository {
     const conn = await getDBConnection();
 
     delete user.id; // Do not want to insert user's id into the table.
-    await conn.execute(`INSERT INTO user (first_name, last_name, email, phone, state, county,
-                                          address_line_1, address_line_2, zip_code, password, join_date)
+    await conn.execute(`INSERT INTO user (firstName, lastName, email, phone, state, county,
+                                          addressLine1, addressLine2, zipCode, password, joinDate)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
       Object.values(user));
+  }
+
+  async getUserById(userId) {
+    const conn = await getDBConnection();
+
+    const [ results ] = await conn.execute(`SELECT * FROM user WHERE id=?`, [ userId ]);
+    if (results.length === 0) {
+      return null;
+    }
+
+    const values = results[0];
+
+    const user = new User(values.firstName, values.lastName, values.email, values.phone,
+      values.state, values.county, values.addressLine1, values.addressLine2,
+      values.zip_code, values.password, values.joinDate
+    );
+    user.id = userId;
+    return user;
   }
 }
 
