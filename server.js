@@ -1,6 +1,6 @@
 const createApp = require('./create.app');
 const config = require('./config');
-const { getDBConnection, UserRepository, User } = require('./database');
+const { getDBConnection, UserRepository } = require('./database');
 
 (async () => {
   await getDBConnection();
