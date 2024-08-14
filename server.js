@@ -1,7 +1,7 @@
 const createApp = require('./create.app');
 const config = require('./config');
 
-const PORT = 3000 || config.SERVER_PORT;
+const PORT = config.SERVER_PORT || 3000;
 
 const app = createApp();
 app.listen(PORT, (err) => {
