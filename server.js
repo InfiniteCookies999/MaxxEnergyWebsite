@@ -5,7 +5,7 @@ const { getDBConnection, UserRepository } = require('./database');
 (async () => {
   await getDBConnection();
   
-  await UserRepository.create();
+  await UserRepository.initialize();
 
   const PORT = config.SERVER_PORT || 3000;
 

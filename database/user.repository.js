@@ -1,5 +1,21 @@
 const getDBConnection = require('./connection');
 
+class User {
+  constructor() {
+    this.firstName = "";
+    this.lastName = "";
+    this.email = "";
+    this.phone = "";
+    this.state = "";
+    this.county = "";
+    this.address_line_1 = "";
+    this.address_line_2 = null;
+    this.zip_code = "";
+    this.password = "";
+    this.joinDate = null;
+  }
+}
+
 class UserRepository {
 
   maxNameLength() {
@@ -25,7 +41,7 @@ class UserRepository {
     ];
   }
 
-  async create() {
+  async initialize() {
     
     const conn = await getDBConnection();
     const enumStates = this.validStates()
@@ -35,18 +51,23 @@ class UserRepository {
     // is a hashed version that gets stored in the database and not the
     // length of the raw passwords the user sends.
     conn.query(`CREATE TABLE IF NOT EXISTS user (
-      first_name CHAR(${this.maxNameLength()}),
-      last_name CHAR(${this.maxNameLength()}),
-      email TEXT(320),
-      phone CHAR(12),
-      state CHAR(2),
-      county CHAR(100),
-      address_line_1 CHAR(${this.maxAddressLineLength()}),
-      address_line_2 CHAR(${this.maxAddressLineLength()}),
-      zip_code ENUM(${enumStates}),
-      password CHAR(120),
-      join_date DATE
+      id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+      first_name VARCHAR(${this.maxNameLength()}) NOT NULL,
+      last_name VARCHAR(${this.maxNameLength()}) NOT NULL,
+      email TEXT(320) NOT NULL,
+      phone CHAR(12) NOT NULL,
+      state ENUM(${enumStates}) NOT NULL,
+      county VARCHAR(100) NOT NULL,
+      address_line_1 VARCHAR(${this.maxAddressLineLength()}) NOT NULL,
+      address_line_2 VARCHAR(${this.maxAddressLineLength()}),
+      zip_code SMALLINT NOT NULL,
+      password VARCHAR(120) NOT NULL,
+      join_date DATE NOT NULL
       )`);
+  }
+
+  async create() {
+
   }
 }
 
