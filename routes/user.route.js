@@ -2,26 +2,16 @@ const express = require('express');
 const { controller, validateBody } = require('../middleware'); 
 const { body } = require('express-validator');
 const COUNTIES = require('./counties');
+const { UserRepository } = require('../database');
 
 const NAME_PATTERN = /^[a-zA-Z0-9]+$/;
-const NAME_MAX_LENGTH = 40;
 
 const ADDRESS_LINE_PATTERN = /^[a-zA-Z0-9 .'\-#@%&]+$/;
 const ADDRESS_LINE_MAX_LENGTH = 250;
 
-const MAX_PASSWORD_LENGTH = 100;
 const PASSWORD_PATTERN = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/;
 
 const PHONE_PATTERN = /^(\d{3})\-(\d{3})\-(\d{4})$/;
-
-const VALID_STATES = [
-  'AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FM',
-  'FL', 'GA', 'GU', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA',
-  'ME', 'MH', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV',
-  'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'MP', 'OH', 'OK', 'OR', 'PW',
-  'PA', 'PR', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VI', 'VA',
-  'WA', 'WV', 'WI', 'WY'
-];
 
 const router = express.Router();
 
@@ -30,7 +20,7 @@ router.use(express.json());
 function validateName(fieldName) {
   return body(fieldName)
     .notEmpty().withMessage("Cannot be empty")
-    .isLength({ min: 1, max: NAME_MAX_LENGTH }).withMessage("Invalid length")
+    .isLength({ min: 1, max: UserRepository.maxNameLength() }).withMessage("Invalid length")
     .matches(NAME_PATTERN).withMessage("Name must be alphanumeric");
 }
 
@@ -53,7 +43,7 @@ router.post('/user/register',
     .matches(PHONE_PATTERN).withMessage("Invalid phone format"),
   body('state')
     .notEmpty().withMessage("Cannot be empty")
-    .isIn(VALID_STATES).withMessage("Unknown state"),
+    .isIn(UserRepository.validStates()).withMessage("Unknown state"),
   body('county')
     .notEmpty().withMessage("Cannot be empty")
     .custom((value, { req }) => {
@@ -75,7 +65,7 @@ router.post('/user/register',
   body('zipCode').notEmpty().withMessage("Cannot be empty")
     .isInt({ min: 0, max: 99999 }).withMessage("Expected valid integer range"),
   body('password').notEmpty().withMessage("Cannot be empty")
-    .isLength({ min: 1, max: MAX_PASSWORD_LENGTH }).withMessage("Invalid length")
+    .isLength({ min: 1, max: UserRepository.maxPasswordLength() }).withMessage("Invalid length")
     .matches(PASSWORD_PATTERN).withMessage("Invalid format"),
 
   validateBody,
@@ -86,7 +76,7 @@ router.post('/user/register',
 router.post('/user/login',
   body('email').isEmail().withMessage("Expected valid email address"),
   body('password').notEmpty().withMessage("Cannot be empty")
-    .isLength({ min: 0, max: MAX_PASSWORD_LENGTH }).withMessage("Invalid length"),
+    .isLength({ min: 0, max: UserRepository.maxPasswordLength() }).withMessage("Invalid length"),
 
   validateBody,
   controller((req, res) => {
