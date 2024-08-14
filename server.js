@@ -1,9 +1,11 @@
 const createApp = require('./create.app');
 const config = require('./config');
-const { getDBConnection } = require('./database');
+const { getDBConnection, UserRepository } = require('./database');
 
 (async () => {
   await getDBConnection();
+  
+  await UserRepository.create();
 
   const PORT = config.SERVER_PORT || 3000;
 

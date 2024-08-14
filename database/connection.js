@@ -6,7 +6,6 @@ var connection;
 
 module.exports = async function getDBConnection() {
   if (connection) {
-    console.log("Using existing connection!");
     return connection;
   }
 
