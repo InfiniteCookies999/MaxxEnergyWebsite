@@ -1,9 +1,9 @@
-const express = require('express');
-const { userRouter } = require('./routes');
+const createApp = require('./create.app');
+const config = require('./config');
 
-const app = express();
-const PORT = 3000;
+const PORT = 3000 || config.SERVER_PORT;
 
+const app = createApp();
 app.listen(PORT, (err) => {
   if (!err) {
     console.log(`Server started on: ${PORT}`);
@@ -11,9 +11,3 @@ app.listen(PORT, (err) => {
     console.log(`Error started server: ${err}`);
   }
 });
-
-// TODO: Move into routing sub-folder!
-app.use(express.static("public", { extensions: ['html'] }));
-
-// Installing routes.
-app.use('/api/', userRouter);
