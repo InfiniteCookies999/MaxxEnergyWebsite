@@ -71,7 +71,7 @@ class UserRepository {
       )`);
   }
 
-  async create(user) {
+  async saveUser(user) {
     const conn = await getDBConnection();
 
     delete user.id; // Do not want to insert user's id into the table.
@@ -80,6 +80,13 @@ class UserRepository {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
       Object.values(user));
+  }
+
+  async doesUserExistByEmail(email) {
+    const conn = await getDBConnection();
+
+    const [ results ] = await conn.execute(`SELECT id FROM user WHERE email=?`, [ email ]);
+    return results.length > 0;
   }
 
   async getUserById(userId) {
