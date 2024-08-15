@@ -17,7 +17,7 @@ $(document).ready(function () {
 
     // Displaying the error messages.
     appendErrorMessages($('#password-error'), passwordErrorFlags, (container, flags) => {
-      tryAppendError(container, "Empty", flags, PASSWORD_EMPTY_FLAG);  
+      tryAppendError(container, "Empty", flags, PASSWORD_EMPTY_FLAG);
     });
     
     appendEmailErrorMessages($('#email-error'), emailErrorFlags);
@@ -37,12 +37,34 @@ $(document).ready(function () {
     $('.bottom-btn-group button').prop("disabled", true);
     $('.bottom-btn-group canvas').css("display", "inline-block");
 
-    // !! Testing: Re-enabling after a certain amount of time to simulate server response.
-    setTimeout(() => {
-      $('.bottom-btn-group button').prop("disabled", false);
-      $('.bottom-btn-group canvas').css("display", "none");
-    }, 1500);
+    const email = $('#email-input').val();
+    const password = $('#password-input').val();
 
+    $('#submit-error').empty();
+
+    $.ajax({
+      type: 'POST',
+      url: '/api/user/login',
+      data: {
+        email,
+        password
+      },
+      success: () => {
+        window.location = "/";
+      },
+      error: (res) => {
+        if (res.status === 401) {
+          const errorMsg = $.parseJSON(res.responseText).message;
+          tryAppendError($('#submit-error'), errorMsg, 1, 1);
+        } else {
+          // TODO: Handle all other issues!
+        }
+      },
+      complete: () => {
+        $('.bottom-btn-group button').prop("disabled", false);
+        $('.bottom-btn-group canvas').css("display", "none");
+      }
+    })
   });
 
   createLoadAnimation(document.getElementById("load-animation"));
