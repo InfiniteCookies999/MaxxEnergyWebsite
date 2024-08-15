@@ -2,13 +2,26 @@
   position: relative !important;
 }
 
+body {
+  background-color: rgb(155, 153, 161) !important;
+}
+
+.outer-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
 .centered-container {
   background-color: white;
   font-size: 1.6rem;
   width: 90%;
-  margin-top: 10rem;
-  margin-bottom: 5rem;
   box-shadow: 1px 1px 5px rgba(0.5, 0.5, 0.5, 0.2);
+  height: fit-content;
+  margin-top: 10rem;
+  margin-bottom: 10rem;;
 }
 
 .smaller-text {
@@ -25,16 +38,6 @@
 .info-errors {
   font-size: 1rem;
   color: var(--site-error-color);
-}
-
-.bottom-container {
-  flex-grow: 1;
-}
-
-.outer-container {
-  display: flex;
-  flex-direction: column;
-  background-color: rgb(155, 153, 161);
 }
 
 #submit-btn {
