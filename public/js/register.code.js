@@ -156,7 +156,7 @@ function setCounties(key) {
   
   for (const county of countyList) {
     // TODO: should probably change the key that is used here.
-    dropdown.append(`<option value=${county}>${county}</option>`);
+    dropdown.append(`<option value=${county.replaceAll(" ", "-")}>${county}</option>`);
   }
 
   dropdown.selectpicker("refresh");
@@ -322,6 +322,52 @@ $(document).ready(function () {
 
     $('.bottom-btn-group button').prop("disabled", true);
     $('.bottom-btn-group canvas').css("display", "inline-block");
+
+    $('#submit-error').empty();
+
+    const firstName    = $('#first-name-input').val();
+    const lastName     = $('#last-name-input').val();
+    const email        = $('#email-input').val();
+    const phoneNumber  = $('#phone-number-input').val();
+    const state        = $('#state-input').find(':selected').val();
+    const county       = $('#county-input').find(":selected").val();
+    const addressLine1 = $('#address-line1-input').val();
+    const addressLine2 = $('#address-line2-input').val();
+    const zipCode      = $('#zip-code-input').val();
+    const password     = $('#password-input').val();
+
+    const body = {
+      firstName, lastName, email, phoneNumber, state, county,
+      addressLine1, addressLine2, zipCode, password
+    };
+    if (addressLine2 === "") {
+      delete body.addressLine2;
+    }
+
+    $.ajax({
+      type: 'POST',
+      url: '/api/user/register',
+      data: body,
+      success: () => {
+        console.log("register success");
+      },
+      error: (res) => {
+        const badReq = res.status >= 400 && res.status <= 499 && res.status !== 400;
+        if (badReq) {
+          const errorMsg = $.parseJSON(res.responseText).message;
+          tryAppendError($('#submit-error'), errorMsg, 1, 1);
+        } else if (req.status === 400) {
+          const errorMsg = $.parseJSON(res.responseText).message.errors;
+            console.log("Error message (400): ", errorMsg);
+        } else {
+          console.log(`Error code: ${req.status}`);
+        }
+      },
+      complete: () => {
+        $('.bottom-btn-group button').prop("disabled", false);
+        $('.bottom-btn-group canvas').css("display", "none");
+      }
+    });
 
     // !! Testing: Re-enabling after a certain amount of time to simulate server response.
     setTimeout(() => {
