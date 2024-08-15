@@ -1,19 +1,21 @@
-const express = require('express');
-const { userRouter } = require('./routes');
+const createApp = require('./create.app');
+const config = require('./config');
+const { getDBConnection, UserRepository } = require('./database');
 
-const app = express();
-const PORT = 3000;
+(async () => {
+  await getDBConnection();
+  
+  await UserRepository.initialize();
 
-app.listen(PORT, (err) => {
-  if (!err) {
-    console.log(`Server started on: ${PORT}`);
-  } else {
-    console.log(`Error started server: ${err}`);
-  }
-});
+  const PORT = config.SERVER_PORT || 3000;
 
-// TODO: Move into routing sub-folder!
-app.use(express.static("public", { extensions: ['html'] }));
+  const app = createApp();
+  app.listen(PORT, (err) => {
+    if (!err) {
+      console.log(`Server started on: ${PORT}`);
+    } else {
+      console.log(`Error started server: ${err}`);
+    }
+  });
+})();
 
-// Installing routes.
-app.use('/api/', userRouter);
