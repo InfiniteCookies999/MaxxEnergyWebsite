@@ -1,0 +1,46 @@
+.social-media-p {
+  font-weight: bold;
+  font-size: 24px;
+}
+.footer-btn {
+  border-radius: 50%;
+  margin: 0 5px;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.footer-above {
+  background-color: var(--site-orange-color);
+  display: flex;
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+  padding: 20px; /* Adjust padding as needed */
+  min-height: 300px; /* Ensures the footer takes up space and allows centering */
+}
+.social-flex-column {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin: 0 auto; 
+}
+.row {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Centers the grid items horizontally */
+}
+
+@media (max-width: 768px) {
+  .social-media-p,
+  .social-media-icons {
+    flex-basis: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .social-flex-row {
+    flex-direction: column; 
+  }
+}
