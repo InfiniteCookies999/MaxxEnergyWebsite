@@ -7,25 +7,25 @@
   <!-- Common links -->
   <script src="js/loader.code.js"></script>
   <link rel="stylesheet" href="common.style.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
   <link rel="stylesheet" type="text/css" href="shared.auth.style.css">
 	<link rel="stylesheet" type="text/css" href="index.style.css">
   <link rel="stylesheet" type="text/css" href="header.style.css">
-  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   <title>Homepage</title>
+  <!-- TODO: Move common header links elsewhere -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+  <script src="js/header.code.js"></script>
 </head>
 <body>
-  <!--Added header here-->
+
   <div data-include="header"></div>
 
   <div class="homepage-background">
     <div class="homepage-text">
-    <h1 class="hero">Innovative Clean Energy Solutions for a Sustainable Future.</h1>
+    <h1 class="hero">Innovative Clean Energy Solutions for a Sustainable Future</h1>
     <p class="hero-p">Leading the charge in sustainable energy with cutting-edge technology and eco-friendly solutions.</p>
   </div>
   
@@ -56,7 +56,7 @@
       <img class="same-size-image" src="images/who-are-we.jpg">
     </div>
     <div class="fr-column">
-      <div><h2>Who We Are</h2></div>
+      <div><h2>Reviews</h2></div>
     <p class="who-we-are">Maxx Energy is at the forefront of the clean energy movement, dedicated to powering communities across the Mid-Atlantic with innovative, sustainable solutions. 
       With over 20 years of experience, we pride ourselves on delivering reliable, eco-friendly energy that meets today’s needs while protecting our planet for future 
       generations. Our commitment to sustainability, customer satisfaction, and environmental stewardship drives everything we do.</p>
@@ -82,6 +82,7 @@
 </div>
 </div>
 
+<div class="gray-container">
 <div class="middle">
 <div><h1>OUR SERVICES</h1></div>
 <div><h3 class="what-we-offer">WHAT WE OFFER</h3></div>
@@ -93,26 +94,28 @@
     <p class="para-top">Solar Energy Solutions</p>
     <img class="pictures" src="images/pic1.jpg">
     <p class="para-bottom">Harness the power of the sun to reduce energy costs and your carbon footprint.</p>
-    <p class="learn-service"><a href="your-link-url-here">LEARN MORE</a></p>
+    <p class="learn-service"><a href="#">LEARN MORE</a></p>
 </div>
 
 <div class="flex-column">
     <p class="para-top">Wind Energy Solutions</p>
     <img class="pictures" src="images/pic2.jpg">
     <p class="para-bottom">Reliable wind power to fuel your home or business with sustainable energy.</p>
-    <p class="learn-service"><a href="your-link-url-here">LEARN MORE</a></p>
+    <p class="learn-service"><a href="#">LEARN MORE</a></p>
 </div>
 
 <div class="flex-column">
     <p class="para-top">Hydro Power Solutions</p>
     <img class="pictures" src="images/pic3.jpg">
     <p class="para-bottom">Efficient water-powered energy systems for a clean, renewable future.</p>
-    <p class="learn-service"><a href="your-link-url-here">LEARN MORE</a></p>
+    <p class="learn-service"><a href="#">LEARN MORE</a></p>
+</div>
+</div>
 </div>
 </div>
 
 
-
+<div data-include="footer"></div>
 
 </body>
 </html>

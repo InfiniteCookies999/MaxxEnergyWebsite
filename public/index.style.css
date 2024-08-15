@@ -1,12 +1,12 @@
 body {
-    font-family: "Segoe UI", Arial, sans-serif;
-    background-color: white;
-    margin: 0 auto;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background-color: white;
+  margin: 0 auto;
 }
 .hero{
 font-size: 64px;
-width: 60%;
-margin: 0 auto;   
+width: 65%;
+margin: 0 auto;
 }
 .hero-p{
 font-size: 32px;
@@ -14,260 +14,223 @@ width: 50%;
 margin: 0 auto;	
 padding-top: 30px;
 }
-  .middle{
-    margin: 0 auto; 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .what-we-offer{
-  color: rgb(74, 154, 245);
-  }
-  .homepage-background {
-    background-image: url('images/homepage.jpg');
-    background-size: cover;
-    background-position: bottom center;
-    background-repeat: no-repeat;
-    height: 800px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    text-align: center;
-}
-  .mission-column{
-    background-color: rgb(74, 154, 245);
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 200px; 
-}
-  .mission-h{
-  font-size: 22px;
-  width: 80%;
-  text-align: center;
-  }
-  .states{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-  	padding-bottom: 20px;
-  }
-  .flex-row {
+.middle{
+  margin: 0 auto; 
   display: flex;
-  align-items: center; 
-  justify-content: center; 
-  width: 80%;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
 }
-.flex-row p {
-  flex-grow: 1; 
-  text-align: center;
-  margin: 0; 
+.what-we-offer{
+color: rgb(74, 154, 245);
 }
-.container{
-  display: flex;
-  width: 80%;
-  margin: 0 auto;
-  margin-top: 20px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-}
-.fl-column{
-  width: 50%;
-}
-.fl-column img{
-  max-width: 90%;
-  height: auto;
-  object-fit: contain;
-}
-.fr-column{
-  width: 50%;
-  margin: 0 auto;
-}
-.fr-column img{
-  max-width: 90%;
-  height: auto;
-  object-fit: contain;
-}
-.fl-column2{
-  width: 50%;
-}
-.fl-column2 img{
-  max-width: 90%;
-  height: auto;
-  object-fit: contain;
-}
-.fr-column2{
-  width: 50%;
-  margin: 0 auto;
-}
-.fr-column2 img{
-  max-width: 90%;
-  height: auto;
-  object-fit: contain;
-}
-.who-we-are{
-  line-height: 1.5;
-}
-.same-size-img {
+.homepage-background {
+  background-image: url('images/homepage.jpg');
+  background-size: cover;
+  background-position: bottom center;
+  background-repeat: no-repeat;
+  height: 800px;
   width: 100%;
-  height: auto; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
 }
-.learn-more{
-  border: none;
+.mission-column{
   background-color: rgb(74, 154, 245);
   color: white;
-  width: 200px;
-  height: 50px;
-  border-radius: 10px;
-  font-size: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px; 
+}
+.mission-h{
+font-size: 22px;
+width: 80%;
+text-align: center;
+}
+.states{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  padding-bottom: 20px;
+}
+.flex-row {
+display: flex;
+align-items: center; 
+justify-content: center; 
+width: 80%;
+justify-content: space-between;
+}
+.flex-row p {
+flex-grow: 1; 
+text-align: center;
+margin: 0; 
+}
+.container{
+display: flex;
+width: 80%;
+margin: 0 auto;
+margin-top: 20px;
+padding-top: 20px;
+padding-bottom: 20px;
+}
+.fl-column{
+min-width: 50%;
+}
+.fl-column img{
+max-width: 90%;
+height: auto;
+object-fit: contain;
+}
+.fr-column{
+min-width: 50%;
+margin: 0 auto;
+}
+.fr-column img{
+max-width: 90%;
+height: auto;
+object-fit: contain;
+}
+.fl-column2{
+min-width: 50%;
+}
+.fl-column2 img{
+max-width: 90%;
+height: auto;
+object-fit: contain;
+}
+.fr-column2{
+min-width: 50%;
+margin: 0 auto;
+}
+.fr-column2 img{
+max-width: 90%;
+height: auto;
+object-fit: contain;
+}
+.who-we-are{
+line-height: 1.5;
+}
+.same-size-image {
+width: 100%;
+height: auto;
+object-fit: cover; /* Ensures the image covers the entire area without distorting */
+min-width: 100px; /* Set the minimum width you want the image to stop shrinking at */
+max-width: 600px; /* Optional: Set a maximum width if you want to limit the growth */
+border-radius: 25px;
+}
+.learn-more{
+border: none;
+background-color: rgb(74, 154, 245);
+color: white;
+width: 200px;
+height: 50px;
+border-radius: 10px;
+font-size: 25px;
 }
 .learn-more:hover {
-  background-color: rgb(44, 124, 215); 
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-  cursor: pointer; 
+background-color: rgb(44, 124, 215); 
+box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+cursor: pointer; 
 }
 .flex-column{
-      display: flex;
-      align-items: center;
-      flex-direction: column;
-      margin:0;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin:0;
 }   
 .flex-row2 {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 30px;
-  justify-content: space-between; /* Centers the items */  text-align: center;
-  width: 80%;
-  margin: 0 auto;
+display: flex;
+flex-direction: row;
+align-items: center;
+margin-bottom: 30px;
+justify-content: space-between; /* Centers the items */  
+text-align: center;
+width: 80%;
+margin: 0 auto;
 }
 .para-top{
-      font-size: 20px;
-      margin-top: 30px;
-      border-top: 2px solid black; 
-      width: 300px;
-      font-family: Bradley Hand (cursive);
-	  padding-top: 20px;
-    }
-    .para-bottom{
-      font-size: 20px;
-      margin-bottom: 20px;
-      border-bottom: 4px solid black; 
-      width: 300px;
-      text-align: center;
-      font-style: italic;
-	  padding-bottom: 20px;	  
-    }
-    .pictures {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%; 
-    height: 200px; 
-    object-fit: cover; 
-    max-width: 300px; 
-    max-height: 300px; 
+    font-size: 20px;
+    margin-top: 30px;
+    border-top: 2px solid black; 
+    width: 300px;
+    font-family: Bradley Hand (cursive);
+  padding-top: 20px;
+  }
+  .para-bottom{
+    font-size: 20px;
+    margin-bottom: 20px;
+    border-bottom: 4px solid black; 
+    width: 300px;
+    text-align: center;
+    font-style: italic;
+    padding-bottom: 20px;	  
+  }
+  .pictures {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%; 
+  height: 200px; 
+  object-fit: cover; 
+  max-width: 300px; 
+  max-height: 300px;
 }
 .learn-service a {
-  color: rgb(74, 154, 245); 
-  font-weight: bold; 
+color: rgb(74, 154, 245); 
+font-weight: bold; 
 }
 
 .learn-service a:hover {
-  color: rgb(44, 124, 215); 
+color: rgb(44, 124, 215); 
 }
+
+
 /* Tablets */
 @media (min-width: 767px) and (max-width: 1330px) {
-  .homepage-background {
-    width: 100%;
+.homepage-background {
+  width: 100%;
 }
-  .hero{
-    width: 60%;
-    font-size: 50px;
-  }
-  .hero-p{
-    width: 50%; 
-    font-size: 28px;
-  }
-  h1{
-    font-size: 32px; 
-  }
-  h2{
-    font-size: 24px;
-  }
-  .mission-h{
-    font-size: 18px;
-  }
-  .flex-row, .flex-row2 {
-    flex-wrap: wrap;
-    justify-content: center; 
-    gap: 15px;
-  }
-
-  .flex-row p, .flex-row2 p {
-    flex-basis: calc(25% - 30px); 
-    text-align: center;
-    margin-bottom: 10px; 
-  }
-  .container{
-    display: flex;
-    flex-direction: column;
-    justify-content: center; 
-    align-items: center; 
-    text-align: center;
-    }
-    .fl-column2{
-      order: 1;
-    }
-    .fl-column2{
-      order: 2;
-    }
+.hero{
+  width: 60%;
+  font-size: 50px;
 }
-/* Smart phones */
-@media (max-width: 767px) {
-  .hero{
-    width: 80%;
-    font-size: 28px;
-  }
-  .hero-p{
-    width: 70%;
-    font-size: 24px;    
-  }
-  h1{
-    font-size: 28px;  
-  }
-  h2{
-    font-size: 20px;
-  }
-  .mission-h{
-    font-size: 16px;
-  }
-  .flex-row, .flex-row2 {
-    flex-wrap: wrap; 
-    justify-content: center; 
-    gap: 10px; 
-  }
+.hero-p{
+  width: 50%; 
+  font-size: 28px;
+}
+h1{
+  font-size: 32px; 
+}
+h2{
+  font-size: 24px;
+}
+.mission-h{
+  font-size: 18px;
+}
+.flex-row, .flex-row2 {
+  flex-wrap: wrap;
+  justify-content: center; 
+  gap: 15px;
+}
 
-  .flex-row p, .flex-row2 p {
-    flex-basis: calc(25% - 30px); 
-    text-align: center;
-    margin-bottom: 10px;
-  }
-  .states-h{
-    text-align: center;
-  }
-  .container{
+.flex-row p, .flex-row2 p {
+  flex-basis: calc(25% - 30px); 
+  text-align: center;
+  margin-bottom: 10px; 
+}
+.container{
   display: flex;
   flex-direction: column;
   justify-content: center; 
   align-items: center; 
-  text-align: center; 
+  text-align: center;
+  }
+  .fl-column, .fr-column{
+    min-width: 80%;
   }
   .fl-column2{
     order: 1;
@@ -275,4 +238,54 @@ padding-top: 30px;
   .fl-column2{
     order: 2;
   }
+}
+/* Smart phones */
+@media (max-width: 767px) {
+.hero{
+  width: 80%;
+  font-size: 40px;
+}
+.hero-p{
+  width: 70%;
+  font-size: 20px;    
+}
+h1{
+  font-size: 28px;  
+}
+h2{
+  font-size: 20px;
+}
+.mission-h{
+  font-size: 16px;
+}
+.flex-row, .flex-row2 {
+  flex-wrap: wrap; 
+  justify-content: center; 
+  gap: 10px; 
+}
+
+.flex-row p, .flex-row2 p {
+  flex-basis: calc(25% - 30px); 
+  text-align: center;
+  margin-bottom: 10px;
+}
+.states-h{
+  text-align: center;
+}
+.container{
+display: flex;
+flex-direction: column;
+justify-content: center; 
+align-items: center; 
+text-align: center; 
+}
+.fl-column2{
+  order: 1;
+}
+.fl-column2{
+  order: 2;
+}
+.same-size-image{
+  margin: 0 auto;
+}
 }
