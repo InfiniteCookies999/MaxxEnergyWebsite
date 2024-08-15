@@ -3,7 +3,7 @@
 }
 
 body {
-  background-color: rgb(155, 153, 161);
+  background-color: rgb(155, 153, 161) !important;
 }
 
 .outer-container {
