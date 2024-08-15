@@ -22,7 +22,7 @@ class UserService {
   }
 
 
-  async login(email, password) {
+  async login(email, password, session) {
     const invalidMessage = "Invalid email or password";
 
     const user = await UserRepository.getUserByEmail(email);
@@ -30,7 +30,15 @@ class UserService {
       throw new HttpError(invalidMessage, 401);
     }
 
-    console.log(user);
+    const hashedPassword = user.password;
+    if (!(await bcrypt.compare(password, hashedPassword))) {
+      throw new HttpError(invalidMessage, 401);
+    }
+
+    // The user provided correct credentials. Creating a user session.
+    session.user = {
+      id: user.id
+    }
   }
 }
 

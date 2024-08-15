@@ -83,7 +83,8 @@ router.post('/user/login',
 
   validateBody,
   controller(async (req, res) => {
-    res.send("This is a response!");
+    await UserService.login(req.body.email, req.body.password, req.session);
+    res.send();
   })
 )
 

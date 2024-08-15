@@ -97,7 +97,7 @@ class UserRepository {
       return null;
     }
 
-    const user = new User(...results[0]);
+    const user = new User(...Object.values(results[0]));
     return user;
   }
 
@@ -109,7 +109,7 @@ class UserRepository {
       return null;
     }
 
-    const user = new User(...results[0]);
+    const user = new User(...Object.values(results[0]));
     return user;
   }
 
