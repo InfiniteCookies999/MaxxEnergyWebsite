@@ -1,0 +1,10 @@
+body{
+  padding-top: 120px;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+.navbar {
+  position: relative !important;
+}
+.contact-us-container{
+  padding-bottom: 120px;
+}
