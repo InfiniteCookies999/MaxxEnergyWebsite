@@ -3,6 +3,7 @@ const { controller, validateBody } = require('../middleware');
 const { body } = require('express-validator');
 const COUNTIES = require('./counties');
 const { UserRepository } = require('../database');
+const { UserService } = require('../services');
 
 const NAME_PATTERN = /^[a-zA-Z0-9]+$/;
 
@@ -15,6 +16,7 @@ const PHONE_PATTERN = /^(\d{3})\-(\d{3})\-(\d{4})$/;
 
 const router = express.Router();
 
+router.use(express.urlencoded({extended: false}));
 router.use(express.json());
 
 function validateName(fieldName) {
@@ -69,8 +71,9 @@ router.post('/user/register',
     .matches(PASSWORD_PATTERN).withMessage("Invalid format"),
 
   validateBody,
-  controller((req, res) => {
-    res.send("This is the response!");
+  controller(async (req, res) => {
+    await UserService.register(req.body);
+    res.send();
 }));
 
 router.post('/user/login',
@@ -79,7 +82,7 @@ router.post('/user/login',
     .isLength({ min: 0, max: UserRepository.maxPasswordLength() }).withMessage("Invalid length"),
 
   validateBody,
-  controller((req, res) => {
+  controller(async (req, res) => {
     res.send("This is a response!");
   })
 )

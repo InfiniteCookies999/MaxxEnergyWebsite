@@ -1,14 +1,16 @@
 const getMessage = (err) => {
-  switch (err.statusCode) {
-    case 400:
-      return JSON.parse(err.message);
-    case 401:  
-      return err.message;
-    case 404:
-      return err.message || "Page does not exist";
-    default:
-      return "Internal server error";
+  if (err.statusCode === 400) {
+    // Parse json from express-validator.
+    return JSON.parse(err.message);
   }
+  if (err.statusCode == 404) {
+    return err.message || "Page does not exist";
+  }
+  if (err.statusCode >= 400 && err.statusCode <= 499) {
+    return err.message;
+  }
+  console.log(err);
+  return "Internal server error";
 }
 
 const errorHandler = (err, req, res, next) => {

@@ -1,10 +1,10 @@
 const getDBConnection = require('./connection');
 
 class User {
-  constructor(firstName, lastName, email, phone, state, county,
+  constructor(id, firstName, lastName, email, phone, state, county,
               addressLine1, addressLine2,
               zipCode, password, joinDate) {
-    this.id = 0;
+    this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
@@ -97,15 +97,22 @@ class UserRepository {
       return null;
     }
 
-    const values = results[0];
-
-    const user = new User(values.firstName, values.lastName, values.email, values.phone,
-      values.state, values.county, values.addressLine1, values.addressLine2,
-      values.zip_code, values.password, values.joinDate
-    );
-    user.id = userId;
+    const user = new User(...results[0]);
     return user;
   }
+
+  async getUserByEmail(email) {
+    const conn = await getDBConnection();
+
+    const [ results ] = await conn.execute(`SELECT * FROM user WHERE email=?`, [ email ]);
+    if (results.length === 0) {
+      return null;
+    }
+
+    const user = new User(...results[0]);
+    return user;
+  }
+
 }
 
 module.exports = {
