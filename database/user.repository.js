@@ -80,6 +80,8 @@ class UserRepository {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
       Object.values(user));
+    
+    return await this.getUserByEmail(user.email);
   }
 
   async doesUserExistByEmail(email) {

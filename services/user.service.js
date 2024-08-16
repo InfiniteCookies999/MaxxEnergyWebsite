@@ -1,12 +1,13 @@
 const bcrypt = require('bcryptjs');
 const { HttpError } = require('../middleware');
 const { UserRepository, User } = require('../database');
+const userRepository = require('../database/user.repository');
 
 const HASH_STRENGTH = 10
 
 class UserService {
 
-  async register(dto) {
+  async register(dto, session) {
     if (await UserRepository.doesUserExistByEmail(dto.email)) {
       throw new HttpError("Email taken", 403);
     }
@@ -14,11 +15,15 @@ class UserService {
     // TODO: Deal with email verification!
     const hashedPassword = await bcrypt.hash(dto.password, HASH_STRENGTH);
 
-    await UserRepository.saveUser(new User(0,
+    const user = await UserRepository.saveUser(new User(0,
       dto.firstName, dto.lastName, dto.email, dto.phoneNumber,
       dto.state, dto.county, dto.addressLine1, dto.addressLine2 || null,
       dto.zipCode, hashedPassword, new Date()
     ));
+
+    session.user = {
+      id: user.id
+    }
   }
 
 
