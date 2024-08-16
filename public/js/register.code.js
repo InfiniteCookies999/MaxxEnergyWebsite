@@ -349,7 +349,7 @@ $(document).ready(function () {
       url: '/api/user/register',
       data: body,
       success: () => {
-        console.log("register success");
+        window.location = "/profile";
       },
       error: (res) => {
         const badReq = res.status >= 400 && res.status <= 499 && res.status !== 400;

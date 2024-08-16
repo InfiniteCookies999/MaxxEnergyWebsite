@@ -1,7 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const config = require('./config');
-const { userRouter, staticRouter } = require('./routes');
+const { userRouter, staticRouter, viewsRouter } = require('./routes');
 const { errorHandler } = require('./middleware');
 
 function createApp() {
@@ -24,8 +24,14 @@ function createApp() {
     cookie: { maxAge: 60000 * 1 },
   }));
 
+  // Set the view engine.
+  app.set('view engine', 'hbs');
+  app.set('views', 'public');
+
   // Installing routes.
   app.use('/api/', userRouter);
+  app.use(viewsRouter);
+  // This must be placed after the views router because they share the same directory.
   app.use(staticRouter);
 
   // Install middleware

@@ -23,6 +23,11 @@ class UserService {
 
 
   async login(email, password, session) {
+    if (session.user) {
+      // The user is already logged in. They cannot login again.
+      throw new HttpError("Already logged in", 409);
+    }
+
     const invalidMessage = "Invalid email or password";
 
     const user = await UserRepository.getUserByEmail(email);
@@ -39,6 +44,14 @@ class UserService {
     session.user = {
       id: user.id
     }
+  }
+
+  async getUser(session) {
+    if (!(session.user)) {
+      throw new HttpError("Cannot get user's information. Not logged in", 401);
+    }
+
+    return await UserRepository.getUserById(session.user.id);
   }
 }
 
