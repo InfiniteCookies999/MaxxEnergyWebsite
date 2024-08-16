@@ -84,7 +84,7 @@ function setCounties(dropdown, key, userCounty) {
   dropdown.selectpicker('val', selectedCounty);
 }
 
-async function addStatesAndCounties(stateDropdown, countyDropdown, userState, userCounty) {
+function addStatesAndCounties(stateDropdown, countyDropdown, userState, userCounty) {
   
   let selectedAbbreviation = "VA"; // Default to Virginia.
   stateDropdown.selectpicker();
