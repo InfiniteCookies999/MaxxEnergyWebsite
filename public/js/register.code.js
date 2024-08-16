@@ -10,69 +10,6 @@ const FIXED_NUMBER_EMPTY      = 0x01;
 const FIXED_NUMBER_INCOMPLETE = 0x02;
 const FIELD_EMPTY             = 0x01;
 
-// See: https://gist.github.com/marshallswain/88f377c71aa88aceaf660b157f6d8f46
-const STATES = [
-  { name: 'ALABAMA', abbreviation: 'AL'},
-  { name: 'ALASKA', abbreviation: 'AK'},
-  { name: 'AMERICAN SAMOA', abbreviation: 'AS'},
-  { name: 'ARIZONA', abbreviation: 'AZ'},
-  { name: 'ARKANSAS', abbreviation: 'AR'},
-  { name: 'CALIFORNIA', abbreviation: 'CA'},
-  { name: 'COLORADO', abbreviation: 'CO'},
-  { name: 'CONNECTICUT', abbreviation: 'CT'},
-  { name: 'DELAWARE', abbreviation: 'DE'},
-  { name: 'DISTRICT OF COLUMBIA', abbreviation: 'DC'},
-  { name: 'FEDERATED STATES OF MICRONESIA', abbreviation: 'FM'},
-  { name: 'FLORIDA', abbreviation: 'FL'},
-  { name: 'GEORGIA', abbreviation: 'GA'},
-  { name: 'GUAM', abbreviation: 'GU'},
-  { name: 'HAWAII', abbreviation: 'HI'},
-  { name: 'IDAHO', abbreviation: 'ID'},
-  { name: 'ILLINOIS', abbreviation: 'IL'},
-  { name: 'INDIANA', abbreviation: 'IN'},
-  { name: 'IOWA', abbreviation: 'IA'},
-  { name: 'KANSAS', abbreviation: 'KS'},
-  { name: 'KENTUCKY', abbreviation: 'KY'},
-  { name: 'LOUISIANA', abbreviation: 'LA'},
-  { name: 'MAINE', abbreviation: 'ME'},
-  { name: 'MARSHALL ISLANDS', abbreviation: 'MH'},
-  { name: 'MARYLAND', abbreviation: 'MD'},
-  { name: 'MASSACHUSETTS', abbreviation: 'MA'},
-  { name: 'MICHIGAN', abbreviation: 'MI'},
-  { name: 'MINNESOTA', abbreviation: 'MN'},
-  { name: 'MISSISSIPPI', abbreviation: 'MS'},
-  { name: 'MISSOURI', abbreviation: 'MO'},
-  { name: 'MONTANA', abbreviation: 'MT'},
-  { name: 'NEBRASKA', abbreviation: 'NE'},
-  { name: 'NEVADA', abbreviation: 'NV'},
-  { name: 'NEW HAMPSHIRE', abbreviation: 'NH'},
-  { name: 'NEW JERSEY', abbreviation: 'NJ'},
-  { name: 'NEW MEXICO', abbreviation: 'NM'},
-  { name: 'NEW YORK', abbreviation: 'NY'},
-  { name: 'NORTH CAROLINA', abbreviation: 'NC'},
-  { name: 'NORTH DAKOTA', abbreviation: 'ND'},
-  { name: 'NORTHERN MARIANA ISLANDS', abbreviation: 'MP'},
-  { name: 'OHIO', abbreviation: 'OH'},
-  { name: 'OKLAHOMA', abbreviation: 'OK'},
-  { name: 'OREGON', abbreviation: 'OR'},
-  { name: 'PALAU', abbreviation: 'PW'},
-  { name: 'PENNSYLVANIA', abbreviation: 'PA'},
-  { name: 'PUERTO RICO', abbreviation: 'PR'},
-  { name: 'RHODE ISLAND', abbreviation: 'RI'},
-  { name: 'SOUTH CAROLINA', abbreviation: 'SC'},
-  { name: 'SOUTH DAKOTA', abbreviation: 'SD'},
-  { name: 'TENNESSEE', abbreviation: 'TN'},
-  { name: 'TEXAS', abbreviation: 'TX'},
-  { name: 'UTAH', abbreviation: 'UT'},
-  { name: 'VERMONT', abbreviation: 'VT'},
-  { name: 'VIRGIN ISLANDS', abbreviation: 'VI'},
-  { name: 'VIRGINIA', abbreviation: 'VA'},
-  { name: 'WASHINGTON', abbreviation: 'WA'},
-  { name: 'WEST VIRGINIA', abbreviation: 'WV'},
-  { name: 'WISCONSIN', abbreviation: 'WI'},
-  { name: 'WYOMING', abbreviation: 'WY' }
-];
-
 function getPasswordErrorFlags() {
   const password = $('#password-input').val();
   let errorFlags = 0;
@@ -146,60 +83,6 @@ function getZipCodeErrorFlags() {
   return getFixedNumberErrorFlags($('#zip-code-input'), 5);
 }
 
-function setCounties(key) {
-  const countyList = COUNTIES[key];
-
-  const dropdown = $('#county-input');
-  dropdown.selectpicker();
-
-  dropdown.empty();
-  
-  for (const county of countyList) {
-    // TODO: should probably change the key that is used here.
-    dropdown.append(`<option value=${county.replaceAll(" ", "-")}>${county}</option>`);
-  }
-
-  dropdown.selectpicker("refresh");
-}
-
-async function addStates() {
-
-  // https://ip-api.com
-  let userState = undefined;
-  try {
-    
-    const response = await fetch("http://ip-api.com/json");
-    const json = await response.json();
-
-    userState = json.regionName;
-
-  } catch (error) {
-    // Ignoring the error since this is only helpful information not essential.
-  }
-  
-  let selectedAbbreviation = "";
-  const dropdown = $('#state-input');
-  dropdown.selectpicker();
-  for (const state of STATES) {
-    let name = state.name.toLowerCase();
-    name = name.charAt(0).toUpperCase() + name.slice(1);
-
-    if (name === userState) {
-      selectedAbbreviation = state.abbreviation;
-    }
-
-    dropdown.append(`<option value=${state.abbreviation}>${name}</option>`);
-  }
-
-  dropdown.selectpicker("refresh");
-  
-  if (userState !== undefined && userState !== "") {
-    dropdown.selectpicker('val', selectedAbbreviation);
-  }
-  
-  setCounties(selectedAbbreviation);
-}
-
 function onPasteEvent(cb) {
   return (event) => {
     const doNotPaste = () => {
@@ -227,11 +110,28 @@ $(document).ready(function () {
 
   createLoadAnimation(document.getElementById("load-animation"));
 
-  addStates();
+  (async () => {
+
+    // https://ip-api.com
+    let userState = undefined;
+    try {
+      
+      const response = await fetch("http://ip-api.com/json");
+      const json = await response.json();
+
+      userState = json.regionName;
+
+    } catch (error) {
+      // Ignoring the error since this is only helpful information not essential.
+    }
+
+    addStatesAndCounties($('#state-input'), $('#county-input'), userState, "");
+  
+  })();
 
   $('#state-input').on('change', () => {
     const state = $(this).find("option:selected").val();
-    setCounties(state);
+    setCounties($('#county-input'), state, "");
   });
 
   $("form").submit((event) => {

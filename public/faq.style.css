@@ -7,12 +7,12 @@ body{
 .question {
   font-size: 1.5rem; 
   font-weight: bold;
-  color: rgb(63, 134, 216);
+  color: var(--site-color-darker-blue-color);
 }
 .answer {
   font-size: 1.5rem;
   font-weight: bold;
-  color: rgb(233, 151, 0);
+  color: var(--site-color-darker-orange-color)
 }
 .question-text {
   font-weight: bold;

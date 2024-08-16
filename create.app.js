@@ -20,8 +20,8 @@ function createApp() {
     secret: config.SESSION_SECRET_KEY,
     // So the session persist.
     saveUninitialized: true,
-    // This is only the user's session cookie. The session will still be open even once the session cookie expires.
-    cookie: { maxAge: 60000 * 1 },
+    // This is how long the user is logged in for.
+    cookie: { maxAge: 60000 * 1440 /* One day */  },
   }));
 
   // Set the view engine.

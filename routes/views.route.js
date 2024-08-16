@@ -16,7 +16,15 @@ router.get('/profile', controller(async (req, res) => {
 
   res.render('profile', {
     firstName: user.firstName,
-    lastName: user.lastName
+    lastName: user.lastName,
+    profilePicture: "/images/default-profile-icon.jpg",
+    email: user.email,
+    phone: user.phone,
+    addressLine1: user.addressLine1,
+    addressLine2: user.addressLine2,
+    county: user.county.replaceAll("-", " "),
+    state: user.state,
+    zipCode: user.zipCode
   });
 }));
 
