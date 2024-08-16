@@ -60,7 +60,7 @@ router.post('/user/register',
         return true;
       }
       // TODO: Consider improving performance by having these be sets instead.
-      return countyList.includes(value);
+      return countyList.includes(value.replaceAll("-", " "));
     }).withMessage("Unknown county"),
   validateAddressLine('addressLine1'),
   validateAddressLine('addressLine2', true),

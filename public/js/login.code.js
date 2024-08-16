@@ -50,21 +50,25 @@ $(document).ready(function () {
         password
       },
       success: () => {
-        window.location = "/";
+        window.location = "/profile";
       },
       error: (res) => {
-        if (res.status === 401) {
+        const badReq = res.status >= 400 && res.status <= 499 && res.status !== 400;
+        if (badReq) {
           const errorMsg = $.parseJSON(res.responseText).message;
           tryAppendError($('#submit-error'), errorMsg, 1, 1);
+        } else if (req.status === 400) {
+          const errorMsg = $.parseJSON(res.responseText).message.errors;
+            console.log("Error message (400): ", errorMsg);
         } else {
-          // TODO: Handle all other issues!
+          console.log(`Error code: ${req.status}`);
         }
       },
       complete: () => {
         $('.bottom-btn-group button').prop("disabled", false);
         $('.bottom-btn-group canvas').css("display", "none");
       }
-    })
+    });
   });
 
   createLoadAnimation(document.getElementById("load-animation"));
