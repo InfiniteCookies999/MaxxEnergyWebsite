@@ -1,5 +1,6 @@
 const getDBConnection = require('./connection');
-const { UserRepository, User } = require('./user.repository');
+const UserRepository = require('./user.repository');
+const User = require('./user.model');
 
 module.exports = {
   getDBConnection,
