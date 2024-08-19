@@ -2,6 +2,15 @@ body {
   background-color: white !important;
 }
 
+#profile-picture:hover {
+  cursor: pointer;
+  border: 1px var(--site-blue-color) dashed;
+}
+
+.profile-drag-border {
+  border: 1px var(--site-blue-color) solid;
+}
+
 #profile-header {
   margin-bottom: 2rem;
 }

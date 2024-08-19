@@ -141,12 +141,72 @@ function submitName() {
   return true;
 }
 
+function submitProfilePicture(file) {
+
+  const reader = new FileReader();
+  const image = $('#profile-picture');
+
+  reader.onload = (event) => {
+    image.attr('src', event.target.result);
+  }
+
+  reader.readAsDataURL(file);
+
+  // TODO: Here we would upload the change to the server.
+}
+
 $(document).ready(function() {
 
   const addressData = $('#address-span').attr("address-data").split(":");
   const userState = addressData[3];
   const userCounty = addressData[2].replaceAll(" ", "-");
   addStatesAndCounties($('#state-input'), $('#county-input'), userState, userCounty);
+
+  $('#profile-picture').on("click", () => {
+    const selector = document.getElementById('file-selector');
+    
+    selector.onchange = () => {
+      const file = selector.files[0];
+      if (!file) {
+        console.log("no file selected");
+        return;
+      }
+
+      submitProfilePicture(file);
+    };
+    selector.click();
+  });
+
+  $('#profile-picture').on("dragover", (event) => {
+    event.preventDefault();
+    $('#profile-picture').addClass('profile-drag-border');
+  });
+
+  const dragFinished = () => {
+    $('#profile-picture').removeClass('profile-drag-border');
+  };
+  $('#profile-picture').on("dragleave", dragFinished);
+  $('#profile-picture').on("dragend", dragFinished);
+  $('#profile-picture').on("drop", (event) => {
+    event.preventDefault();
+    $('#profile-picture').removeClass('profile-drag-border');
+    const file = event.originalEvent.dataTransfer.files[0];
+    if (!file) {
+      return;
+    }
+    const type = file.type;
+    const validTypes = $('#file-selector').attr('accept')
+      .split(",")
+      .map(v => v.trim())
+      .map(v => "image/" + v.substr(1));
+
+    if (!validTypes.includes(type)) {
+      // Not a valid file type
+      return;
+    }
+
+    submitProfilePicture(file);
+  });
 
   // Resetting errors
   checkForChangeInErrors($('#new-password-error'), $('#new-password-input'), getPasswordErrorFlagsFn($('#new-password-input')));
