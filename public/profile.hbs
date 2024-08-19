@@ -48,7 +48,8 @@
                                 <th scope="row">Email</th>
                                 <td>
                                     <span id="email-span" class="static-field">{{email}}</span>
-                                    <input autocomplete="off" type="text" class="form-control editable-field" value="{{email}}">
+                                    <input id="email-input" autocomplete="off" type="text" class="form-control editable-field" value="{{email}}">
+                                    <div id="email-error" class="info-errors"></div>
                                 </td>
                                 <td>
                                     <i class="bx bx-edit-alt edit-icon"></i>
@@ -59,7 +60,13 @@
                                 <th scope="row">Phone Number</th>
                                 <td>
                                     <span id="phone-number-span" class="static-field">{{phone}}</span>
-                                    <input autocomplete="off" type="text" class="form-control editable-field" value="{{phone}}">    
+                                    <input id="phone-number-input"
+                                           autocomplete="off"
+                                           type="tel"
+                                           class="form-control editable-field"
+                                           value="{{phone}}"
+                                           maxlength="12">    
+                                    <div id="phone-number-error" class="info-errors"></div>
                                 </td>
                                 <td>
                                     <i class="bx bx-edit-alt edit-icon"></i>
@@ -85,13 +92,17 @@
                                                        type="text"
                                                        class="form-control editable-field"
                                                        value="{{addressLine1}}"
-                                                       placeholder="Address Line 1">
+                                                       placeholder="Address Line 1"
+                                                       maxlength="250">
+                                                <div id="address-line1-error" class="info-errors"></div>
                                                 <input id="zip-code-input"
                                                        autocomplete="off"
                                                        type="text"
                                                        class="form-control editable-field mt-1"
                                                        value="{{zipCode}}"
-                                                       placeholder="Zip code">
+                                                       placeholder="Zip code"
+                                                       maxlength="5">
+                                                <div id="zip-code-error" class="info-errors"></div>
                                             </div>
                                         </div>
                                         <div class="col-6">
@@ -103,7 +114,8 @@
                                                        type="text"
                                                        class="form-control editable-field"
                                                        value="{{addressLine2}}"
-                                                       placeholder="Address Line 2">
+                                                       placeholder="Address Line 2"
+                                                       maxlength="250">
                                             </div>
                                         </div>
                                     </div>
@@ -117,9 +129,19 @@
                                 <th scope="row">Password</th>
                                 <td>
                                     <span id="password-span" class="static-field">********************</span>
-                                    <input autocomplete="off" type="text" class="form-control editable-field" placeholder="enter old password">
+                                    <input id="old-password-input"
+                                           autocomplete="off"
+                                           type="text"
+                                           class="form-control editable-field"
+                                           placeholder="enter old password">
+                                    <div id="old-password-error" class="info-errors"></div>
                                     <br/>
-                                    <input autocomplete="off" type="text" class="form-control editable-field" placeholder="enter new password">
+                                    <input id="new-password-input"
+                                           autocomplete="off"
+                                           type="text"
+                                           class="form-control editable-field"
+                                           placeholder="enter new password">
+                                    <div id="new-password-error" class="info-errors"></div>
                                 </td>
                                 <td>
                                     <i class="bx bx-edit-alt edit-icon"></i>

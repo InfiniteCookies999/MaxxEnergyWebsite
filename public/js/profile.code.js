@@ -1,4 +1,103 @@
+
+function getPhoneNumberErrorFlags() {
+  return getFixedNumberErrorFlags($('#phone-number-input'), 10);
+}
+
+function getZipCodeErrorFlags() {
+  return getFixedNumberErrorFlags($('#zip-code-input'), 5);
+}
+
 function submitEmail() {
+  const errorFlags = getEmailErrorFlagsFn($('#email-input'))();
+  
+  appendEmailErrorMessages($('#email-error'), errorFlags);
+
+  if (errorFlags !== 0) {
+    $('#email-input').addClass("is-invalid");
+    return false;
+  }
+
+  // TODO: Here we would submit the new email to the server.
+
+  return true;
+}
+
+function submitPhoneNumber() {
+  const errorFlags = getPhoneNumberErrorFlags();
+  
+  appendErrorMessages($('#phone-number-error'), errorFlags, (container, flags) => {
+    tryAppendError(container, "Empty", flags, FIXED_NUMBER_EMPTY);
+    tryAppendError(container, "Incomplete", flags, FIXED_NUMBER_INCOMPLETE);
+  });
+
+  if (errorFlags !== 0) {
+    $('#phone-number-input').addClass('is-invalid');
+    return false;
+  }
+
+  // TODO: Here we would submit the new phone number to the server.
+
+  return true;
+}
+
+function submitAddress() {
+  const zipCodeErrorFlags = getZipCodeErrorFlags();
+  const addressLine1ErrorFlags = getNonEmptyErrorFlagsFn($('#address-line1-input'))();
+
+  appendErrorMessages($('#address-line1-error'), addressLine1ErrorFlags, (container, flags) => {
+    tryAppendError(container, "Empty", flags, FIELD_EMPTY);
+  });
+
+  appendErrorMessages($('#zip-code-error'), zipCodeErrorFlags, (container, flags) => {
+    tryAppendError(container, "Empty", flags, FIXED_NUMBER_EMPTY);
+    tryAppendError(container, "Incomplete", flags, FIXED_NUMBER_INCOMPLETE);
+  });
+
+  if (addressLine1ErrorFlags !== 0) {
+    $('#address-line1-input').addClass("is-invalid");
+  }
+
+  if (zipCodeErrorFlags !== 0) {
+    $('#zip-code-input').addClass("is-invalid");
+  }
+
+  if (addressLine1ErrorFlags !== 0 ||
+      zipCodeErrorFlags !== 0) {
+    return false;
+  }
+
+  // TODO: Here we would submit the new address to the server.
+
+  return true;
+}
+
+function submitPassword() {
+  const oldPasswordErrorFlags = getNonEmptyErrorFlagsFn($('#old-password-input'))();
+  const newPasswordErrorFlags = getPasswordErrorFlagsFn($('#new-password-input'))();
+
+  appendErrorMessages($('#old-password-error'), oldPasswordErrorFlags, (container, flags) => {
+    tryAppendError(container, "Empty", flags, FIELD_EMPTY);
+  });
+
+  appendErrorMessages($('#new-password-error'), newPasswordErrorFlags, (container, flags) => {
+    tryAppendError(container, `Too short. Min. Length: ${MIN_PASSWORD_LENGTH}`, flags, PASSWORD_TOO_SHORT_FLAG);
+    tryAppendError(container, "Missing special character", flags, PASSWORD_NO_SPECIAL_FLAG);
+    tryAppendError(container, "Missing digit", flags, PASSWORD_NO_DIGIT_FLAG);
+  });
+
+  if (oldPasswordErrorFlags !== 0) {
+    $('#old-password-input').addClass("is-invalid");
+  }
+
+  if (newPasswordErrorFlags !== 0) {
+    $('#new-password-input').addClass("is-invalid");
+  }
+
+  if (oldPasswordErrorFlags !== 0 ||
+      newPasswordErrorFlags !== 0) {
+    return false;
+  }
+
   return true;
 }
 
@@ -8,6 +107,21 @@ $(document).ready(function() {
   const userState = addressData[3];
   const userCounty = addressData[2].replaceAll(" ", "-");
   addStatesAndCounties($('#state-input'), $('#county-input'), userState, userCounty);
+
+  // Resetting errors
+  checkForChangeInErrors($('#new-password-error'), $('#new-password-input'), getPasswordErrorFlagsFn($('#new-password-input')));
+  checkForChangeInErrors($('#old-password-error'), $('#old-password-input'), getNonEmptyErrorFlagsFn($('#old-password-input')));
+  checkForChangeInErrors($('#email-error'), $('#email-input'), getEmailErrorFlagsFn($('#email-input')));
+  checkForChangeInErrors($('#phone-number-error'), $('#phone-number-input'), getPhoneNumberErrorFlags);
+  checkForChangeInErrors($('#address-line1-error'), $('#address-line1-input'), getNonEmptyErrorFlagsFn($('#address-line1-input')));
+  checkForChangeInErrors($('#zip-code-error'), $('#zip-code-input'), getZipCodeErrorFlags);
+
+  preventInvalidPhoneInput($('#phone-number-input'));
+
+  // Making sure zip codes only recieve numbers.
+  preventInvalidNonNumber($('#zip-code-input'));
+
+  preventInvalidAddressLine($('#address-line1-input, #address-line2-input'));
 
   $('#state-input').on('change', () => {
     const state = $(this).find("option:selected").val();
@@ -39,17 +153,29 @@ $(document).ready(function() {
       const row = $(saveIcon).closest('tr');
       const editField = row.find('.editable-field');
       const staticField = row.find('.static-field');
-      // TODO: Will need to validate.
-
+      
+      // Validating inputs for the different fields.
       const spanId = staticField.attr('id');
       switch (spanId) {
       case 'email-span':
-        // If it is an email then it needs to check against the server
-        // to see if the email is valid.
         if (!submitEmail()) {
           return;
         }
-      default:
+        break;
+      case 'phone-number-span':
+        if (!submitPhoneNumber()) {
+          return;
+        }
+        break;
+      case 'address-span':
+        if (!submitAddress()) {
+          return;
+        }  
+        break;
+      case 'password-span':
+        if (!submitPassword()) {
+          return;
+        }
         break;
       }
     

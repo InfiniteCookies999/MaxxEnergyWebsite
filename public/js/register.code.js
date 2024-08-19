@@ -1,34 +1,6 @@
 
-const PASSWORD_TOO_SHORT_FLAG  = 0x01;
-const PASSWORD_NO_SPECIAL_FLAG = 0x02;
-const PASSWORD_NO_DIGIT_FLAG   = 0x04;
-
 const REPEAT_PASSWORD_EMPTY_FLAG    = 0x01;
 const REPEAT_PASSWORD_NO_MATCH_FLAG = 0x02;
-
-const FIXED_NUMBER_EMPTY      = 0x01;
-const FIXED_NUMBER_INCOMPLETE = 0x02;
-const FIELD_EMPTY             = 0x01;
-
-function getPasswordErrorFlags() {
-  const password = $('#password-input').val();
-  let errorFlags = 0;
-
-  if (password.length < MIN_PASSWORD_LENGTH) {
-    errorFlags |= PASSWORD_TOO_SHORT_FLAG;
-  }
-
-  // See: https://stackoverflow.com/questions/32311081/check-for-special-characters-in-string
-  if (!password.match(PASSWORD_SPECIAL_CHARACTER_PATTERN)) {
-    errorFlags |= PASSWORD_NO_SPECIAL_FLAG;
-  }
-
-  if (!password.match(/\d/)) {
-    errorFlags |= PASSWORD_NO_DIGIT_FLAG;
-  }
-
-  return errorFlags;
-}
 
 function getRepeatPasswordErrorFlags() {
   const repeatPassword = $('#repeat-password-input').val();
@@ -49,11 +21,6 @@ function getNameErrorFlags(nameInput) {
   return name.length === 0 ? FIELD_EMPTY : 0;
 }
 
-function getAddressLine1ErrorFlags() {
-  const addressLine = $('#address-line1-input').val();
-  return addressLine.length === 0 ? FIELD_EMPTY : 0;
-}
-
 function getFirstNameErrorFlags() {
   return getNameErrorFlags($('#first-name-input'));
 }
@@ -62,48 +29,12 @@ function getLastNameErrorFlags() {
   return getNameErrorFlags($('#last-name-input'));
 }
 
-function getFixedNumberErrorFlags(input, length) {
-  const phoneNumber = input.val().replaceAll("-", "");
-  let errorFlags = 0;
-
-  if (phoneNumber.length === 0) {
-    errorFlags |= FIXED_NUMBER_EMPTY;
-  } else if (phoneNumber.length < length) {
-    errorFlags |= FIXED_NUMBER_INCOMPLETE;
-  }
-
-  return errorFlags;
-}
-
 function getPhoneNumberErrorFlags() {
   return getFixedNumberErrorFlags($('#phone-number-input'), 10);
 }
 
 function getZipCodeErrorFlags() {
   return getFixedNumberErrorFlags($('#zip-code-input'), 5);
-}
-
-function onPasteEvent(cb) {
-  return (event) => {
-    const doNotPaste = () => {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    
-    if (event.originalEvent && event.originalEvent.clipboardData) {
-      const content = event.originalEvent.clipboardData.getData("text");
-      
-      if (content === "" || content === undefined) {
-        doNotPaste(event); 
-        return;
-      }
-
-      cb(content, doNotPaste);
-
-    } else {
-      doNotPaste();
-    }
-  };
 }
 
 $(document).ready(function () {
@@ -137,14 +68,14 @@ $(document).ready(function () {
   $("form").submit((event) => {
     event.preventDefault();
 
-    const passwordErrorFlags       = getPasswordErrorFlags();
-    const emailErrorFlags          = getEmailErrorFlags();
+    const passwordErrorFlags       = getPasswordErrorFlagsFn($('#password-input'))();
+    const emailErrorFlags          = getEmailErrorFlagsFn($('#email-input'))();
     const repeatPasswordErrorFlags = getRepeatPasswordErrorFlags();
     const firstNameErrorFlags      = getFirstNameErrorFlags();
     const lastNameErrorFlags       = getLastNameErrorFlags();
     const phoneNumberErrorFlags    = getPhoneNumberErrorFlags();
     const zipCodeErrorFlags        = getZipCodeErrorFlags();
-    const addressLine1ErrorFlags   = getAddressLine1ErrorFlags();
+    const addressLine1ErrorFlags   = getNonEmptyErrorFlagsFn($('#address-line1-input'))();
     
     // Displaying the error messages.
     appendErrorMessages($('#password-error'), passwordErrorFlags, (container, flags) => {
@@ -268,55 +199,19 @@ $(document).ready(function () {
         $('.bottom-btn-group canvas').css("display", "none");
       }
     });
-
-    // !! Testing: Re-enabling after a certain amount of time to simulate server response.
-    setTimeout(() => {
-      $('.bottom-btn-group button').prop("disabled", false);
-      $('.bottom-btn-group canvas').css("display", "none");
-    }, 1500);
-    
   });
 
   // Resetting errors
-  checkForChangeInErrors($('#password-error'), $('#password-input'), getPasswordErrorFlags);
-  checkForChangeInErrors($('#email-error'), $('#email-input'), getEmailErrorFlags);
+  checkForChangeInErrors($('#password-error'), $('#password-input'), getPasswordErrorFlagsFn($('#password-input')));
+  checkForChangeInErrors($('#email-error'), $('#email-input'), getEmailErrorFlagsFn($('#email-input')));
   checkForChangeInErrors($('#repeat-password-error'), $('#repeat-password-input'), getRepeatPasswordErrorFlags);
   checkForChangeInErrors($('#first-name-error'), $('#first-name-input'), getFirstNameErrorFlags);
   checkForChangeInErrors($('#last-name-error'), $('#last-name-input'), getLastNameErrorFlags);
   checkForChangeInErrors($('#phone-number-error'), $('#phone-number-input'), getPhoneNumberErrorFlags);
   checkForChangeInErrors($('#zip-code-error'), $('#zip-code-input'), getZipCodeErrorFlags);
-  checkForChangeInErrors($('#address-line1-error'), $('#address-line1-input'), getAddressLine1ErrorFlags);
+  checkForChangeInErrors($('#address-line1-error'), $('#address-line1-input'), getNonEmptyErrorFlagsFn($('#address-line1-input')));
 
-  // Prevent the user from inputting non-numbers into the phone number input field!
-  $('#phone-number-input').keypress((event) => {
-    if (event.which < 48 || event.which > 57) {
-      event.preventDefault();
-    }
-  });
-  $('#phone-number-input').on("paste", onPasteEvent((content, doNotPaste) => {
-    if (!(/^\d+$/.test(content))) {
-      doNotPaste();
-    }
-  }));
-
-  // Insert - into the phone number.
-  $('#phone-number-input').keyup((event) => {
-    const input = event.target;
-    const value = input.value;
-
-    // Remove all - from the string.
-    const noDashValue = value.replaceAll("-", "");
-    // Only contains numbers now so we can take count.
-    const numDigits = noDashValue.length;
-
-    if (numDigits > 6) {
-      input.value = noDashValue.replace(/(\d{3})\-?(\d{3})\-?(\d)/, "$1-$2-$3");
-    } else if (numDigits > 3) {
-      input.value = noDashValue.replace(/(\d{3})\-?(\d)/, "$1-$2");
-    } else {
-      input.value = noDashValue;
-    }
-  });
+  preventInvalidPhoneInput($('#phone-number-input'));
 
   // Making sure name inputs are alphanumeric.
   $('#first-name-input, #last-name-input').keypress((event) => {
@@ -336,38 +231,9 @@ $(document).ready(function () {
   }));
 
   // Making sure zip codes only recieve numbers.
-  $('#zip-code-input').keypress((event) => {
-    if (!(event.which >= 48 && event.which <= 57)) {
-      event.preventDefault();
-    }
-  });
-  $('#zip-code-input').on("paste", onPasteEvent((content, doNotPaste) => {
-    if (!(/^\d+$/.test(content))) {
-      doNotPaste();
-    }
-  }));
+  preventInvalidNonNumber($('#zip-code-input'));
 
-  // Making sure only valid characters go into the address lines.
-  // https://fsawebenroll.ed.gov/RoboHelp/Business_Address.htm
-  $('#address-line1-input, #address-line2-input').keypress((event) => {
-    const key = event.which;
-    if (!((key >= 97 && key <= 122) || // a-z
-          (key >= 65 && key <= 90) ||  // A-Z
-          (key >= 48 && key <= 57) ||  // 0-9
-           key === 32 || key === 39 || // Special keys
-           key === 44 || key === 46 ||
-           key == 45 || key === 35 ||
-           key === 64 || key === 37 ||
-           key === 38 || key === 47)
-          ) {
-      event.preventDefault();
-    }
-  });
-  $('#address-line1-input, #address-line2-input').on("paste", onPasteEvent((content, doNotPaste) => {
-    if (!(/^[a-zA-Z0-9 .'\-#@%&]+$/.test(content))) {
-      doNotPaste();
-    }
-  }));
+  preventInvalidAddressLine($('#address-line1-input, #address-line2-input'));
 
   $('#show-password-check input').click(() => {
     const input1 = $('#password-input')[0];
