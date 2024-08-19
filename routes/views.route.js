@@ -16,6 +16,7 @@ router.get('/profile', controller(async (req, res) => {
   const user = await UserService.getUser(req.session);
 
   res.render('profile', {
+    // User information
     firstName: user.firstName,
     lastName: user.lastName,
     profilePicture: "/images/default-profile-icon.jpg", // TODO: Here the profile would be loaded from database.
@@ -25,7 +26,12 @@ router.get('/profile', controller(async (req, res) => {
     addressLine2: user.addressLine2,
     county: user.county.replaceAll("-", " "),
     state: user.state,
-    zipCode: user.zipCode
+    zipCode: user.zipCode,
+
+    // Form restrictions
+    maxNameLength: UserRepository.maxNameLength(),
+    maxAddressLineLength: UserRepository.maxAddressLineLength(),
+    maxPasswordLength: UserRepository.maxPasswordLength()
   });
 }));
 
