@@ -72,7 +72,7 @@ router.post('/user/register',
 
   validateBody,
   controller(async (req, res) => {
-    await UserService.register(req.body);
+    await UserService.register(req.body, req.session);
     res.send();
 }));
 
@@ -86,6 +86,6 @@ router.post('/user/login',
     await UserService.login(req.body.email, req.body.password, req.session);
     res.send();
   })
-)
+);
 
 module.exports = router;

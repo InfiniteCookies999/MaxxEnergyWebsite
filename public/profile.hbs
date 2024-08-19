@@ -11,18 +11,127 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
+    <!-- Search functionality of selectors -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+
+    <link rel="stylesheet" href="shared.auth.style.css">
     <link rel="stylesheet" href="profile.style.css">
+    
+    <script src="js/counties.code.js"></script>
+    <script src="js/address.form.util.code.js"></script>
+    <script src="js/form.utils.code.js"></script>
+    <script src="js/shared.auth.code.js"></script>
+    <script src="js/profile.code.js"></script>
 
 </head>
 <body>
     <!--Included the header-->
-    <!-- <div data-include="header"></div> -->
+    <div data-include="header"></div>
 
-    <div class="container mt-4">
-        <div class="profile-container">
-            <h1>User Profile</h1>
-            <h2>{{firstName}} {{lastName}}</h2>
+    <div style="margin-top: 6rem;">
+        <div class="container">
+            <h2 id="profile-header">User Profile</h2>
+            <div class="profile-container">
+                <img src={{profilePicture}} width="256" height="256" style="border-radius: 8px;">
+                
+                <div class="container-fluid right-container">
+                    <h4>{{firstName}} {{lastName}}</h4>
+                    
+                    <table class="table">
+                        <tbody>
+                            <tr class="tab-row-entry">
+                                <th scope="row">Email</th>
+                                <td>
+                                    <span id="email-span" class="static-field">{{email}}</span>
+                                    <input autocomplete="off" type="text" class="form-control editable-field" value="{{email}}">
+                                </td>
+                                <td>
+                                    <i class="bx bx-edit-alt edit-icon"></i>
+                                    <i class="bx bx-save save-icon"></i>
+                                </td>
+                            </tr>
+                            <tr class="tab-row-entry">
+                                <th scope="row">Phone Number</th>
+                                <td>
+                                    <span id="phone-number-span" class="static-field">{{phone}}</span>
+                                    <input autocomplete="off" type="text" class="form-control editable-field" value="{{phone}}">    
+                                </td>
+                                <td>
+                                    <i class="bx bx-edit-alt edit-icon"></i>
+                                    <i class="bx bx-save save-icon"></i>
+                                </td>
+                            </tr>
+                            <tr class="tab-row-entry">
+                                <th scope="row">Address</th>
+                                <td>
+                                    <span id="address-span" class="static-field"
+                                          address-data="{{addressLine1}}:{{addressLine2}}:{{county}}:{{state}}:{{zipCode}}">
+                                        {{addressLine1}} {{addressLine2}} {{county}} {{state}}, {{zipCode}}
+                                    </span>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="select-with-search">
+                                                <div class="select-with-search">
+                                                    <select id="state-input" data-live-search="true" class="selectpicker">
+                                                    </select>
+                                                </div>
+                                                <input id="address-line1-input"
+                                                       autocomplete="off"
+                                                       type="text"
+                                                       class="form-control editable-field"
+                                                       value="{{addressLine1}}"
+                                                       placeholder="Address Line 1">
+                                                <input id="zip-code-input"
+                                                       autocomplete="off"
+                                                       type="text"
+                                                       class="form-control editable-field mt-1"
+                                                       value="{{zipCode}}"
+                                                       placeholder="Zip code">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="select-with-search">
+                                                <select id="county-input" data-live-search="true" class="selectpicker">
+                                                </select>
+                                                <input id="address-line2-input"
+                                                       autocomplete="off"
+                                                       type="text"
+                                                       class="form-control editable-field"
+                                                       value="{{addressLine2}}"
+                                                       placeholder="Address Line 2">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <i class="bx bx-edit-alt edit-icon"></i>
+                                    <i class="bx bx-save save-icon"></i>
+                                </td>
+                            </tr>
+                            <tr class="tab-row-entry">
+                                <th scope="row">Password</th>
+                                <td>
+                                    <span id="password-span" class="static-field">********************</span>
+                                    <input autocomplete="off" type="text" class="form-control editable-field" placeholder="enter old password">
+                                    <br/>
+                                    <input autocomplete="off" type="text" class="form-control editable-field" placeholder="enter new password">
+                                </td>
+                                <td>
+                                    <i class="bx bx-edit-alt edit-icon"></i>
+                                    <i class="bx bx-save save-icon"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                
+                </div>
+                
+            </div>
         </div>
     </div>
 

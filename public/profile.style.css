@@ -1,0 +1,45 @@
+body {
+  background-color: white !important;
+}
+
+#profile-header {
+  margin-bottom: 2rem;
+}
+
+.profile-container {
+  border: 1px solid rgb(207, 207, 207);
+  padding: 1rem;
+  border-radius: 10px;
+  min-width: fit-content;
+  display: flex;
+}
+
+.right-container {
+  flex: 1;
+  margin-left: 1rem;
+}
+
+.tab-row-entry td:nth-of-type(1) {
+  color: gray;
+}
+
+.tab-row-entry td:nth-of-type(2) {
+  color: var(--site-color-darker-blue-color);
+}
+
+.tab-row-entry td:nth-of-type(2) i:hover {
+  color: blue;
+  cursor: pointer;
+}
+
+.editable-field {
+  display: none;
+}
+
+.save-icon {
+  display: none;
+}
+
+.select-with-search {
+  display: none;
+}
