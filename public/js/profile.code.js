@@ -131,7 +131,7 @@ $(document).ready(function() {
   // Turn the edit box on if the user clicks the edit button.
   $('.edit-icon').each((_, editIcon) => {
     $(editIcon).on('click', () => {
-      const row = $(editIcon).closest('tr');
+      const row = $(editIcon).closest('.tab-row-entry');
       const editField = row.find('.editable-field');
       const staticField = row.find('.static-field');
 
@@ -150,7 +150,7 @@ $(document).ready(function() {
   // Turn the edit box off if the user clicks the edit button and save.
   $('.save-icon').each((_, saveIcon) => {
     $(saveIcon).on('click', () => {
-      const row = $(saveIcon).closest('tr');
+      const row = $(saveIcon).closest('.tab-row-entry');
       const editField = row.find('.editable-field');
       const staticField = row.find('.static-field');
       
@@ -187,6 +187,10 @@ $(document).ready(function() {
         const zipCode = $('#zip-code-input').val();
         const space = addressLine2 !== "" ? " " : "";
         staticField.text(`${addressLine1}${space}${addressLine2} ${county} ${state}, ${zipCode}`);
+      } else if (spanId === 'name-span') {
+        const firstName = $('#first-name-input').val();
+        const lastName = $('#last-name-input').val();
+        staticField.text(`${firstName} ${lastName}`);
       } else if (spanId !== 'password-span') {
         staticField.text(editField.val());
       }

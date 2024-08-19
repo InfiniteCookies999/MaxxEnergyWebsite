@@ -23,11 +23,12 @@ body {
   color: gray;
 }
 
-.tab-row-entry td:nth-of-type(2) {
+.tab-row-entry i, .editable-section i {
   color: var(--site-color-darker-blue-color);
 }
 
-.tab-row-entry td:nth-of-type(2) i:hover {
+.tab-row-entry i:hover,
+.editable-section i:hover {
   color: blue;
   cursor: pointer;
 }

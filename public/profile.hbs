@@ -40,7 +40,29 @@
                 <img src={{profilePicture}} width="256" height="256" style="border-radius: 8px;">
                 
                 <div class="container-fluid right-container">
-                    <h4>{{firstName}} {{lastName}}</h4>
+                    <div class="editable-section tab-row-entry">
+                        
+                        <h4 id="name-span" style="display: inline-block;" class="static-field">{{firstName}} {{lastName}}</h4>
+
+                        <input id="first-name-input"
+                               autocomplete="off"
+                               type="text"
+                               class="form-control editable-field"
+                               value="{{firstName}}"
+                               maxlength="40">
+
+                        <input id="last-name-input"
+                               autocomplete="off"
+                               type="text"
+                               class="form-control editable-field mt-1"
+                               value="{{lastName}}"
+                               maxlength="40">
+                        
+                        <div style="display: inline-block;">
+                            <i class="bx bx-edit-alt edit-icon"></i>
+                            <i class="bx bx-save save-icon"></i>
+                        </div>
+                    </div>
                     
                     <table class="table">
                         <tbody>
@@ -48,7 +70,11 @@
                                 <th scope="row">Email</th>
                                 <td>
                                     <span id="email-span" class="static-field">{{email}}</span>
-                                    <input id="email-input" autocomplete="off" type="text" class="form-control editable-field" value="{{email}}">
+                                    <input id="email-input"
+                                           autocomplete="off"
+                                           type="text"
+                                           class="form-control editable-field"
+                                           value="{{email}}">
                                     <div id="email-error" class="info-errors"></div>
                                 </td>
                                 <td>
