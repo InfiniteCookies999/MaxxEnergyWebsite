@@ -1,6 +1,7 @@
 const express = require('express');
 const { controller } = require('../middleware'); 
 const { UserService } = require('../services');
+const { UserRepository } = require('../database');
 
 const router = express.Router();
 
@@ -15,16 +16,22 @@ router.get('/profile', controller(async (req, res) => {
   const user = await UserService.getUser(req.session);
 
   res.render('profile', {
+    // User information
     firstName: user.firstName,
     lastName: user.lastName,
-    profilePicture: "/images/default-profile-icon.jpg",
+    profilePicture: "/images/default-profile-icon.jpg", // TODO: Here the profile would be loaded from database.
     email: user.email,
     phone: user.phone,
     addressLine1: user.addressLine1,
     addressLine2: user.addressLine2,
     county: user.county.replaceAll("-", " "),
     state: user.state,
-    zipCode: user.zipCode
+    zipCode: user.zipCode,
+
+    // Form restrictions
+    maxNameLength: UserRepository.maxNameLength(),
+    maxAddressLineLength: UserRepository.maxAddressLineLength(),
+    maxPasswordLength: UserRepository.maxPasswordLength()
   });
 }));
 
@@ -43,7 +50,11 @@ router.get('/register', controller(async (req, res) => {
     return res.redirect("/");
   }
   
-  res.render("register");
+  res.render("register", {
+    maxNameLength: UserRepository.maxNameLength(),
+    maxAddressLineLength: UserRepository.maxAddressLineLength(),
+    maxPasswordLength: UserRepository.maxPasswordLength()
+  });
 }));
 
 module.exports = router;

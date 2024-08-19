@@ -50,7 +50,7 @@
                                type="text"
                                class="form-control editable-field"
                                value="{{firstName}}"
-                               maxlength="40"
+                               maxlength="{{maxNameLength}}"
                                placeholder="First Name"/>
                         <div id="first-name-error" class="info-errors"></div>
                         <input id="last-name-input"
@@ -58,7 +58,7 @@
                                type="text"
                                class="form-control editable-field mt-1"
                                value="{{lastName}}"
-                               maxlength="40"
+                               maxlength="{{maxNameLength}}"
                                placeholder="Last Name"/>
                         <div id="last-name-error" class="info-errors"></div>
                         
@@ -123,7 +123,7 @@
                                                        class="form-control editable-field"
                                                        value="{{addressLine1}}"
                                                        placeholder="Address Line 1"
-                                                       maxlength="250"/>
+                                                       maxlength="{{maxAddressLength}}"/>
                                                 <div id="address-line1-error" class="info-errors"></div>
                                                 <input id="zip-code-input"
                                                        autocomplete="off"
@@ -145,7 +145,7 @@
                                                        class="form-control editable-field"
                                                        value="{{addressLine2}}"
                                                        placeholder="Address Line 2"
-                                                       maxlength="250"/>
+                                                       maxlength="{{maxAddressLength}}"/>
                                             </div>
                                         </div>
                                     </div>
@@ -170,7 +170,8 @@
                                            autocomplete="off"
                                            type="text"
                                            class="form-control editable-field"
-                                           placeholder="enter new password"/>
+                                           placeholder="enter new password"
+                                           maxlength="{{maxPasswordLength}}"/>
                                     <div id="new-password-error" class="info-errors"></div>
                                 </td>
                                 <td class="icon-group">

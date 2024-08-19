@@ -48,7 +48,7 @@
                                     type="text"
                                     id="first-name-input"
                                     placeholder="Susan"
-                                    maxlength="40">
+                                    maxlength={{maxNameLength}}>
                             <div id="first-name-error" class="info-errors"></div>
                         </div>
                         <div class="form-group pb-3">
@@ -68,7 +68,7 @@
                             <input class="form-control input-fields"
                                     type="text"
                                     id="address-line1-input"
-                                    maxlength="250">
+                                    maxlength="{{maxAddressLineLength}}">
                             <div id="address-line1-error" class="info-errors"></div>
                         </div>
                         <div class="form-group pb-3">
@@ -81,7 +81,7 @@
                         </div>
                         <div class="form-group">
                             <label for="password-input">Password:</label>
-                            <input class="form-control input-fields" type="password" id="password-input" maxlength="100">
+                            <input class="form-control input-fields" type="password" id="password-input" maxlength="{{maxPasswordLength}}">
                             <div id="password-error" class="info-errors"></div>
                         </div>
                         <div id="show-password-check" class="form-group smaller-text">
@@ -103,7 +103,7 @@
                                     type="text"
                                     id="last-name-input"
                                     placeholder="Smith"
-                                    maxlength="40">
+                                    maxlength="{{maxNameLength}}">
                             <div id="last-name-error" class="info-errors"></div>
                         </div>
                         <div class="form-group pb-3">
@@ -127,7 +127,7 @@
                                     type="text"
                                     id="address-line2-input"
                                     placeholder="Optional"
-                                    maxlength="250">
+                                    maxlength="{{maxAddressLineLength}}">
                             <div id="address-line2-error" class="info-errors"></div>
                         </div>
                         <div class="form-group pb-3" style="visibility: hidden;">
@@ -136,7 +136,7 @@
                         </div>
                         <div class="form-group pb-3">
                             <label for="repeat-password-input">Repeat Password:</label>
-                            <input class="form-control input-fields" type="password" id="repeat-password-input" maxlength="100">
+                            <input class="form-control input-fields" type="password" id="repeat-password-input" maxlength="{{maxPasswordLength}}">
                             <div id="repeat-password-error" class="info-errors"></div>
                         </div>
                     </div>
