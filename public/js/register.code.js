@@ -16,17 +16,12 @@ function getRepeatPasswordErrorFlags() {
   return errorFlags;
 }
 
-function getNameErrorFlags(nameInput) {
-  const name = nameInput.val();
-  return name.length === 0 ? FIELD_EMPTY : 0;
-}
-
 function getFirstNameErrorFlags() {
-  return getNameErrorFlags($('#first-name-input'));
+  return getNonEmptyErrorFlagsFn($('#first-name-input'))();
 }
 
 function getLastNameErrorFlags() {
-  return getNameErrorFlags($('#last-name-input'));
+  return getNonEmptyErrorFlagsFn($('#last-name-input'))();
 }
 
 function getPhoneNumberErrorFlags() {
@@ -214,21 +209,7 @@ $(document).ready(function () {
   preventInvalidPhoneInput($('#phone-number-input'));
 
   // Making sure name inputs are alphanumeric.
-  $('#first-name-input, #last-name-input').keypress((event) => {
-    const key = event.which;
-    if (!((key >= 97 && key <= 122) ||
-          (key >= 65 && key <= 90) ||
-          (key >= 48 && key <= 57) ||
-          key === 32
-        )) {
-          event.preventDefault();
-        }
-  });
-  $('#first-name-input, #last-name-input').on("paste", onPasteEvent((content, doNotPaste) => {
-    if (!(/^[ a-zA-Z0-9]+$/.test(content))) {
-      doNotPaste();
-    }
-  }));
+  preventInvalidNonAlhpaNumeric($('#first-name-input, #last-name-input'));
 
   // Making sure zip codes only recieve numbers.
   preventInvalidNonNumber($('#zip-code-input'));

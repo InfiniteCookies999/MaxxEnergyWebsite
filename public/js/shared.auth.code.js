@@ -178,3 +178,21 @@ function preventInvalidAddressLine(input) {
     }
   }));
 }
+
+function preventInvalidNonAlhpaNumeric(input) {
+  input.keypress((event) => {
+    const key = event.which;
+    if (!((key >= 97 && key <= 122) ||
+          (key >= 65 && key <= 90) ||
+          (key >= 48 && key <= 57) ||
+          key === 32
+        )) {
+          event.preventDefault();
+        }
+  });
+  input.on("paste", onPasteEvent((content, doNotPaste) => {
+    if (!(/^[ a-zA-Z0-9]+$/.test(content))) {
+      doNotPaste();
+    }
+  }));
+}

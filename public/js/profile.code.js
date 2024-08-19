@@ -7,6 +7,14 @@ function getZipCodeErrorFlags() {
   return getFixedNumberErrorFlags($('#zip-code-input'), 5);
 }
 
+function getFirstNameErrorFlags() {
+  return getNonEmptyErrorFlagsFn($('#first-name-input'))();
+}
+
+function getLastNameErrorFlags() {
+  return getNonEmptyErrorFlagsFn($('#last-name-input'))();
+}
+
 function submitEmail() {
   const errorFlags = getEmailErrorFlagsFn($('#email-input'))();
   
@@ -98,6 +106,38 @@ function submitPassword() {
     return false;
   }
 
+  // TODO: Here we would submit the new password to the server.
+
+  return true;
+}
+
+function submitName() {
+  const firstNameErrorFlags = getFirstNameErrorFlags();
+  const lastNameErrorFlags = getLastNameErrorFlags();
+
+  appendErrorMessages($('#first-name-error'), firstNameErrorFlags, (container, flags) => {
+    tryAppendError(container, "Empty", flags, FIELD_EMPTY);
+  });
+
+  appendErrorMessages($('#last-name-error'), lastNameErrorFlags, (container, flags) => {
+    tryAppendError(container, "Empty", flags, FIELD_EMPTY);
+  });
+
+  if (firstNameErrorFlags !== 0) {
+    $('#first-name-input').addClass("is-invalid");
+  }
+  if (lastNameErrorFlags !== 0) {
+    $('#last-name-input').addClass("is-invalid");
+  }
+
+  if (firstNameErrorFlags !== 0 ||
+      lastNameErrorFlags !== 0
+  ) {
+    return false;
+  }
+
+  // TODO: Here we would submit the new name to the server.
+
   return true;
 }
 
@@ -117,6 +157,9 @@ $(document).ready(function() {
   checkForChangeInErrors($('#zip-code-error'), $('#zip-code-input'), getZipCodeErrorFlags);
 
   preventInvalidPhoneInput($('#phone-number-input'));
+
+  // Making sure name inputs are alphanumeric.
+  preventInvalidNonAlhpaNumeric($('#first-name-input, #last-name-input'));
 
   // Making sure zip codes only recieve numbers.
   preventInvalidNonNumber($('#zip-code-input'));
@@ -174,6 +217,11 @@ $(document).ready(function() {
         break;
       case 'password-span':
         if (!submitPassword()) {
+          return;
+        }
+        break;
+      case 'name-span':
+        if (!submitName()) {
           return;
         }
         break;
