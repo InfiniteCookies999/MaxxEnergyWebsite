@@ -1,7 +1,6 @@
 const bcrypt = require('bcryptjs');
 const { HttpError } = require('../middleware');
 const { UserRepository, User } = require('../database');
-const userRepository = require('../database/user.repository');
 
 const HASH_STRENGTH = 10
 

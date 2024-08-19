@@ -1,3 +1,7 @@
+function submitEmail() {
+  return true;
+}
+
 $(document).ready(function() {
 
   const addressData = $('#address-span').attr("address-data").split(":");
@@ -36,8 +40,20 @@ $(document).ready(function() {
       const editField = row.find('.editable-field');
       const staticField = row.find('.static-field');
       // TODO: Will need to validate.
+
+      const spanId = staticField.attr('id');
+      switch (spanId) {
+      case 'email-span':
+        // If it is an email then it needs to check against the server
+        // to see if the email is valid.
+        if (!submitEmail()) {
+          return;
+        }
+      default:
+        break;
+      }
     
-      if (staticField.attr('id') === 'address-span') {
+      if (spanId === 'address-span') {
         const addressLine1 = $('#address-line1-input').val();
         const addressLine2 = $('#address-line2-input').val();
         const county = $('#county-input').find(":selected").val().replaceAll("-", " ");
@@ -45,7 +61,7 @@ $(document).ready(function() {
         const zipCode = $('#zip-code-input').val();
         const space = addressLine2 !== "" ? " " : "";
         staticField.text(`${addressLine1}${space}${addressLine2} ${county} ${state}, ${zipCode}`);
-      } else if (staticField.attr('id') !== 'password-span') {
+      } else if (spanId !== 'password-span') {
         staticField.text(editField.val());
       }
       
