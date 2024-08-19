@@ -37,10 +37,36 @@
         <div class="container">
             <h2 id="profile-header">User Profile</h2>
             <div class="profile-container">
-                <img src={{profilePicture}} width="256" height="256" style="border-radius: 8px;">
-                
+                <img id="profile-picture" src={{profilePicture}} width="256" height="256" style="border-radius: 8px;" />
+                <input id="file-selector" type="file" hidden="true" accept=".png, .jpg, .jpeg, .webp, .avif" />
+
                 <div class="container-fluid right-container">
-                    <h4>{{firstName}} {{lastName}}</h4>
+                    <div class="editable-section tab-row-entry">
+                        
+                        <h4 id="name-span" style="display: inline;" class="static-field">{{firstName}} {{lastName}}</h4>
+
+                        <input id="first-name-input"
+                               autocomplete="off"
+                               type="text"
+                               class="form-control editable-field"
+                               value="{{firstName}}"
+                               maxlength="40"
+                               placeholder="First Name"/>
+                        <div id="first-name-error" class="info-errors"></div>
+                        <input id="last-name-input"
+                               autocomplete="off"
+                               type="text"
+                               class="form-control editable-field mt-1"
+                               value="{{lastName}}"
+                               maxlength="40"
+                               placeholder="Last Name"/>
+                        <div id="last-name-error" class="info-errors"></div>
+                        
+                        <div style="display: inline;" class="icon-group">
+                            <i class="bx bx-edit-alt edit-icon"></i>
+                            <i class="bx bx-save save-icon"></i>
+                        </div>
+                    </div>
                     
                     <table class="table">
                         <tbody>
@@ -48,9 +74,14 @@
                                 <th scope="row">Email</th>
                                 <td>
                                     <span id="email-span" class="static-field">{{email}}</span>
-                                    <input autocomplete="off" type="text" class="form-control editable-field" value="{{email}}">
+                                    <input id="email-input"
+                                           autocomplete="off"
+                                           type="text"
+                                           class="form-control editable-field"
+                                           value="{{email}}"/>
+                                    <div id="email-error" class="info-errors"></div>
                                 </td>
-                                <td>
+                                <td class="icon-group">
                                     <i class="bx bx-edit-alt edit-icon"></i>
                                     <i class="bx bx-save save-icon"></i>
                                 </td>
@@ -59,9 +90,15 @@
                                 <th scope="row">Phone Number</th>
                                 <td>
                                     <span id="phone-number-span" class="static-field">{{phone}}</span>
-                                    <input autocomplete="off" type="text" class="form-control editable-field" value="{{phone}}">    
+                                    <input id="phone-number-input"
+                                           autocomplete="off"
+                                           type="tel"
+                                           class="form-control editable-field"
+                                           value="{{phone}}"
+                                           maxlength="12"/> 
+                                    <div id="phone-number-error" class="info-errors"></div>
                                 </td>
-                                <td>
+                                <td class="icon-group">
                                     <i class="bx bx-edit-alt edit-icon"></i>
                                     <i class="bx bx-save save-icon"></i>
                                 </td>
@@ -85,13 +122,17 @@
                                                        type="text"
                                                        class="form-control editable-field"
                                                        value="{{addressLine1}}"
-                                                       placeholder="Address Line 1">
+                                                       placeholder="Address Line 1"
+                                                       maxlength="250"/>
+                                                <div id="address-line1-error" class="info-errors"></div>
                                                 <input id="zip-code-input"
                                                        autocomplete="off"
                                                        type="text"
                                                        class="form-control editable-field mt-1"
                                                        value="{{zipCode}}"
-                                                       placeholder="Zip code">
+                                                       placeholder="Zip code"
+                                                       maxlength="5"/>
+                                                <div id="zip-code-error" class="info-errors"></div>
                                             </div>
                                         </div>
                                         <div class="col-6">
@@ -103,12 +144,13 @@
                                                        type="text"
                                                        class="form-control editable-field"
                                                        value="{{addressLine2}}"
-                                                       placeholder="Address Line 2">
+                                                       placeholder="Address Line 2"
+                                                       maxlength="250"/>
                                             </div>
                                         </div>
                                     </div>
                                 </td>
-                                <td>
+                                <td class="icon-group">
                                     <i class="bx bx-edit-alt edit-icon"></i>
                                     <i class="bx bx-save save-icon"></i>
                                 </td>
@@ -117,23 +159,30 @@
                                 <th scope="row">Password</th>
                                 <td>
                                     <span id="password-span" class="static-field">********************</span>
-                                    <input autocomplete="off" type="text" class="form-control editable-field" placeholder="enter old password">
+                                    <input id="old-password-input"
+                                           autocomplete="off"
+                                           type="text"
+                                           class="form-control editable-field"
+                                           placeholder="enter old password"/>
+                                    <div id="old-password-error" class="info-errors"></div>
                                     <br/>
-                                    <input autocomplete="off" type="text" class="form-control editable-field" placeholder="enter new password">
+                                    <input id="new-password-input"
+                                           autocomplete="off"
+                                           type="text"
+                                           class="form-control editable-field"
+                                           placeholder="enter new password"/>
+                                    <div id="new-password-error" class="info-errors"></div>
                                 </td>
-                                <td>
+                                <td class="icon-group">
                                     <i class="bx bx-edit-alt edit-icon"></i>
                                     <i class="bx bx-save save-icon"></i>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                
-                </div>
-                
+                </div>      
             </div>
         </div>
     </div>
-
 </body>
 </html>

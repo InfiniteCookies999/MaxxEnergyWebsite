@@ -7,11 +7,14 @@ const HASH_STRENGTH = 10
 class UserService {
 
   async register(dto, session) {
+    if (session.user) {
+      // The user is already logged in. They cannot register while logged in.
+      throw new HttpError("Already logged in", 409);
+    }
     if (await UserRepository.doesUserExistByEmail(dto.email)) {
       throw new HttpError("Email taken", 403);
     }
     
-    // TODO: Deal with email verification!
     const hashedPassword = await bcrypt.hash(dto.password, HASH_STRENGTH);
 
     const user = await UserRepository.saveUser(new User(0,

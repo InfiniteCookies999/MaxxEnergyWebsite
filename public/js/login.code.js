@@ -13,7 +13,7 @@ $(document).ready(function () {
     event.preventDefault();
 
     const passwordErrorFlags = getPasswordErrorFlags();
-    const emailErrorFlags    = getEmailErrorFlags();
+    const emailErrorFlags    = getEmailErrorFlagsFn($('#email-input'))();
 
     // Displaying the error messages.
     appendErrorMessages($('#password-error'), passwordErrorFlags, (container, flags) => {
@@ -74,7 +74,7 @@ $(document).ready(function () {
   createLoadAnimation(document.getElementById("load-animation"));
 
   checkForChangeInErrors($('#password-error'), $('#password-input'), getPasswordErrorFlags);
-  checkForChangeInErrors($('#email-error'), $('#email-input'), getEmailErrorFlags);
+  checkForChangeInErrors($('#email-error'), $('#email-input'), getEmailErrorFlagsFn($('#email-input')));
 
   $('#show-password-check input').click(() => {
     const input = $('#password-input')[0];

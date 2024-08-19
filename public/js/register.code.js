@@ -5,126 +5,227 @@ const phone = document.getElementById('phone');
 const message = document.getElementById('message');
 const contact_form = document.getElementById('contact_form');
 
-const firstNameError = document.getElementById('first_name_error');
-const lastNameError = document.getElementById('last_name_error');
-const emailError = document.getElementById('email_error');
-const phoneError = document.getElementById('phone_error');
-const messageError = document.getElementById('message_error');
+const REPEAT_PASSWORD_EMPTY_FLAG    = 0x01;
+const REPEAT_PASSWORD_NO_MATCH_FLAG = 0x02;
 
-// Error Message Icon
-const errorIcon = '<i class="bx bx-error-alt"></i> ';
+function getRepeatPasswordErrorFlags() {
+  const repeatPassword = $('#repeat-password-input').val();
+  const password = $('#password-input').val();
+  let errorFlags = 0;
 
-contact_form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    let hasErrors = false;
+  if (repeatPassword.length === 0) {
+    errorFlags |= REPEAT_PASSWORD_EMPTY_FLAG;
+  } else if (repeatPassword !== password) { // TODO: maybe this should not show the error if the password is empty?
+    errorFlags |= REPEAT_PASSWORD_NO_MATCH_FLAG;
+  }
 
-    // Remove previous error messages
-    firstNameError.innerHTML = '';
-    lastNameError.innerHTML = '';
-    emailError.innerHTML = '';
-    phoneError.innerHTML = '';
-    messageError.innerHTML = '';
+  return errorFlags;
+}
 
-    // Validate First Name ensuring it's not left blank, and does not include special characters or numbers
-    if (firstName.value === '' || firstName.value == null) {
-        firstNameError.innerHTML = `${errorIcon}Empty, You must enter a valid first name.`;
-        hasErrors = true;
-    } else {
-        const nameRegex = /^[A-Za-z\s]+$/;
-        if (!nameRegex.test(firstName.value)) {
-            firstNameError.innerHTML = `${errorIcon}Error, First name can only contain letters and spaces.`;
-            hasErrors = true;
-        }
+function getFirstNameErrorFlags() {
+  return getNonEmptyErrorFlagsFn($('#first-name-input'))();
+}
+
+function getLastNameErrorFlags() {
+  return getNonEmptyErrorFlagsFn($('#last-name-input'))();
+}
+
+function getPhoneNumberErrorFlags() {
+  return getFixedNumberErrorFlags($('#phone-number-input'), 10);
+}
+
+function getZipCodeErrorFlags() {
+  return getFixedNumberErrorFlags($('#zip-code-input'), 5);
+}
+
+$(document).ready(function () {
+
+  createLoadAnimation(document.getElementById("load-animation"));
+
+  (async () => {
+
+    // https://ip-api.com
+    let userState = undefined;
+    try {
+      
+      const response = await fetch("http://ip-api.com/json");
+      const json = await response.json();
+
+      userState = json.regionName;
+
+    } catch (error) {
+      // Ignoring the error since this is only helpful information not essential.
     }
 
-    // Validate Last Name ensuring it's not left blank, and does not include special characters or numbers
-    if (lastName.value === '' || lastName.value == null) {
-        lastNameError.innerHTML = `${errorIcon}Empty, You must enter a valid last name.`;
-        hasErrors = true;
-    } else {
-        const nameRegex = /^[A-Za-z\s]+$/;
-        if (!nameRegex.test(lastName.value)) {
-            lastNameError.innerHTML = `${errorIcon}Error, Last name can only contain letters and spaces.`;
-            hasErrors = true;
-        }
-    }
+    addStatesAndCounties($('#state-input'), $('#county-input'), userState, "");
+  
+  })();
 
-    // Validate Email to not be empty, to include @, and have no blank space
-    if (email.value === '' || email.value == null) {
-        emailError.innerHTML = `${errorIcon}Empty, You must enter a valid email.`;
-        hasErrors = true;
-    } else {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email.value)) {
-            emailError.innerHTML = `${errorIcon}Please enter a valid email address.`;
-            hasErrors = true;
-        }
-    }
+  $('#state-input').on('change', () => {
+    const state = $(this).find("option:selected").val();
+    setCounties($('#county-input'), state, "");
+  });
 
-    // Validate phone number to not be empty, must only use numbers no letters or special characters
-    if (phone.value === '' || phone.value == null) {
-        phoneError.innerHTML = `${errorIcon}Empty, You must enter a phone number.`;
-        hasErrors = true;
-    } else {
-        const phoneRegex = /^[0-9]{10,15}$/;
-        if (!phoneRegex.test(phone.value)) {
-            phoneError.innerHTML = `${errorIcon}Please enter a valid phone number, only numerical digits allowed (0-9).`;
-            hasErrors = true;
-        }
-    }
+  $("form").submit((event) => {
+    event.preventDefault();
 
-    // Validate Message to not be empty, must have at least 20 characters and less than 600 characters
-    if (message.value === '' || message.value == null) {
-        messageError.innerHTML = `${errorIcon}Empty, You must enter a message.`;
-        hasErrors = true;
-    } else {
-        const minLength = 20;
-        const maxLength = 600;
-
-        if (message.value.length < minLength) {
-            messageError.innerHTML = `${errorIcon}Message must be at least ${minLength} characters long.`;
-            hasErrors = true;
-        } else if (message.value.length > maxLength) {
-            messageError.innerHTML = `${errorIcon}Message must be no more than ${maxLength} characters long.`;
-            hasErrors = true;
-        }
-    }
-
-    // If there are errors, prevent form submission
-    if (hasErrors) {
-        return;
-    }
-
-    // If no errors, perform AJAX submission
-    const formData = {
-        firstName: firstName.value.trim(),
-        lastName: lastName.value.trim(),
-        email: email.value.trim(),
-        phone: phone.value.trim(),
-        message: message.value.trim(),
-    };
-
-    // Disable the submit button to prevent multiple submissions
-    document.querySelector('.submit-btn').disabled = true;
-
-    //AJAX
-    $.ajax({
-        type: 'POST',
-        url: '/api/contact/submit', // Update this URL to your actual endpoint
-        data: formData,
-        success: () => {
-            // Display the success message and clear the form
-            document.getElementById('success_message').style.display = 'block';
-            contact_form.reset();
-        },
-        error: (res) => {
-            const errorMsg = $.parseJSON(res.responseText).message;
-            console.error(`Error: ${errorMsg}`);
-            // You can display the error message here if needed
-        },
-        complete: () => {
-            // Re-enable the submit button after the request completes
-            document.querySelector('.submit-btn').disabled = false;
-        }
+    const passwordErrorFlags       = getPasswordErrorFlagsFn($('#password-input'))();
+    const emailErrorFlags          = getEmailErrorFlagsFn($('#email-input'))();
+    const repeatPasswordErrorFlags = getRepeatPasswordErrorFlags();
+    const firstNameErrorFlags      = getFirstNameErrorFlags();
+    const lastNameErrorFlags       = getLastNameErrorFlags();
+    const phoneNumberErrorFlags    = getPhoneNumberErrorFlags();
+    const zipCodeErrorFlags        = getZipCodeErrorFlags();
+    const addressLine1ErrorFlags   = getNonEmptyErrorFlagsFn($('#address-line1-input'))();
+    
+    // Displaying the error messages.
+    appendErrorMessages($('#password-error'), passwordErrorFlags, (container, flags) => {
+      tryAppendError(container, `Too short. Min. Length: ${MIN_PASSWORD_LENGTH}`, flags, PASSWORD_TOO_SHORT_FLAG);
+      tryAppendError(container, "Missing special character", flags, PASSWORD_NO_SPECIAL_FLAG);
+      tryAppendError(container, "Missing digit", flags, PASSWORD_NO_DIGIT_FLAG);
     });
+    
+    appendEmailErrorMessages($('#email-error'), emailErrorFlags);
+    
+    appendErrorMessages($('#repeat-password-error'), repeatPasswordErrorFlags, (container, flags) => {
+      tryAppendError(container, "Empty", flags, REPEAT_PASSWORD_EMPTY_FLAG);
+      tryAppendError(container, "Does not match password", flags, REPEAT_PASSWORD_NO_MATCH_FLAG);
+    });
+    
+    appendErrorMessages($('#first-name-error'), firstNameErrorFlags, (container, flags) => {
+      tryAppendError(container, "Empty", flags, FIELD_EMPTY);
+    });
+
+    appendErrorMessages($('#last-name-error'), lastNameErrorFlags, (container, flags) => {
+      tryAppendError(container, "Empty", flags, FIELD_EMPTY);
+    });
+
+    appendErrorMessages($('#phone-number-error'), phoneNumberErrorFlags, (container, flags) => {
+      tryAppendError(container, "Empty", flags, FIXED_NUMBER_EMPTY);
+      tryAppendError(container, "Incomplete", flags, FIXED_NUMBER_INCOMPLETE);
+    });
+
+    appendErrorMessages($('#zip-code-error'), zipCodeErrorFlags, (container, flags) => {
+      tryAppendError(container, "Empty", flags, FIXED_NUMBER_EMPTY);
+      tryAppendError(container, "Incomplete", flags, FIXED_NUMBER_INCOMPLETE);
+    });
+
+    appendErrorMessages($('#address-line1-error'), addressLine1ErrorFlags, (container, flags) => {
+      tryAppendError(container, "Empty", flags, FIELD_EMPTY);
+    });
+
+    if (passwordErrorFlags !== 0) {
+      $('#password-input').addClass("is-invalid");
+    }
+    if (emailErrorFlags !== 0) {
+      $('#email-input').addClass("is-invalid");
+    }
+    if (repeatPasswordErrorFlags !== 0) {
+      $('#repeat-password-input').addClass("is-invalid");
+    }
+    if (firstNameErrorFlags !== 0) {
+      $('#first-name-input').addClass("is-invalid");
+    }
+    if (lastNameErrorFlags !== 0) {
+      $('#last-name-input').addClass("is-invalid");
+    }
+    if (phoneNumberErrorFlags !== 0) {
+      $('#phone-number-input').addClass("is-invalid");
+    }
+    if (zipCodeErrorFlags !== 0) {
+      $('#zip-code-input').addClass("is-invalid");
+    }
+    if (addressLine1ErrorFlags !== 0) {
+      $('#address-line1-input').addClass("is-invalid");
+    }
+
+    if (passwordErrorFlags !== 0 ||
+        emailErrorFlags !== 0 ||
+        repeatPasswordErrorFlags !== 0 ||
+        firstNameErrorFlags !== 0 ||
+        lastNameErrorFlags !== 0 ||
+        phoneNumberErrorFlags !== 0 ||
+        zipCodeErrorFlags !== 0 ||
+        addressLine1ErrorFlags !== 0
+      ) {
+      // There were errors. Do not continue.
+      return;
+    }
+
+    $('.bottom-btn-group button').prop("disabled", true);
+    $('.bottom-btn-group canvas').css("display", "inline-block");
+
+    $('#submit-error').empty();
+
+    const firstName    = $('#first-name-input').val();
+    const lastName     = $('#last-name-input').val();
+    const email        = $('#email-input').val();
+    const phoneNumber  = $('#phone-number-input').val();
+    const state        = $('#state-input').find(':selected').val();
+    const county       = $('#county-input').find(":selected").val();
+    const addressLine1 = $('#address-line1-input').val();
+    const addressLine2 = $('#address-line2-input').val();
+    const zipCode      = $('#zip-code-input').val();
+    const password     = $('#password-input').val();
+
+    const body = {
+      firstName, lastName, email, phoneNumber, state, county,
+      addressLine1, addressLine2, zipCode, password
+    };
+    if (addressLine2 === "") {
+      delete body.addressLine2;
+    }
+
+    $.ajax({
+      type: 'POST',
+      url: '/api/user/register',
+      data: body,
+      success: () => {
+        window.location = "/profile";
+      },
+      error: (res) => {
+        const badReq = res.status >= 400 && res.status <= 499 && res.status !== 400;
+        if (badReq) {
+          const errorMsg = $.parseJSON(res.responseText).message;
+          tryAppendError($('#submit-error'), errorMsg, 1, 1);
+        } else if (req.status === 400) {
+          const errorMsg = $.parseJSON(res.responseText).message.errors;
+            console.log("Error message (400): ", errorMsg);
+        } else {
+          console.log(`Error code: ${req.status}`);
+        }
+      },
+      complete: () => {
+        $('.bottom-btn-group button').prop("disabled", false);
+        $('.bottom-btn-group canvas').css("display", "none");
+      }
+    });
+  });
+
+  // Resetting errors
+  checkForChangeInErrors($('#password-error'), $('#password-input'), getPasswordErrorFlagsFn($('#password-input')));
+  checkForChangeInErrors($('#email-error'), $('#email-input'), getEmailErrorFlagsFn($('#email-input')));
+  checkForChangeInErrors($('#repeat-password-error'), $('#repeat-password-input'), getRepeatPasswordErrorFlags);
+  checkForChangeInErrors($('#first-name-error'), $('#first-name-input'), getFirstNameErrorFlags);
+  checkForChangeInErrors($('#last-name-error'), $('#last-name-input'), getLastNameErrorFlags);
+  checkForChangeInErrors($('#phone-number-error'), $('#phone-number-input'), getPhoneNumberErrorFlags);
+  checkForChangeInErrors($('#zip-code-error'), $('#zip-code-input'), getZipCodeErrorFlags);
+  checkForChangeInErrors($('#address-line1-error'), $('#address-line1-input'), getNonEmptyErrorFlagsFn($('#address-line1-input')));
+
+  preventInvalidPhoneInput($('#phone-number-input'));
+
+  // Making sure name inputs are alphanumeric.
+  preventInvalidNonAlhpaNumeric($('#first-name-input, #last-name-input'));
+
+  // Making sure zip codes only recieve numbers.
+  preventInvalidNonNumber($('#zip-code-input'));
+
+  preventInvalidAddressLine($('#address-line1-input, #address-line2-input'));
+
+  $('#show-password-check input').click(() => {
+    const input1 = $('#password-input')[0];
+    const input2 = $('#repeat-password-input')[0];
+    input1.type = input1.type === "password" ? "text" : "password";
+    input2.type = input2.type === "password" ? "text" : "password";
+  });
 });
