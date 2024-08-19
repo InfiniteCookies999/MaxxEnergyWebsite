@@ -8,3 +8,10 @@ body{
 .contact-us-container{
   padding-bottom: 120px;
 }
+.success-text{
+  color: green;
+}
+.contact-submit{
+  background-color: var(--site-blue-color);
+  color: white;
+}
