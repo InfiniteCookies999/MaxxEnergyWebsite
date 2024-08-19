@@ -37,4 +37,13 @@ router.get('/login', controller(async (req, res) => {
   res.render("login");
 }));
 
+router.get('/register', controller(async (req, res) => {
+  if (req.session.user) {
+    // The user is already logged in so redirecting them to the home page.
+    return res.redirect("/");
+  }
+  
+  res.render("register");
+}));
+
 module.exports = router;

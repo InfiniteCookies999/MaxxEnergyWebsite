@@ -1,3 +1,9 @@
+const firstName = document.getElementById('first_name');
+const lastName = document.getElementById('last_name');
+const email = document.getElementById('email');
+const phone = document.getElementById('phone');
+const message = document.getElementById('message');
+const contact_form = document.getElementById('contact_form');
 
 const REPEAT_PASSWORD_EMPTY_FLAG    = 0x01;
 const REPEAT_PASSWORD_NO_MATCH_FLAG = 0x02;
