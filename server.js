@@ -1,12 +1,13 @@
 const createApp = require('./create.app');
 const config = require('./config');
-const { getDBConnection, UserRepository } = require('./database');
+const { getDBConnection, UserRepository, ContactRepository } = require('./database');
 
 (async () => {
   await getDBConnection();
   
   await UserRepository.initialize();
-
+  await ContactRepository.initialize();
+  
   const PORT = config.SERVER_PORT || 3000;
 
   const app = createApp();
@@ -14,8 +15,7 @@ const { getDBConnection, UserRepository } = require('./database');
     if (!err) {
       console.log(`Server started on: ${PORT}`);
     } else {
-      console.log(`Error started server: ${err}`);
+      console.log(`Error starting server: ${err}`);
     }
   });
 })();
-
