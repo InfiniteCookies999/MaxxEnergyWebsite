@@ -2,6 +2,7 @@ const express = require('express');
 const { controller } = require('../middleware'); 
 const { UserService } = require('../services');
 const { UserRepository } = require('../database');
+const fetch = require('node-fetch');
 
 const router = express.Router();
 
@@ -55,6 +56,13 @@ router.get('/register', controller(async (req, res) => {
     maxAddressLineLength: UserRepository.maxAddressLineLength(),
     maxPasswordLength: UserRepository.maxPasswordLength()
   });
+}));
+
+router.get('/logout', controller(async (req, res) => {
+  if (req.session.user) {
+    delete req.session.destroy();
+  }
+  res.redirect("/");
 }));
 
 module.exports = router;
