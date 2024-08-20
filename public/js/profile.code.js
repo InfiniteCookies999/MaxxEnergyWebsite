@@ -215,6 +215,8 @@ $(document).ready(function() {
   checkForChangeInErrors($('#phone-number-error'), $('#phone-number-input'), getPhoneNumberErrorFlags);
   checkForChangeInErrors($('#address-line1-error'), $('#address-line1-input'), getNonEmptyErrorFlagsFn($('#address-line1-input')));
   checkForChangeInErrors($('#zip-code-error'), $('#zip-code-input'), getZipCodeErrorFlags);
+  checkForChangeInErrors($('#first-name-error'), $('#first-name-input'), getFirstNameErrorFlags);
+  checkForChangeInErrors($('#last-name-error'), $('#last-name-input'), getLastNameErrorFlags);
 
   preventInvalidPhoneInput($('#phone-number-input'));
 
