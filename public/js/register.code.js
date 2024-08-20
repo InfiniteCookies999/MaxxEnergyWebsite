@@ -215,7 +215,7 @@ $(document).ready(function () {
   preventInvalidPhoneInput($('#phone-number-input'));
 
   // Making sure name inputs are alphanumeric.
-  preventInvalidNonAlhpaNumeric($('#first-name-input, #last-name-input'));
+  preventInvalidName($('#first-name-input, #last-name-input'));
 
   // Making sure zip codes only recieve numbers.
   preventInvalidNonNumber($('#zip-code-input'));
