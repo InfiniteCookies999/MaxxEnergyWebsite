@@ -137,8 +137,7 @@ describe('UserService', () => {
       const session = {};
 
       const model = getUserModel(body, "hashedPassword");
-      console.log(model.id);
-
+      
       UserRepository.getUserByEmail.mockResolvedValue(getUserModel(body, "hashedPassword"));
       bcrypt.compare.mockResolvedValue(true);
 

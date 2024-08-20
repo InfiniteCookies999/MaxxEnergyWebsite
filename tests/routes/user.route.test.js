@@ -1,6 +1,8 @@
 const supertest = require("supertest");
 const createApp = require('../../create.app');
 
+jest.mock('../../services/user.service');
+
 const app = createApp();
 
 function getValidRegisterBody() {
