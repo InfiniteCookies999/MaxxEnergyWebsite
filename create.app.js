@@ -29,15 +29,20 @@ function createApp() {
   app.set('views', 'public');
 
   // Installing routes.
-  let baseRoute = '/api/';
-  if (config.BASE_ROUTE) {
-    baseRoute = config.BASE_ROUTE + baseRoute;
+  let baseRoute = config.BASE_ROUTE || '';
+  if (baseRoute.endsWith("/")) {
+    baseRoute.slice(0, -1);
   }
+  if (baseRoute.startsWith("/")) {
+    baseRoute = baseRoute.substring(1);
+  }
+  const apiRoute = baseRoute === '' ? '/api/' : `/${baseRoute}` + '/api/';
+  const staticRoute = baseRoute === '' ? '' : `/${baseRoute}/`; 
 
-  app.use(baseRoute, userRouter);
-  app.use(viewsRouter);
+  app.use(apiRoute, userRouter);
+  app.use(staticRoute, viewsRouter);
   // This must be placed after the views router because they share the same directory.
-  app.use(staticRouter);
+  app.use(staticRoute, staticRouter);
 
   // Install middleware
   app.use(errorHandler);
