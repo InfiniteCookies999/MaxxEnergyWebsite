@@ -53,7 +53,7 @@ class UserService {
     }
   }
 
-  getUserIdForUpdate(userId) {
+  getUserIdForUpdate(userId, session) {
     if (!userId) {
       return session.user.id;
     } else {
@@ -62,9 +62,9 @@ class UserService {
   }
 
   async updateName(userId, firstName, lastName, session) {
-    userId = this.getUserIdForUpdate(userId);
+    userId = this.getUserIdForUpdate(userId, session);
 
-    
+    await UserRepository.updateUsersName(userId, firstName, lastName);
   }
 
   async getUser(session) {

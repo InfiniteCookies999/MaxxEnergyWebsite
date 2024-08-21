@@ -94,7 +94,10 @@ router.post('/user/update-name/:id?',
 
   validateLoggedIn,
   controller(async (req, res) => {
-    await UserService.updateName(req.params.id, req.body.firstName, req.body.lastName);
+    await UserService.updateName(req.params.id,
+                                 req.body.firstName,
+                                 req.body.lastName,
+                                req.session);
     res.send();
   })
 )
