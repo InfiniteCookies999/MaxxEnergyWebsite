@@ -53,6 +53,20 @@ class UserService {
     }
   }
 
+  getUserIdForUpdate(userId, session) {
+    if (!userId) {
+      return session.user.id;
+    } else {
+      throw new HttpError("No admin permissions yet", 401);
+    }
+  }
+
+  async updateName(userId, firstName, lastName, session) {
+    userId = this.getUserIdForUpdate(userId, session);
+
+    await UserRepository.updateUsersName(userId, firstName, lastName);
+  }
+
   async getUser(session) {
     if (!(session.user)) {
       throw new HttpError("Cannot get user's information. Not logged in", 401);

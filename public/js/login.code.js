@@ -53,16 +53,7 @@ $(document).ready(function () {
         window.location = "/profile";
       },
       error: (res) => {
-        const badReq = res.status >= 400 && res.status <= 499 && res.status !== 400;
-        if (badReq) {
-          const errorMsg = $.parseJSON(res.responseText).message;
-          tryAppendError($('#submit-error'), errorMsg, 1, 1);
-        } else if (req.status === 400) {
-          const errorMsg = $.parseJSON(res.responseText).message.errors;
-            console.log("Error message (400): ", errorMsg);
-        } else {
-          console.log(`Error code: ${req.status}`);
-        }
+        processServerErrorResponse(res, $('#submit-error'));
       },
       complete: () => {
         $('.bottom-btn-group button').prop("disabled", false);

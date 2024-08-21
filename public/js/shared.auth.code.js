@@ -195,3 +195,16 @@ function preventInvalidName(input) {
     }
   }));
 }
+
+function processServerErrorResponse(res, input) {
+  const badReq = res.status >= 400 && res.status <= 499 && res.status !== 400;
+  if (badReq && input) {
+    const errorMsg = $.parseJSON(res.responseText).message;
+    tryAppendError(input, errorMsg, 1, 1);
+  } else if (req.status === 400) {
+    const errorMsg = $.parseJSON(res.responseText).message.errors;
+      console.log("Error message (400): ", errorMsg);
+  } else {
+    console.log(`Error code: ${req.status}`);
+  }
+}
