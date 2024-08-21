@@ -3,6 +3,8 @@ const session = require('express-session');
 const config = require('./config');
 const { userRouter, staticRouter, viewsRouter } = require('./routes');
 const { errorHandler } = require('./middleware');
+//changes
+const exphbs = require('express-handlebars');
 
 function createApp() {
 
@@ -24,7 +26,14 @@ function createApp() {
     cookie: { maxAge: 60000 * 1440 /* One day */  },
   }));
 
+  //changes
+  const hbs = exphbs.create({
+    partialsDir: "public/partials"
+  });
+
+
   // Set the view engine.
+  app.engine('hbs', hbs.engine);
   app.set('view engine', 'hbs');
   app.set('views', 'public');
 
