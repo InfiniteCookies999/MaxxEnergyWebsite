@@ -136,7 +136,20 @@ function submitName() {
     return false;
   }
 
-  // TODO: Here we would submit the new name to the server.
+  const firstName = $('#first-name-input').val();
+  const lastName = $('#last-name-input').val();
+
+  $.ajax({
+    type: 'POST',
+    url: '/api/user/update-name',
+    data: {
+      firstName,
+      lastName
+    },
+    error: (res) => {
+      processServerErrorResponse(res);
+    }
+  });
 
   return true;
 }

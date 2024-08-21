@@ -65,4 +65,8 @@ router.get('/logout', controller(async (req, res) => {
   res.redirect("/");
 }));
 
+router.get('/faq', controller(async (req, res) => {
+  res.render("faq");
+}));
+
 module.exports = router;
