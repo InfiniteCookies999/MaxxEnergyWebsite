@@ -39,6 +39,14 @@ function createApp() {
   const apiRoute = baseRoute === '' ? '/api/' : `/${baseRoute}` + '/api/';
   const staticRoute = baseRoute === '' ? '' : `/${baseRoute}/`; 
 
+  // Adding a middlewere for all views to include the baseRoute
+  if (baseRoute !== '') {
+    app.use((_, res, next) => {
+      res.locals.baseRoute = `/${baseRoute}`;
+      next();
+    })
+  }
+
   app.use(apiRoute, userRouter);
   app.use(staticRoute, viewsRouter);
   // This must be placed after the views router because they share the same directory.
