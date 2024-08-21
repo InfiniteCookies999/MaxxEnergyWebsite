@@ -16,6 +16,16 @@ function validateBody(req, res, next) {
   }
 }
 
+function validateLoggedIn(req, res, next) {
+  if (!req.session.user) {
+    next(new HttpError("Must be logged in", 401));
+  } else {
+    // No error continue with the route.
+    next();
+  }
+}
+
 module.exports = {
-  validateBody
+  validateBody,
+  validateLoggedIn
 }

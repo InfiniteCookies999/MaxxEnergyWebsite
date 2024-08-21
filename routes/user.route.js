@@ -1,5 +1,5 @@
 const express = require('express');
-const { controller, validateBody } = require('../middleware'); 
+const { controller, validateBody, validateLoggedIn } = require('../middleware'); 
 const { body } = require('express-validator');
 const COUNTIES = require('./counties');
 const { UserRepository } = require('../database');
@@ -87,5 +87,16 @@ router.post('/user/login',
     res.send();
   })
 );
+
+router.post('/user/update-name/:id?',
+  validateName('firstName'),
+  validateName('lastName'),
+
+  validateLoggedIn,
+  controller(async (req, res) => {
+    await UserService.updateName(req.params.id, req.body.firstName, req.body.lastName);
+    res.send();
+  })
+)
 
 module.exports = router;

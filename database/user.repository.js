@@ -85,6 +85,14 @@ class UserRepository {
     return user;
   }
 
+  /*async updateUsersName(firstName, lastName) {
+    const conn = await getDBConnection();
+
+    await conn.execute(`UPDATE user SET firstName=?, lastName=? WHERE id=?`,
+      []
+    )
+  }*/
+
   async getUserByEmail(email) {
     const conn = await getDBConnection();
 
