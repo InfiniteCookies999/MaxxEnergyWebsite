@@ -29,7 +29,12 @@ function createApp() {
   app.set('views', 'public');
 
   // Installing routes.
-  app.use('/api/', userRouter);
+  let baseRoute = '/api/';
+  if (config.BASE_ROUTE) {
+    baseRoute = config.BASE_ROUTE + baseRoute;
+  }
+
+  app.use(baseRoute, userRouter);
   app.use(viewsRouter);
   // This must be placed after the views router because they share the same directory.
   app.use(staticRouter);
