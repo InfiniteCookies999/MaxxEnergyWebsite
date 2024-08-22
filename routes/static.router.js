@@ -1,8 +1,9 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-const { HttpError } = require('../middleware');
+const mime = require('mime-types');
 const config = require('../config');
+const { HttpError } = require('../middleware');
 
 
 const router = express.Router();
@@ -12,26 +13,32 @@ if (config.REROUTE_PATH) {
   // Manually serving html files to fixup hrefs.
   router.use((req, res, next) => {
     if (req.method === 'GET' && !req.path.startsWith('/api')) {
-      let readFile = '';
+      let readPath = '';
       if (req.path === '/') {
-        readFile = 'index';
+        readPath = 'index';
       } else {
-        readFile = req.path.startsWith('/') ? req.path : req.path.substring(1);
+        readPath = req.path.startsWith('/') ? req.path : req.path.substring(1);
       }
-      if (!readFile.includes('.')) {
-        readFile = readFile + '.html';
+      const extention = path.extname(readPath).toLowerCase();
+      let mimeType = '';
+      if (extention === '') {
+        readPath = readPath + '.html';
+        mimeType = 'text/html';
+      } else {
+        mimeType = mime.lookup(extention) || 'text/html';
       }
 
-      const filePath = path.join(__dirname + "/../", 'public', readFile);
+      const filePath = path.join(__dirname + "/../", 'public', readPath);
 
       fs.readFile(filePath, 'utf8', (err, data) => {
         if (err) {
-          return next(err);
+          return next(new HttpError(`could not find file ${filePath}`, 404));
         }
         data = data.replaceAll(/href="((?!http).*)"/g, (_, p1) => {
           const slash = p1.startsWith('/') ? '' : '/';
           return `href="/${config.REROUTE_PATH}${slash}${p1}"`;
         });
+        res.setHeader('Content-Type', mimeType);
         res.send(data);
       });
     } else {
