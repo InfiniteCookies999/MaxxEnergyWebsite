@@ -14,7 +14,8 @@ async function reroute(req, res, next) {
   if (req.method === 'GET') {
     const pathExtension = path.extname(req.url).toLowerCase();
     if (pathExtension === "" || pathExtension === "html") {
-      
+      console.log("It is html or hbs");
+
       if (req.url === '/') {
         req.url = "/index";
       }
@@ -23,6 +24,7 @@ async function reroute(req, res, next) {
       if (filePath.endsWith('.html')) {
         filePath = filePath.substring(0, filePath.length() - 5);
       }
+      console.log("File path: ", filePath);
 
       if (fs.existsSync(filePath + '.html')) {
         // Manually serving the html.
