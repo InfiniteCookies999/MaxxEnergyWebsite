@@ -11,7 +11,8 @@ if (config.REROUTE_PATH) {
   
   // Manually serving html files to fixup hrefs.
   router.use((req, res, next) => {
-    if (req.method === 'GET' && !req.path.startsWith('/api')) {
+    if (req.method === 'GET' && !req.path.startsWith('/api') &&
+        !req.path.startsWith("http")) {
       let readFile = '';
       if (req.path === '/') {
         readFile = 'index';
