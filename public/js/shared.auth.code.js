@@ -180,22 +180,22 @@ function preventInvalidAddressLine(input) {
 }
 
 function preventInvalidName(input) {
-  input.keypress((event) => {
+  input.on('keypress', (event) => {
     const key = event.which;
     if (!((key >= 97 && key <= 122) || // a-z
           (key >= 65 && key <= 90) ||  // A-Z
-          key === 45 // -
-        )) {
+          key === 45 || // -
+          key === 32)) { // space
           event.preventDefault();
         }
   });
+
   input.on("paste", onPasteEvent((content, doNotPaste) => {
-    if (!(/^[ a-zA-Z0-9]+$/.test(content))) {
+    if (!(/^[a-zA-Z\s\-]+$/.test(content))) {  // Allow only letters, spaces, and dashes
       doNotPaste();
     }
   }));
 }
-
 function processServerErrorResponse(res, input) {
   const badReq = res.status >= 400 && res.status <= 499 && res.status !== 400;
   if (badReq && input) {
