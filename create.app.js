@@ -2,7 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const config = require('./config');
 const { userRouter, staticRouter, viewsRouter } = require('./routes');
-const { errorHandler } = require('./middleware');
+const { errorHandler, reroute } = require('./middleware');
 
 function createApp() {
 
@@ -23,6 +23,10 @@ function createApp() {
     // This is how long the user is logged in for.
     cookie: { maxAge: 60000 * 1440 /* One day */  },
   }));
+
+  if (config.REROUTE_PATH) {
+    app.use(reroute);    
+  }
 
   // Set the view engine.
   app.set('view engine', 'hbs');

@@ -2,7 +2,6 @@ const express = require('express');
 const { controller } = require('../middleware'); 
 const { UserService } = require('../services');
 const { UserRepository } = require('../database');
-const fetch = require('node-fetch');
 
 const router = express.Router();
 
