@@ -19,8 +19,11 @@ async function reroute(req, res, next) {
         req.url = "/index";
       }
       
-      const filePath = path.join(__dirname, '../public', req.url);
-      
+      let filePath = path.join(__dirname, '../public', req.url);
+      if (filePath.endsWith('.html')) {
+        filePath = filePath.substring(0, filePath.length() - 5);
+      }
+
       if (fs.existsSync(filePath + '.html')) {
         // Manually serving the html.
         
