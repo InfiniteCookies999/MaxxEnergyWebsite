@@ -28,29 +28,10 @@ function createApp() {
   app.set('view engine', 'hbs');
   app.set('views', 'public');
 
-  // Installing routes.
-  let baseRoute = config.BASE_ROUTE || '';
-  if (baseRoute.endsWith("/")) {
-    baseRoute.slice(0, -1);
-  }
-  if (baseRoute.startsWith("/")) {
-    baseRoute = baseRoute.substring(1);
-  }
-  const apiRoute = baseRoute === '' ? '/api/' : `/${baseRoute}` + '/api/';
-  const staticRoute = baseRoute === '' ? '' : `/${baseRoute}/`; 
-
-  // Adding a middlewere for all views to include the baseRoute
-  if (baseRoute !== '') {
-    app.use((_, res, next) => {
-      res.locals.baseRoute = `/${baseRoute}`;
-      next();
-    })
-  }
-
-  app.use(apiRoute, userRouter);
-  app.use(staticRoute, viewsRouter);
+  app.use('/api/', userRouter);
+  app.use(viewsRouter);
   // This must be placed after the views router because they share the same directory.
-  app.use(staticRoute, staticRouter);
+  app.use(staticRouter);
 
   // Install middleware
   app.use(errorHandler);
