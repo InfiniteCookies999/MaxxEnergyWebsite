@@ -28,6 +28,8 @@ async function reroute(req, res, next) {
 
       if (fs.existsSync(filePath + '.html')) {
         // Manually serving the html.
+
+        console.log("Trying to serve html");
         
         const body = await fs.promises.readFile(filePath + '.html', 'utf8');
         res.setHeader('Content-Type', 'text/html');
@@ -40,6 +42,7 @@ async function reroute(req, res, next) {
         res.send = function (body) {
           return osend.call(this, replaceRoutes(body));
         };
+        next();
       } else {
         next();
       }
