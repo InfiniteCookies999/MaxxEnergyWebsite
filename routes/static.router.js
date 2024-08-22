@@ -1,7 +1,44 @@
 const express = require('express');
+const path = require('path');
+const fs = require('fs');
+const { HttpError } = require('../middleware');
+const config = require('../config');
+
 
 const router = express.Router();
 
-router.use(express.static("public", { extensions: ['html'] }));
+if (config.REROUTE_PATH) {
+  
+  // Manually serving html files to fixup hrefs.
+  router.use((req, res, next) => {
+    if (req.method === 'GET' && !req.path.startsWith('/api')) {
+      let readFile = '';
+      if (req.path === '/') {
+        readFile = 'index.html';
+      } else {
+        readFile = req.path.substring(1) + '.html';
+      }
+
+      const filePath = path.join(__dirname + "/../", 'public', readFile);
+
+      fs.readFile(filePath, 'utf8', (err, data) => {
+        if (err) {
+          return next(new HttpError(`could not find '${filePath}'`));
+        }
+        data = data.replaceAll(/href="(.*)"/g, (_, p1) => {
+          const slash = p1.startsWith('/') ? '' : '/';
+          return `href="/${config.REROUTE_PATH}${slash}${p1}"`;
+        });
+        res.send(data);
+      });
+    } else {
+      next();
+    }
+  });
+} else {
+  router.use(express.static("public", { extensions: ['html'] }));
+}
+
+//router.use(express.static("public", { extensions: ['html'] }));
 
 module.exports = router;
