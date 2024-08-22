@@ -10,7 +10,7 @@ const router = express.Router();
 
 if (config.REROUTE_PATH) {
   
-  // Manually serving html files to fixup hrefs.
+  // Manually serving static files to fix routing.
   router.use((req, res, next) => {
     if (req.method === 'GET' && !req.path.startsWith('/api')) {
       let readPath = '';
@@ -34,7 +34,7 @@ if (config.REROUTE_PATH) {
         if (err) {
           return next(new HttpError(`could not find file ${filePath}`, 404));
         }
-        data = data.replaceAll(/href="((?!http).*)"/g, (_, p1) => {
+        data = data.replaceAll(/href=["']((?!http).*)["']/g, (_, p1) => {
           const slash = p1.startsWith('/') ? '' : '/';
           return `href="/${config.REROUTE_PATH}${slash}${p1}"`;
         });
@@ -48,7 +48,5 @@ if (config.REROUTE_PATH) {
 } else {
   router.use(express.static("public", { extensions: ['html'] }));
 }
-
-//router.use(express.static("public", { extensions: ['html'] }));
 
 module.exports = router;
