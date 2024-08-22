@@ -14,16 +14,19 @@ if (config.REROUTE_PATH) {
     if (req.method === 'GET' && !req.path.startsWith('/api')) {
       let readFile = '';
       if (req.path === '/') {
-        readFile = 'index.html';
+        readFile = 'index';
       } else {
-        readFile = req.path.substring(1) + '.html';
+        readFile = req.path.startsWith('/') ? req.path : req.path.substring(1);
+      }
+      if (!readFile.includes('.')) {
+        readFile = readFile + '.html';
       }
 
       const filePath = path.join(__dirname + "/../", 'public', readFile);
 
       fs.readFile(filePath, 'utf8', (err, data) => {
         if (err) {
-          return next(new HttpError(`could not find '${filePath}'`));
+          return next(err);
         }
         data = data.replaceAll(/href="(.*)"/g, (_, p1) => {
           const slash = p1.startsWith('/') ? '' : '/';
