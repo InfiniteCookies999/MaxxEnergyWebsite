@@ -13,7 +13,7 @@ function replaceRoutes(body) {
 async function reroute(req, res, next) {
   if (req.method === 'GET') {
     const pathExtension = path.extname(req.url).toLowerCase();
-    if (pathExtension === "") {
+    if (pathExtension === "" || pathExtension === "html") {
       
       if (req.url === '/') {
         req.url = "/index";
