@@ -41,7 +41,7 @@ $(document).ready(function () {
     const password = $('#password-input').val();
 
     $('#submit-error').empty();
-    const baseUrl = $('[base-url]').val() || '';
+    const baseUrl = $('[base-url]').val();
 
     $.ajax({
       type: 'POST',
