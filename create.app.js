@@ -2,7 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const config = require('./config');
 const { userRouter, staticRouter, viewsRouter, contactRouter } = require('./routes');
-const { errorHandler } = require('./middleware');
+const { errorHandler, reroute, replaceImports } = require('./middleware');
 
 function createApp() {
 
@@ -19,6 +19,9 @@ function createApp() {
     saveUninitialized: true,
     cookie: { maxAge: 60000 * 1440 /* One day */  },
   }));
+
+  app.use(replaceImports);
+  app.use(reroute);
 
   // Set the view engine.
   app.set('view engine', 'hbs');
