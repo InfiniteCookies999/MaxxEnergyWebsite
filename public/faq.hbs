@@ -22,8 +22,9 @@
 </head>
 <div>
     <div class="container mt-4">
-    <!--Included the header-->
-    <div data-include="header"></div>
+    
+        <import value="/header"></import>
+
         <h1>Frequently Asked Questions</h1>
         <br/>
         
@@ -33,7 +34,7 @@
             <br/>
             <label class="answer">A:</label>
             <span class="answer-text text-spacing">Maxx Energy is responsible for providing clean, reliable, cost effective power to our customers. You can you more about us at our </span>
-            <a class="answer-text" href="{{baseRoute}}/about">About Us Page.</a>
+            <a class="answer-text" href="/about">About Us Page.</a>
         </div>
 
         <div class="qa-container">
@@ -59,9 +60,9 @@
             <br/>
             <label class="answer">A:</label>
             <span class="answer-text text-spacing">You can checkout our services at </span>
-            <a class="answer-text" href="{{baseRoute}}/services">Services.</a>
+            <a class="answer-text" href="/services">Services.</a>
             <span class="answer-text">You will need an account to be able to receive services which you can signup</span>
-            <a class="answer-text" href="{{baseRoute}}/login">here.</a>
+            <a class="answer-text" href="/login">here.</a>
             <span class="answer-text">We provide a wide range of services such as Energy Audits, Clean Energy Incentives, Auto Billing, and more.</span>
         </div>
 
@@ -87,9 +88,9 @@
             <br/>
             <label class="answer">A:</label>
             <span class="answer-text">You can update your account information by logging in </span>
-            <a class="answer-text" href="{{baseRoute}}/login">here.</a>
+            <a class="answer-text" href="/login">here.</a>
             <span class="answer-text">Or by contacting our</span>
-            <a class="answer-text" href="{{baseRoute}}/contact">Customer Service.</a>
+            <a class="answer-text" href="/contact">Customer Service.</a>
         </div>
 
         <div class="qa-container">
@@ -100,18 +101,18 @@
             <span class="answer-text text-spacing">Yes you may change your plan at anytime.</span>
         </div>
 
-        <div class="qa-container">
+        <div class="qa-container mb-5">
             <label class="question">Q:</label>
             <span class="question-text text-spacing">What if my question was not answered on this page?</span>
             <br/>
             <label class="answer">A:</label>
             <span class="answer-text text-spacing">If you have further questions feel free to reach out and contact us at our </span>
-            <a class="answer-text" href="{{baseRoute}}/contact">Contact Us Page.</a>
+            <a class="answer-text" href="/contact">Contact Us Page.</a>
         </div>
 
     </div>
 
-    <div data-include="footer"></div>
+    <import value="/footer"></import>
 </div>    
 </body>
 </html>
