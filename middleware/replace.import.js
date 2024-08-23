@@ -18,7 +18,13 @@ function replace(body) {
 function replaceImports(_, res, next) {
   const osend = res.send;
   res.send = function (body) {
-    return osend.call(this, replace(body));
+    // Making sure we only change html files!
+    if (body && body.trimStart().startsWith("<!DOCTYPE html>")) {
+      // Only replace if it is an html file.
+      return osend.call(this, replace(body));
+    } else {
+      return osend.call(this, body);
+    }
   };
   next();
 }
