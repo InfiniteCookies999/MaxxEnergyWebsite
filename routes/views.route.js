@@ -10,7 +10,7 @@ function getReroute() {
   return config.REROUTE_PATH || '';
 }
 
-router.get('/profile', controller(async (req, res) => {
+router.get('/user-profile', controller(async (req, res) => {
   
   if (!req.session.user) {
     // Cannot display the user's profile page if the user is not even
@@ -20,7 +20,7 @@ router.get('/profile', controller(async (req, res) => {
 
   const user = await UserService.getUser(req.session);
 
-  res.render('profile', {
+  res.render('user-profile', {
     // User information
     firstName: user.firstName,
     lastName: user.lastName,
