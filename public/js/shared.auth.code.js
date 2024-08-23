@@ -205,12 +205,12 @@ function processServerErrorResponse(res, input) {
     } catch (error) {
       // Okay must be a different response from the server so just printing
       // that instead.
-      console.log(`Error code: ${req.status}`);
+      console.log(`Error code: ${res.status}`);
     }
   } else if (req.status === 400) {
     const errorMsg = $.parseJSON(res.responseText).message.errors;
       console.log("Error message (400): ", errorMsg);
   } else {
-    console.log(`Error code: ${req.status}`);
+    console.log(`Error code: ${res.status}`);
   }
 }
