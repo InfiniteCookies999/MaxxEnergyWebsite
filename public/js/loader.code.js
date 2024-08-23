@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const newScript = document.createElement('script');
         newScript.textContent = script.textContent;
         document.body.appendChild(newScript);
-        document.body.removeChild(newScript); // Optionally remove the script tag after execution
+        document.body.removeChild(newScript);
       });
     };
     request.send();

@@ -29,9 +29,9 @@
             <div class="container">
                 <div class="row justify-content-md-center">
                     <div class="col-12 col-md-10 col-lg-8 col-xl-7">
-                        <h1 class="mb-4 display-5 text-center">Contact</h1>
+                        <h1 class="mb-4 display-5 text-center">Reach Out To Us</h1>
                         <p class="text-muted mb-5 text-center">
-                            "The most efficient way to reach us is through the contact form below. Please complete all required fields, and our team will respond promptly."
+                            "The best and most efficient way to reach us is through the contact form below. We can answer any relevant questions you may have. Please complete all required fields, and our team will respond promptly."
                         </p>
                         <hr class="w-50 mx-auto mb-5 border-dark">
                     </div>
@@ -42,25 +42,41 @@
                 <div class="row justify-content-lg-center">
                     <div class="col-12 col-lg-9">
                         <div class="bg-white border rounded shadow-sm overflow-hidden">
-                            <!-- Update the form's action and method -->
+
                             <form id="contact_form" action="/api/contact/submit" method="POST">
                                 <div class="row p-4">
                                     <div class="col-12 col-md-6 form-group">
                                         <label for="first_name" class="form-label">First Name</label>
-                                        <input type="text" class="form-control" id="first_name" name="firstName" value="" placeholder="Susan" maxlength="50">
+                                        <input type="text" class="form-control" 
+                                            id="first_name" 
+                                            name="firstName" 
+                                            value="" 
+                                            placeholder="Susan" 
+                                            maxlength="{{maxNameLength}}">
                                         <div id="first_name_error" class="text-danger"></div>
                                     </div>
                                     
                                     <div class="col-12 col-md-6 form-group">
                                         <label for="last_name" class="form-label">Last Name</label>
-                                        <input type="text" class="form-control" id="last_name" name="lastName" value="" placeholder="Smith" maxlength="50">
+                                        <input type="text" class="form-control" 
+                                            id="last_name" 
+                                            name="lastName" 
+                                            value="" 
+                                            placeholder="Smith" 
+                                            maxlength="{{maxNameLength}}">
                                         <div id="last_name_error" class="text-danger"></div>
                                     </div>
 
                                     <div class="col-12 col-md-6 form-group">
                                         <label for="email" class="form-label">Email</label>
                                         <div class="input-group">
-                                            <input type="email" class="form-control" id="email" name="email" value="" placeholder="youremail@example.com">
+                                            <input type="email" 
+                                            class="form-control" 
+                                                id="email" 
+                                                name="email" 
+                                                value="" 
+                                                placeholder="youremail@example.com"
+                                                maxlength="50">
                                         </div>
                                         <div id="email_error" class="text-danger"></div>
                                     </div>
@@ -68,15 +84,24 @@
                                     <div class="col-12 col-md-6 form-group">
                                         <label for="phone" class="form-label">Phone Number</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" id="phone" name="phone" value="" maxlength="12" placeholder="703-584-9283">
+                                            <input type="text" class="form-control" 
+                                                id="phone" 
+                                                name="phone" 
+                                                value="" 
+                                                maxlength="12">
                                         </div>
                                         <div id="phone_error" class="text-danger"></div>
                                     </div>
 
                                     <div class="col-12 form-group">
                                         <label for="message" class="form-label">Message</label>
-                                        <textarea class="form-control" id="message" name="message" placeholder="Please reach out to us!" rows="3" maxlength="500"></textarea>
-                                        <div id="message_error" class="text-danger"></div>
+                                            <textarea class="form-control" 
+                                                id="message" 
+                                                name="message" 
+                                                placeholder="Please reach out to us!" 
+                                                rows="3" 
+                                                maxlength="500"></textarea>
+                                            <div id="message_error" class="text-danger"></div>
                                     </div>
                                     
                                     <div class="col-12 text-center">
