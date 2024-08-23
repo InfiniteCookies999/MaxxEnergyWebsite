@@ -6,7 +6,7 @@ const { replaceRoutes } = require('./reroute');
 function replace(body) {
   return body.replaceAll(/<import\s*href="(.*)"><\/import>/g, (_, p1) => {
     const filePath = path.join(__dirname, '../public', p1 + ".html");
-    returnfs.readFileSync(filePath, 'utf8');
+    return fs.readFileSync(filePath, 'utf8');
   });
 }
 
