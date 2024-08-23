@@ -26,7 +26,7 @@ function reroute(req, res, next) {
       if (fs.existsSync(filePath + '.html')) {
         // Manually serving the html.
 
-        const body = fs.readFileSync(filePath + '.html', 'utf8');
+        let body = fs.readFileSync(filePath + '.html', 'utf8');
         res.setHeader('Content-Type', 'text/html');
         if (config.REROUTE_PATH) {
           body = replaceRoutes(body);
