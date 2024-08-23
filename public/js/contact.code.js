@@ -106,24 +106,36 @@ document.addEventListener("DOMContentLoaded", function () {
             message: message.value.trim(),
         };
 
-        $.ajax({
-            type: 'POST',
-            url: '/api/contact/submit',  // The endpoint of your server to handle contact submissions
-            data: JSON.stringify(formData),
-            contentType: 'application/json',
-            success: function(response) {
-                // Handle success response
-                alert("Your message has been sent successfully!");
-                contactForm.reset();
-                document.getElementById('success_message').style.display = 'block';
-            },
-            error: function(xhr, status, error) {
-                // Handle error response
-                console.error("Error submitting the form:", error);
-                alert("There was an issue submitting your message. Please try again later.");
-            }
-        });
-    });
+       $.ajax({
+    type: 'POST',
+    url: '/api/contact/submit', 
+    data: JSON.stringify(formData),
+    contentType: 'application/json',
+    success: function(response) {
+        firstNameError.innerHTML = '';
+        lastNameError.innerHTML = '';
+        emailError.innerHTML = '';
+        phoneError.innerHTML = '';
+        messageError.innerHTML = '';
+        
+
+        const successMessage = document.getElementById('success_message');
+        successMessage.style.display = 'block';
+        
+        setTimeout(() => {
+            successMessage.style.display = 'none';
+        }, 8000);
+        
+        // Clear the form
+        contactForm.reset();
+    },
+    error: function(xhr, status, error) {
+        // Handle error response
+        console.error("Error submitting the form:", error);
+        alert("There was an issue submitting your message. Please try again later.");
+    }
+});
+});
 
     preventInvalidName($(firstName));
     preventInvalidName($(lastName));
