@@ -3,9 +3,13 @@ const fs = require('fs');
 const path = require('path');
 
 function replaceRoutes(body) {
-  return body.replaceAll(/href=["']((?!http).*)["']/g, (_, p1) => {
+  return body.replaceAll(/href=["']((?!http).*)["']/g, (match, p1) => {
     const slash = p1.startsWith('/') ? '' : '/';
-    return `href="/${config.REROUTE_PATH}${slash}${p1}"`;
+    if (match.includes("\"")) {
+      return `href="/${config.REROUTE_PATH}${slash}${p1}"`;
+    } else {
+      return `href='/${config.REROUTE_PATH}${slash}${p1}'`;
+    }
   });
 }
 
