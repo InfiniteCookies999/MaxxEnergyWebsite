@@ -176,12 +176,14 @@ $(document).ready(function () {
       delete body.addressLine2;
     }
 
+    const baseUrl = $('[base-url]').attr('base-url');
+
     $.ajax({
       type: 'POST',
-      url: '/api/user/register',
+      url: baseUrl + '/api/user/register',
       data: body,
       success: () => {
-        window.location = "/profile";
+        window.location = baseUrl + "/user-profile";
       },
       error: (res) => {
         processServerErrorResponse(res, $('#submit-error'));

@@ -139,9 +139,11 @@ function submitName() {
   const firstName = $('#first-name-input').val();
   const lastName = $('#last-name-input').val();
 
+  const baseUrl = $('[base-url]').attr('base-url');
+
   $.ajax({
     type: 'POST',
-    url: '/api/user/update-name',
+    url: baseUrl + '/api/user/update-name',
     data: {
       firstName,
       lastName
