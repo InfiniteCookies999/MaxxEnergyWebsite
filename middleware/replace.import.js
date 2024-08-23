@@ -5,13 +5,8 @@ const { replaceRoutes } = require('./reroute');
 
 function replace(body) {
   return body.replaceAll(/<import\s*href="(.*)"><\/import>/g, (_, p1) => {
-    let filePath = path.join(__dirname, '../public', p1 + ".html");
-    let importBody = fs.readFileSync(filePath, 'utf8');
-    // Reroute the imported body if we need to.
-    if (config.REROUTE_PATH) {
-      importBody = replaceRoutes(importBody);
-    }
-    return importBody;
+    const filePath = path.join(__dirname, '../public', p1 + ".html");
+    returnfs.readFileSync(filePath, 'utf8');
   });
 }
 
