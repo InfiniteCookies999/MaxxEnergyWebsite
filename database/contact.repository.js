@@ -29,6 +29,17 @@ class ContactRepository {
       message VARCHAR(${this.maxMessageLength}) NOT NULL
     )`);
   }
+
+  async insertContactMessage(contactMessage) {
+    const conn = await getDBConnection();
+    await conn.query('INSERT INTO ContactMessage SET ?', {
+      firstName: contactMessage.firstName,
+      lastName: contactMessage.lastName,
+      email: contactMessage.email,
+      phone: contactMessage.phone,
+      message: contactMessage.message
+    });
+  }
 }
 
 module.exports = {

@@ -39,6 +39,10 @@
   align-items: center;
   gap: 60px;
 }
+.brand-logo {
+  height: 100px;
+  width: auto;  
+}
 
 .brand-name {
   font-size: 2rem;

@@ -1,35 +1,25 @@
 const express = require('express');
-const { body } = require('express-validator');
-const { validateBody } = require('../middleware'); 
-const ContactService = require('../services/contact.service');
-
-const PHONE_PATTERN = /^(\d{3})\-(\d{3})\-(\d{4})$/;
+const { ContactRepository, ContactMessage } = require('../database');
 
 const router = express.Router();
 
-router.use(express.urlencoded({ extended: false }));
-router.use(express.json());
+// Route to handle contact form submissions
+router.post('/submit', async (req, res) => {
+  try {
+    const { firstName, lastName, email, phone, message } = req.body;
 
-router.post('/submit',
-  body('firstName').notEmpty().withMessage("First name cannot be empty")
-    .isLength({ max: 50 }).withMessage("First name must be less than 50 characters"),
-  body('lastName').notEmpty().withMessage("Last name cannot be empty")
-    .isLength({ max: 50 }).withMessage("Last name must be less than 50 characters"),
-  body('email').isEmail().withMessage("Expected a valid email address"),
-  body('phone').optional()
-    .matches(PHONE_PATTERN).withMessage("Invalid phone format"),
-  body('message').notEmpty().withMessage("Message cannot be empty")
-    .isLength({ max: 500 }).withMessage("Message must be less than 500 characters"),
+    // Create a new ContactMessage object
+    const contactMessage = new ContactMessage(null, firstName, lastName, email, phone, message);
 
-  validateBody, // Middleware to validate request body
-  async (req, res) => {
-    try {
-      await ContactService.addContact(req.body); // Business logic to add the contact
-      res.redirect('/contact'); // Redirects back to the contact page
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
+    // Insert the contact message into the database
+    await ContactRepository.insertContactMessage(contactMessage);
+
+    // Send a success response back to the client
+    res.status(200).json({ status: 'success', message: 'Message saved successfully!' });
+  } catch (error) {
+    console.error('Error saving contact message:', error);
+    res.status(500).json({ status: 'error', message: 'There was an error saving your message. Please try again later.' });
   }
-);
+});
 
 module.exports = router;
