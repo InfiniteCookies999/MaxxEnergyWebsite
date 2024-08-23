@@ -50,7 +50,7 @@ $(document).ready(function () {
         password
       },
       success: () => {
-        window.location = "/profile";
+        window.location = "/user-profile";
       },
       error: (res) => {
         processServerErrorResponse(res, $('#submit-error'));
