@@ -3,12 +3,12 @@ const fs = require('fs');
 const path = require('path');
 
 function replaceRoutes(body) {
-  return body.replaceAll(/href=["']((?!http).*)["']/g, (match, p1) => {
-    const slash = p1.startsWith('/') ? '' : '/';
+  return body.replaceAll(/href=(["'])((?!http).*)\1/g, (match, _, p2) => {
+    const slash = p2.startsWith('/') ? '' : '/';
     if (match.includes("\"")) {
-      return `href="/${config.REROUTE_PATH}${slash}${p1}"`;
+      return `href="/${config.REROUTE_PATH}${slash}${p2}"`;
     } else {
-      return `href='/${config.REROUTE_PATH}${slash}${p1}'`;
+      return `href='/${config.REROUTE_PATH}${slash}${p2}'`;
     }
   });
 }
