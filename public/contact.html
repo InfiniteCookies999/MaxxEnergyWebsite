@@ -108,8 +108,9 @@
                                         <button class="btn btn-primary btn-lg btn-block" type="submit">Submit</button>
                                     </div>
                                 </div>
-                                <!-- Success message -->
-                                <div id="success_message" class="alert alert-success text-center w-100" style="display: none;">
+
+                                <!-- Success message, min-height makes it so that when you see the success message it doesn't move the submit button -->
+                                <div id="success_message" class="alert alert-success text-center w-100" style="display: none; min-height: 50px;">
                                     Your message has been sent successfully!
                                 </div>
                             </form>
@@ -120,7 +121,6 @@
         </div>
     </section>
 
-    
     <import value="/footer"></import>
 
 </body>
