@@ -136,7 +136,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 });
-
     preventInvalidName($(firstName));
     preventInvalidName($(lastName));
     preventInvalidPhoneInput($(phone));

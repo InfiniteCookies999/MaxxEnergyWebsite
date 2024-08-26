@@ -38,6 +38,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 60px;
+  font-size: 18px;
 }
 .brand-logo {
   height: 100px;
