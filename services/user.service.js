@@ -85,6 +85,13 @@ class UserService {
     await UserRepository.updateUsersPhone(userId, phone);
   }
 
+  async updateAddress(userId, state, county, addressLine1, addressLine2, zipCode, session) {
+    userId = this.getUserIdForUpdate(userId, session);
+
+    await UserRepository.updateUsersAddress(
+      userId, state, county, addressLine1, addressLine2, zipCode);
+  }
+
   async getUser(session) {
     if (!(session.user)) {
       throw new HttpError("Cannot get user's information. Not logged in", 401);

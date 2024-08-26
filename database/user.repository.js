@@ -109,6 +109,21 @@ class UserRepository {
     );
   }
 
+  async updateUsersAddress(userId, state, county, addressLine1, addressLine2, zipCode) {
+    const conn = await getDBConnection();
+
+    let values = [state, county, addressLine1, addressLine2 || null, zipCode, userId]; 
+    
+    await conn.execute(`UPDATE user SET
+        state=?,
+        county=?,
+        addressLine1=?,
+        addressLine2=?,
+        zipCode=?
+      WHERE id=?`,
+      values);
+  }
+
   async getUserByEmail(email) {
     const conn = await getDBConnection();
 

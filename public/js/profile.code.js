@@ -95,7 +95,21 @@ function submitAddress(finishedCB, saveIcon) {
     return;
   }
 
-  // TODO: Here we would submit the new address to the server.
+  const state        = $('#state-input').find(':selected').val();
+  const county       = $('#county-input').find(":selected").val();
+  const addressLine1 = $('#address-line1-input').val();
+  const addressLine2 = $('#address-line2-input').val();
+  const zipCode      = $('#zip-code-input').val();
+  
+  const body = {
+    state, county, addressLine1, addressLine2, zipCode
+  };
+  if (addressLine2 == "") {
+    delete body.addressLine2;
+  }
+
+  console.log("sending body: ", body);
+  submitTo('/api/user/update-address', body, null, finishedCB, saveIcon);
 
 }
 

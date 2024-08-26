@@ -42,15 +42,13 @@ function validatePhoneNumber(fieldName) {
     .matches(PHONE_PATTERN).withMessage("Invalid phone format");
 }
 
-router.post('/user/register',
-  validateName('firstName'),
-  validateName('lastName'),
-  body('email').isEmail().withMessage("Expected valid email address"),
-  validatePhoneNumber('phoneNumber'),
-  body('state')
-    .notEmpty().withMessage("Cannot be empty")
-    .isIn(UserRepository.validStates()).withMessage("Unknown state"),
-  body('county')
+function validateState(fieldName) {
+  return body(fieldName).notEmpty().withMessage("Cannot be empty")
+    .isIn(UserRepository.validStates()).withMessage("Unknown state");
+}
+
+function validateCounty(fieldName) {
+  return body(fieldName)
     .notEmpty().withMessage("Cannot be empty")
     .custom((value, { req }) => {
       const state = req.body.state;
@@ -65,11 +63,24 @@ router.post('/user/register',
       }
       // TODO: Consider improving performance by having these be sets instead.
       return countyList.includes(value.replaceAll("-", " "));
-    }).withMessage("Unknown county"),
+    }).withMessage("Unknown county");
+}
+
+function validateZipCode(fieldName) {
+  return body(fieldName).notEmpty().withMessage("Cannot be empty")
+    .isInt({ min: 0, max: 99999 }).withMessage("Expected valid integer range");
+}
+
+router.post('/user/register',
+  validateName('firstName'),
+  validateName('lastName'),
+  body('email').isEmail().withMessage("Expected valid email address"),
+  validatePhoneNumber('phoneNumber'),
+  validateState('state'),
+  validateCounty('county'),
   validateAddressLine('addressLine1'),
   validateAddressLine('addressLine2', true),
-  body('zipCode').notEmpty().withMessage("Cannot be empty")
-    .isInt({ min: 0, max: 99999 }).withMessage("Expected valid integer range"),
+  validateZipCode('zipCode'),
   body('password').notEmpty().withMessage("Cannot be empty")
     .isLength({ min: 1, max: UserRepository.maxPasswordLength() }).withMessage("Invalid length")
     .matches(PASSWORD_PATTERN).withMessage("Invalid format"),
@@ -132,5 +143,31 @@ router.put('/user/update-phone/:id?',
     res.send();
   })
 );
+
+router.put('/user/update-address/:id?',
+  validateState('state'),
+  validateCounty('county'),
+  validateAddressLine('addressLine1'),
+  validateAddressLine('addressLine2', true),
+  validateZipCode('zipCode'),
+
+  validateBody,
+  validateLoggedIn,
+  controller(async (req, res) => {
+    await UserService.updateAddress(req.params.id,
+                                    req.body.state,
+                                    req.body.county,
+                                    req.body.addressLine1,
+                                    req.body.addressLine2,
+                                    req.body.zipCode,
+                                    req.session);
+    res.send();
+  })
+);
+
+
+
+
+
 
 module.exports = router;
