@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const { HttpError } = require('../middleware');
 const { UserRepository, User } = require('../database');
+const FileService = require('./file.service');
 
 const HASH_STRENGTH = 10
 
@@ -20,7 +21,7 @@ class UserService {
     const user = await UserRepository.saveUser(new User(0,
       dto.firstName, dto.lastName, dto.email, dto.phoneNumber,
       dto.state, dto.county, dto.addressLine1, dto.addressLine2 || null,
-      dto.zipCode, hashedPassword, new Date()
+      dto.zipCode, hashedPassword, new Date(), null
     ));
 
     session.user = {
@@ -104,6 +105,19 @@ class UserService {
     
     const newHashedPassword = await bcrypt.hash(newPassword, HASH_STRENGTH);
     await UserRepository.updatePassword(userId, newHashedPassword);
+  }
+
+  async updateProfilePic(userId, file, session) {
+    userId = this.getUserIdForUpdate(userId, session);
+
+    const user = await UserRepository.getUserById(userId);
+    
+    let oldFile = FileService.fixStoredFile(userId, user.profilePicFile);
+    
+    const profilePicFile = FileService
+      .moveFileWithRandomName(userId, file, 'public/upload/profilepics', oldFile);
+  
+    await UserRepository.updateProfilePic(userId, profilePicFile);
   }
 
   async getUser(session) {

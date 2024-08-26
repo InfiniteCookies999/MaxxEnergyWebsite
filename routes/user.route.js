@@ -1,5 +1,12 @@
 const express = require('express');
-const { controller, validateBody, validateLoggedIn } = require('../middleware'); 
+const multer = require('multer');
+const {
+  controller,
+  validateBody,
+  validateLoggedIn,
+  validateFileExists,
+  fileFilter
+} = require('../middleware'); 
 const { body } = require('express-validator');
 const COUNTIES = require('./counties');
 const { UserRepository } = require('../database');
@@ -18,6 +25,11 @@ const router = express.Router();
 
 router.use(express.urlencoded({extended: false}));
 router.use(express.json());
+
+const fileUpload = multer({
+  dest: '/upload',
+  fileFilter:  fileFilter(UserRepository.validProfilePicMimetypes())
+});
 
 function validateName(fieldName) {
   return body(fieldName)
@@ -187,5 +199,18 @@ router.put('/user/update-password/:id?',
     res.send();
   })
 );
+
+router.put('/user/update-profile-pic/:id?',
+  fileUpload.single('file'),
+
+  validateFileExists,
+  validateLoggedIn,
+  controller(async (req, res) => {
+    await UserService.updateProfilePic(req.params.id,
+                                       req.file,
+                                       req.session);
+    res.send();
+  })
+)
 
 module.exports = router;

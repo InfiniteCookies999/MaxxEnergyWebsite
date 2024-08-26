@@ -178,7 +178,7 @@ function submitName(finishedCB, saveIcon) {
 
 }
 
-function submitProfilePicture(file) {
+function submitProfilePicture(file, finishedCB, saveIcon) {
 
   const reader = new FileReader();
   const image = $('#profile-picture');
@@ -189,7 +189,22 @@ function submitProfilePicture(file) {
 
   reader.readAsDataURL(file);
 
-  // TODO: Here we would upload the change to the server.
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const baseUrl = $('[base-url]').attr('base-url');
+  
+  console.log("sending!");
+  $.ajax({
+    type: 'PUT',
+    url: baseUrl + '/api/user/update-profile-pic',
+    data: formData,
+    processData: false,
+    contentType: false,
+    error: (res) => {
+      processServerErrorResponse(res);
+    }
+  });
 }
 
 $(document).ready(function() {

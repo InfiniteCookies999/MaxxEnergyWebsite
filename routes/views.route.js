@@ -1,6 +1,6 @@
 const express = require('express');
 const { controller } = require('../middleware'); 
-const { UserService } = require('../services');
+const { UserService, FileService } = require('../services');
 const { UserRepository } = require('../database');
 const config = require('../config');
 
@@ -20,6 +20,12 @@ router.get('/user-profile', controller(async (req, res) => {
 
   const user = await UserService.getUser(req.session);
 
+  const profilePicFile = FileService
+    .fixStoredFile(user.id,
+                   user.profilePicFile,
+                   "/upload/profilepics",
+                   "/images/default-profile-icon.jpg");
+  
   res.render('user-profile', {
     // User information
     firstName: user.firstName,
@@ -32,6 +38,7 @@ router.get('/user-profile', controller(async (req, res) => {
     county: user.county.replaceAll("-", " "),
     state: user.state,
     zipCode: user.zipCode,
+    profilePicFile: profilePicFile,
 
     // Form restrictions
     maxNameLength: UserRepository.maxNameLength(),

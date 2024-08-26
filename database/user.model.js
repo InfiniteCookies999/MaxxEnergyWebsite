@@ -2,7 +2,8 @@
 class User {
   constructor(id, firstName, lastName, email, phone, state, county,
               addressLine1, addressLine2,
-              zipCode, password, joinDate) {
+              zipCode, password, joinDate,
+              profilePicFile) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -15,6 +16,7 @@ class User {
     this.zipCode = zipCode;
     this.password = password;
     this.joinDate = joinDate;
+    this.profilePicFile = profilePicFile;
   }
 }
 

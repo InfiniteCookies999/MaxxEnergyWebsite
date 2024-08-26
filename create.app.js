@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require('express-session');
+const fs = require('fs');
 const config = require('./config');
 const { userRouter, staticRouter, viewsRouter, contactRouter } = require('./routes');
 const { errorHandler, reroute, replaceImports } = require('./middleware');
@@ -10,6 +11,14 @@ function createApp() {
 
   if (!config.SESSION_SECRET_KEY) {
     throw new Error("Must include SESSION_SECRET_KEY in your .env file");
+  }
+
+  // Creating the file uploading directories if they do not exist.
+  if (!fs.existsSync("./public/upload")) {
+    fs.mkdirSync('./public/upload');
+  }
+  if (!fs.existsSync("./public/upload/profilepics")) {
+    fs.mkdirSync("./public/upload/profilepics")
   }
 
   // Using sessions to keep track of information while the user is logged in.
