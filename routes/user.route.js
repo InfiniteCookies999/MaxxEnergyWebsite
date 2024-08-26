@@ -71,6 +71,17 @@ function validateZipCode(fieldName) {
     .isInt({ min: 0, max: 99999 }).withMessage("Expected valid integer range");
 }
 
+function validatePassword(fieldName) {
+  return body(fieldName).notEmpty().withMessage("Cannot be empty")
+    .isLength({ min: 1, max: UserRepository.maxPasswordLength() }).withMessage("Invalid length")
+    .matches(PASSWORD_PATTERN).withMessage("Invalid format");
+}
+
+function validateExistingPassword(fieldName) {
+  return body(fieldName).notEmpty().withMessage("Cannot be empty")
+  . isLength({ min: 0, max: UserRepository.maxPasswordLength() }).withMessage("Invalid length");
+}
+
 router.post('/user/register',
   validateName('firstName'),
   validateName('lastName'),
@@ -81,9 +92,7 @@ router.post('/user/register',
   validateAddressLine('addressLine1'),
   validateAddressLine('addressLine2', true),
   validateZipCode('zipCode'),
-  body('password').notEmpty().withMessage("Cannot be empty")
-    .isLength({ min: 1, max: UserRepository.maxPasswordLength() }).withMessage("Invalid length")
-    .matches(PASSWORD_PATTERN).withMessage("Invalid format"),
+  validatePassword('password'),
 
   validateBody,
   controller(async (req, res) => {
@@ -93,9 +102,8 @@ router.post('/user/register',
 
 router.post('/user/login',
   body('email').isEmail().withMessage("Expected valid email address"),
-  body('password').notEmpty().withMessage("Cannot be empty")
-    .isLength({ min: 0, max: UserRepository.maxPasswordLength() }).withMessage("Invalid length"),
-
+  validateExistingPassword('password'),
+  
   validateBody,
   controller(async (req, res) => {
     await UserService.login(req.body.email, req.body.password, req.session);
@@ -165,9 +173,19 @@ router.put('/user/update-address/:id?',
   })
 );
 
-
-
-
-
+router.put('/user/update-password/:id?',
+  validateExistingPassword('oldPassword'),
+  validatePassword("newPassword"),
+  
+  validateBody,
+  validateLoggedIn,
+  controller(async (req, res) => {
+    await UserService.updatePassword(req.params.id,
+                                     req.body.oldPassword,
+                                     req.body.newPassword,
+                                     req.session);
+    res.send();
+  })
+);
 
 module.exports = router;

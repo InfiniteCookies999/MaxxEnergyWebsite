@@ -124,6 +124,14 @@ class UserRepository {
       values);
   }
 
+  async updatePassword(userId, newPassword) {
+    const conn = await getDBConnection();
+
+    await conn.execute(`UPDATE user SET password=? WHERE id=?`,
+      [newPassword, userId]
+    );
+  }
+
   async getUserByEmail(email) {
     const conn = await getDBConnection();
 

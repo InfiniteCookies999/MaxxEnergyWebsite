@@ -113,3 +113,8 @@ body {
   background-color: white;
   transform: translateY(-0.4rem);
 }
+
+/* So that the dropdown does not appear undernear the navbar */
+.select-with-search .dropdown-menu {
+  z-index: 9999;
+}

@@ -92,6 +92,20 @@ class UserService {
       userId, state, county, addressLine1, addressLine2, zipCode);
   }
 
+  async updatePassword(userId, oldPassword, newPassword, session) {
+    userId = this.getUserIdForUpdate(userId, session);
+
+    const user = await UserRepository.getUserById(userId);
+    
+    const hashedPassword = user.password;
+    if (!(await bcrypt.compare(oldPassword, hashedPassword))) {
+      throw new HttpError("Incorrect password", 401);
+    }
+    
+    const newHashedPassword = await bcrypt.hash(newPassword, HASH_STRENGTH);
+    await UserRepository.updatePassword(userId, newHashedPassword);
+  }
+
   async getUser(session) {
     if (!(session.user)) {
       throw new HttpError("Cannot get user's information. Not logged in", 401);

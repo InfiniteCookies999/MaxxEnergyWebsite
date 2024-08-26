@@ -108,7 +108,6 @@ function submitAddress(finishedCB, saveIcon) {
     delete body.addressLine2;
   }
 
-  console.log("sending body: ", body);
   submitTo('/api/user/update-address', body, null, finishedCB, saveIcon);
 
 }
@@ -140,7 +139,10 @@ function submitPassword(finishedCB, saveIcon) {
     return;
   }
 
-  // TODO: Here we would submit the new password to the server.
+  const oldPassword = $('#old-password-input').val();
+  const newPassword = $('#new-password-input').val();
+
+  submitTo('/api/user/update-password', { oldPassword, newPassword }, $('#old-password-error'), finishedCB, saveIcon);
 
 }
 

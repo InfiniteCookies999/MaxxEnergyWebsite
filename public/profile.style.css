@@ -53,3 +53,7 @@ body {
 .select-with-search {
   display: none;
 }
+
+.select-with-search .dropdown-menu {
+  position: absolute;
+}
