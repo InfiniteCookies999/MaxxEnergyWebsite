@@ -92,7 +92,7 @@ function addStatesAndCounties(stateDropdown, countyDropdown, userState, userCoun
     let name = state.name.toLowerCase();
     name = name.charAt(0).toUpperCase() + name.slice(1);
 
-    if (name === userState) {
+    if (state.abbreviation === userState) {
       selectedAbbreviation = state.abbreviation;
     }
 

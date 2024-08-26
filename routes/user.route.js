@@ -1,5 +1,12 @@
 const express = require('express');
-const { controller, validateBody, validateLoggedIn } = require('../middleware'); 
+const multer = require('multer');
+const {
+  controller,
+  validateBody,
+  validateLoggedIn,
+  validateFileExists,
+  fileFilter
+} = require('../middleware'); 
 const { body } = require('express-validator');
 const COUNTIES = require('./counties');
 const { UserRepository } = require('../database');
@@ -19,6 +26,11 @@ const router = express.Router();
 router.use(express.urlencoded({extended: false}));
 router.use(express.json());
 
+const fileUpload = multer({
+  dest: '/upload',
+  fileFilter:  fileFilter(UserRepository.validProfilePicMimetypes())
+});
+
 function validateName(fieldName) {
   return body(fieldName)
     .notEmpty().withMessage("Cannot be empty")
@@ -37,16 +49,18 @@ function validateAddressLine(fieldName, isOptional) {
     .matches(ADDRESS_LINE_PATTERN).withMessage("Invalid address format");
 }
 
-router.post('/user/register',
-  validateName('firstName'),
-  validateName('lastName'),
-  body('email').isEmail().withMessage("Expected valid email address"),
-  body('phoneNumber').notEmpty().withMessage("Cannot be empty")
-    .matches(PHONE_PATTERN).withMessage("Invalid phone format"),
-  body('state')
-    .notEmpty().withMessage("Cannot be empty")
-    .isIn(UserRepository.validStates()).withMessage("Unknown state"),
-  body('county')
+function validatePhoneNumber(fieldName) {
+  return body(fieldName).notEmpty().withMessage("Cannot be empty")
+    .matches(PHONE_PATTERN).withMessage("Invalid phone format");
+}
+
+function validateState(fieldName) {
+  return body(fieldName).notEmpty().withMessage("Cannot be empty")
+    .isIn(UserRepository.validStates()).withMessage("Unknown state");
+}
+
+function validateCounty(fieldName) {
+  return body(fieldName)
     .notEmpty().withMessage("Cannot be empty")
     .custom((value, { req }) => {
       const state = req.body.state;
@@ -61,14 +75,36 @@ router.post('/user/register',
       }
       // TODO: Consider improving performance by having these be sets instead.
       return countyList.includes(value.replaceAll("-", " "));
-    }).withMessage("Unknown county"),
+    }).withMessage("Unknown county");
+}
+
+function validateZipCode(fieldName) {
+  return body(fieldName).notEmpty().withMessage("Cannot be empty")
+    .isInt({ min: 0, max: 99999 }).withMessage("Expected valid integer range");
+}
+
+function validatePassword(fieldName) {
+  return body(fieldName).notEmpty().withMessage("Cannot be empty")
+    .isLength({ min: 1, max: UserRepository.maxPasswordLength() }).withMessage("Invalid length")
+    .matches(PASSWORD_PATTERN).withMessage("Invalid format");
+}
+
+function validateExistingPassword(fieldName) {
+  return body(fieldName).notEmpty().withMessage("Cannot be empty")
+  . isLength({ min: 0, max: UserRepository.maxPasswordLength() }).withMessage("Invalid length");
+}
+
+router.post('/user/register',
+  validateName('firstName'),
+  validateName('lastName'),
+  body('email').isEmail().withMessage("Expected valid email address"),
+  validatePhoneNumber('phoneNumber'),
+  validateState('state'),
+  validateCounty('county'),
   validateAddressLine('addressLine1'),
   validateAddressLine('addressLine2', true),
-  body('zipCode').notEmpty().withMessage("Cannot be empty")
-    .isInt({ min: 0, max: 99999 }).withMessage("Expected valid integer range"),
-  body('password').notEmpty().withMessage("Cannot be empty")
-    .isLength({ min: 1, max: UserRepository.maxPasswordLength() }).withMessage("Invalid length")
-    .matches(PASSWORD_PATTERN).withMessage("Invalid format"),
+  validateZipCode('zipCode'),
+  validatePassword('password'),
 
   validateBody,
   controller(async (req, res) => {
@@ -78,9 +114,8 @@ router.post('/user/register',
 
 router.post('/user/login',
   body('email').isEmail().withMessage("Expected valid email address"),
-  body('password').notEmpty().withMessage("Cannot be empty")
-    .isLength({ min: 0, max: UserRepository.maxPasswordLength() }).withMessage("Invalid length"),
-
+  validateExistingPassword('password'),
+  
   validateBody,
   controller(async (req, res) => {
     await UserService.login(req.body.email, req.body.password, req.session);
@@ -88,7 +123,7 @@ router.post('/user/login',
   })
 );
 
-router.post('/user/update-name/:id?',
+router.put('/user/update-name/:id?',
   validateName('firstName'),
   validateName('lastName'),
 
@@ -101,9 +136,9 @@ router.post('/user/update-name/:id?',
                                  req.session);
     res.send();
   })
-)
+);
 
-router.post('/user/update-email/:id?',
+router.put('/user/update-email/:id?',
   body('email').isEmail().withMessage("Expected valid email address"),
   
   validateBody,
@@ -112,6 +147,68 @@ router.post('/user/update-email/:id?',
     await UserService.updateEmail(req.params.id,
                                   req.body.email,
                                   req.session);
+    res.send();
+  })
+);
+
+router.put('/user/update-phone/:id?',
+  validatePhoneNumber('phoneNumber'),
+  
+  validateBody,
+  validateLoggedIn,
+  controller(async (req, res) => {
+    await UserService.updatePhoneNumber(req.params.id,
+                                        req.body.phoneNumber,
+                                        req.session);
+    res.send();
+  })
+);
+
+router.put('/user/update-address/:id?',
+  validateState('state'),
+  validateCounty('county'),
+  validateAddressLine('addressLine1'),
+  validateAddressLine('addressLine2', true),
+  validateZipCode('zipCode'),
+
+  validateBody,
+  validateLoggedIn,
+  controller(async (req, res) => {
+    await UserService.updateAddress(req.params.id,
+                                    req.body.state,
+                                    req.body.county,
+                                    req.body.addressLine1,
+                                    req.body.addressLine2,
+                                    req.body.zipCode,
+                                    req.session);
+    res.send();
+  })
+);
+
+router.put('/user/update-password/:id?',
+  validateExistingPassword('oldPassword'),
+  validatePassword("newPassword"),
+  
+  validateBody,
+  validateLoggedIn,
+  controller(async (req, res) => {
+    await UserService.updatePassword(req.params.id,
+                                     req.body.oldPassword,
+                                     req.body.newPassword,
+                                     req.session);
+    res.send();
+  })
+);
+
+router.put('/user/update-profile-pic/:id?',
+  fileUpload.single('file'),
+
+  validateFileExists,
+  validateLoggedIn,
+  controller(async (req, res) => {
+    await UserService.updateProfilePic(req.params.id,
+                                       req.file,
+                                       req.session);
     res.send();
   })
 )

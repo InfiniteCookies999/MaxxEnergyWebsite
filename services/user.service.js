@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const { HttpError } = require('../middleware');
 const { UserRepository, User } = require('../database');
+const FileService = require('./file.service');
 
 const HASH_STRENGTH = 10
 
@@ -20,7 +21,7 @@ class UserService {
     const user = await UserRepository.saveUser(new User(0,
       dto.firstName, dto.lastName, dto.email, dto.phoneNumber,
       dto.state, dto.county, dto.addressLine1, dto.addressLine2 || null,
-      dto.zipCode, hashedPassword, new Date()
+      dto.zipCode, hashedPassword, new Date(), null
     ));
 
     session.user = {
@@ -70,11 +71,53 @@ class UserService {
   async updateEmail(userId, email, session) {
     userId = this.getUserIdForUpdate(userId, session);
 
+    // TODO: This needs to be fixed so that if the email is already the
+    // user's email then it should be fine with "updating it".
     if (await UserRepository.doesUserExistByEmail(email)) {
       throw new HttpError("Email taken", 403);
     }
 
     await UserRepository.updateUsersEmail(userId, email)
+  }
+
+  async updatePhoneNumber(userId, phone, session) {
+    userId = this.getUserIdForUpdate(userId, session);
+
+    await UserRepository.updateUsersPhone(userId, phone);
+  }
+
+  async updateAddress(userId, state, county, addressLine1, addressLine2, zipCode, session) {
+    userId = this.getUserIdForUpdate(userId, session);
+
+    await UserRepository.updateUsersAddress(
+      userId, state, county, addressLine1, addressLine2, zipCode);
+  }
+
+  async updatePassword(userId, oldPassword, newPassword, session) {
+    userId = this.getUserIdForUpdate(userId, session);
+
+    const user = await UserRepository.getUserById(userId);
+    
+    const hashedPassword = user.password;
+    if (!(await bcrypt.compare(oldPassword, hashedPassword))) {
+      throw new HttpError("Incorrect password", 401);
+    }
+    
+    const newHashedPassword = await bcrypt.hash(newPassword, HASH_STRENGTH);
+    await UserRepository.updatePassword(userId, newHashedPassword);
+  }
+
+  async updateProfilePic(userId, file, session) {
+    userId = this.getUserIdForUpdate(userId, session);
+
+    const user = await UserRepository.getUserById(userId);
+    
+    let oldFile = FileService.fixStoredFile(userId, user.profilePicFile);
+    
+    const profilePicFile = FileService
+      .moveFileWithRandomName(userId, file, 'public/upload/profilepics', oldFile);
+  
+    await UserRepository.updateProfilePic(userId, profilePicFile);
   }
 
   async getUser(session) {
