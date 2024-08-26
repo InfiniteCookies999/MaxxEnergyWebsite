@@ -106,9 +106,12 @@ document.addEventListener("DOMContentLoaded", function () {
             message: message.value.trim(),
         };
 
+        $('#submit-error').empty();
+    const baseUrl = $('[base-url]').attr('base-url');
+
        $.ajax({
     type: 'POST',
-    url: '/api/contact/submit', 
+    url: baseUrl + '/api/contact/submit', 
     data: JSON.stringify(formData),
     contentType: 'application/json',
     success: function(response) {
