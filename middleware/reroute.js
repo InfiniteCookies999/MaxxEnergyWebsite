@@ -10,7 +10,9 @@ function replaceRoutes(body) {
     } else {
       return `href='/${config.REROUTE_PATH}${slash}${p2}'`;
     }
-  });
+  })
+  // Add the base url for javascript.
+  .replaceAll(/base-url=""/g, `base-url="/${config.REROUTE_PATH}"`);
 }
 
 function reroute(req, res, next) {

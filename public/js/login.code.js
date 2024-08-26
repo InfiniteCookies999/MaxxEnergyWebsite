@@ -41,16 +41,17 @@ $(document).ready(function () {
     const password = $('#password-input').val();
 
     $('#submit-error').empty();
+    const baseUrl = $('[base-url]').attr('base-url');
 
     $.ajax({
       type: 'POST',
-      url: '/api/user/login',
+      url: baseUrl + '/api/user/login',
       data: {
         email,
         password
       },
       success: () => {
-        window.location = "/user-profile";
+        window.location = baseUrl + "/user-profile";
       },
       error: (res) => {
         processServerErrorResponse(res, $('#submit-error'));
