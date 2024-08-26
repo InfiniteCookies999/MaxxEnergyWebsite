@@ -29,7 +29,10 @@ function reroute(req, res, next) {
     req.url = '/' + req.url;
   }
 
-  console.log("req.url: ", req.url);
+  if (req.url.endsWith('/') && req.url !== '/') {
+    res.status(404).send("404 Not found");
+    return;
+  }
 
   if (req.method === 'GET') {
     const pathExtension = path.extname(req.url).toLowerCase();

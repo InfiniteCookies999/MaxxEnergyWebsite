@@ -45,6 +45,14 @@ function createApp() {
   // Install middleware
   app.use(errorHandler);
 
+  /*app.get('*', (_, res) => {
+    res.status(404);
+    res.render("notfound", {
+      route: "/someroute"
+    });
+    //.send();
+  });*/
+
   return app;
 }
 
