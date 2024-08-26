@@ -23,8 +23,8 @@ router.get('/user-profile', controller(async (req, res) => {
   const profilePicFile = FileService
     .fixStoredFile(user.id,
                    user.profilePicFile,
-                   "/upload/profilepics",
-                   "/images/default-profile-icon.jpg");
+                   "upload/profilepics",
+                   "images/default-profile-icon.jpg");
   
   res.render('user-profile', {
     // User information
