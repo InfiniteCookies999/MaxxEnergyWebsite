@@ -7,10 +7,9 @@ const { getDBConnection, UserRepository, ContactRepository } = require('./databa
   
   await UserRepository.initialize();
   await ContactRepository.initialize();
-  
+
   const PORT = config.SERVER_PORT || 3000;
 
-  
   const app = createApp();
   app.listen(PORT, (err) => {
     if (!err) {

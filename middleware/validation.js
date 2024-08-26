@@ -25,7 +25,16 @@ function validateLoggedIn(req, res, next) {
   }
 }
 
+function validateFileExists(req, res, next) {
+  if (!req.file) {
+    next(new HttpError("Missing file", 400));
+  } else {
+    next();
+  }
+}
+
 module.exports = {
   validateBody,
-  validateLoggedIn
+  validateLoggedIn,
+  validateFileExists
 }

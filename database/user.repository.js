@@ -26,6 +26,10 @@ class UserRepository {
     ];
   }
 
+  validProfilePicMimetypes() {
+    return [ "image/png", "image/jpg", "image/jpeg", "image/webp", "image/avif" ];
+  }
+
   async initialize() {
     
     const conn = await getDBConnection();
@@ -51,6 +55,17 @@ class UserRepository {
       
       UNIQUE (email)
       )`);
+
+      // Adding a column for the profile picture if it does not exist.
+      const [rows] = await conn.execute(
+        `SELECT * FROM INFORMATION_SCHEMA.COLUMNS
+         WHERE TABLE_NAME = ? AND COLUMN_NAME = ?`,
+         ["user", "profilePicFile"]
+      );
+
+      if (rows.length === 0) {
+        await conn.execute(`ALTER TABLE user ADD COLUMN profilePicFile CHAR(100)`);
+      }
   }
 
   async saveUser(user) {
@@ -98,6 +113,45 @@ class UserRepository {
 
     await conn.execute(`UPDATE user SET email=? WHERE id=?`,
       [email, userId]
+    );
+  }
+
+  async updateUsersPhone(userId, phone) {
+    const conn = await getDBConnection();
+
+    await conn.execute(`UPDATE user SET phone=? WHERE id=?`,
+      [phone, userId]
+    );
+  }
+
+  async updateUsersAddress(userId, state, county, addressLine1, addressLine2, zipCode) {
+    const conn = await getDBConnection();
+
+    let values = [state, county, addressLine1, addressLine2 || null, zipCode, userId]; 
+    
+    await conn.execute(`UPDATE user SET
+        state=?,
+        county=?,
+        addressLine1=?,
+        addressLine2=?,
+        zipCode=?
+      WHERE id=?`,
+      values);
+  }
+
+  async updatePassword(userId, newPassword) {
+    const conn = await getDBConnection();
+
+    await conn.execute(`UPDATE user SET password=? WHERE id=?`,
+      [newPassword, userId]
+    );
+  }
+
+  async updateProfilePic(userId, profilePicFile) {
+    const conn = await getDBConnection();
+
+    await conn.execute(`UPDATE user SET profilePicFile=? WHERE id=?`,
+      [profilePicFile, userId]
     );
   }
 

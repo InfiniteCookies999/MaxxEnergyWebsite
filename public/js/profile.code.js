@@ -15,38 +15,43 @@ function getLastNameErrorFlags() {
   return getNonEmptyErrorFlagsFn($('#last-name-input'))();
 }
 
-function submitTo(url, body, errorContainer) {
+function submitTo(url, body, errorContainer, finishedCB, saveIcon) {
   
   const baseUrl = $('[base-url]').attr('base-url');
   
   $.ajax({
-    type: 'POST',
+    type: 'PUT',
     url: baseUrl + url,
     data: body,
     error: (res) => {
       processServerErrorResponse(res, errorContainer);
+    },
+    success: () => {
+      finishedCB();
+    },
+    complete: () => {
+      saveIcon.attr("req-save", "false");
     }
   });
 }
 
-function submitEmail() {
+function submitEmail(finishedCB, saveIcon) {
   const errorFlags = getEmailErrorFlagsFn($('#email-input'))();
   
   appendEmailErrorMessages($('#email-error'), errorFlags);
 
   if (errorFlags !== 0) {
     $('#email-input').addClass("is-invalid");
-    return false;
+    return;
   }
 
   const email = $('#email-input').val();
 
-  submitTo('/api/user/update-email', { email }, $('#email-error'));
+  submitTo('/api/user/update-email', { email }, $('#email-error'), finishedCB, saveIcon);
 
-  return true;
 }
 
-function submitPhoneNumber() {
+function submitPhoneNumber(finishedCB, saveIcon) {
   const errorFlags = getPhoneNumberErrorFlags();
   
   appendErrorMessages($('#phone-number-error'), errorFlags, (container, flags) => {
@@ -56,15 +61,15 @@ function submitPhoneNumber() {
 
   if (errorFlags !== 0) {
     $('#phone-number-input').addClass('is-invalid');
-    return false;
   }
 
-  // TODO: Here we would submit the new phone number to the server.
+  const phoneNumber = $('#phone-number-input').val();
 
-  return true;
+  submitTo('/api/user/update-phone', { phoneNumber }, $('#phone-number-error'), finishedCB, saveIcon);
+  
 }
 
-function submitAddress() {
+function submitAddress(finishedCB, saveIcon) {
   const zipCodeErrorFlags = getZipCodeErrorFlags();
   const addressLine1ErrorFlags = getNonEmptyErrorFlagsFn($('#address-line1-input'))();
 
@@ -87,15 +92,27 @@ function submitAddress() {
 
   if (addressLine1ErrorFlags !== 0 ||
       zipCodeErrorFlags !== 0) {
-    return false;
+    return;
   }
 
-  // TODO: Here we would submit the new address to the server.
+  const state        = $('#state-input').find(':selected').val();
+  const county       = $('#county-input').find(":selected").val();
+  const addressLine1 = $('#address-line1-input').val();
+  const addressLine2 = $('#address-line2-input').val();
+  const zipCode      = $('#zip-code-input').val();
+  
+  const body = {
+    state, county, addressLine1, addressLine2, zipCode
+  };
+  if (addressLine2 == "") {
+    delete body.addressLine2;
+  }
 
-  return true;
+  submitTo('/api/user/update-address', body, null, finishedCB, saveIcon);
+
 }
 
-function submitPassword() {
+function submitPassword(finishedCB, saveIcon) {
   const oldPasswordErrorFlags = getNonEmptyErrorFlagsFn($('#old-password-input'))();
   const newPasswordErrorFlags = getPasswordErrorFlagsFn($('#new-password-input'))();
 
@@ -119,15 +136,17 @@ function submitPassword() {
 
   if (oldPasswordErrorFlags !== 0 ||
       newPasswordErrorFlags !== 0) {
-    return false;
+    return;
   }
 
-  // TODO: Here we would submit the new password to the server.
+  const oldPassword = $('#old-password-input').val();
+  const newPassword = $('#new-password-input').val();
 
-  return true;
+  submitTo('/api/user/update-password', { oldPassword, newPassword }, $('#old-password-error'), finishedCB, saveIcon);
+
 }
 
-function submitName() {
+function submitName(finishedCB, saveIcon) {
   const firstNameErrorFlags = getFirstNameErrorFlags();
   const lastNameErrorFlags = getLastNameErrorFlags();
 
@@ -149,18 +168,17 @@ function submitName() {
   if (firstNameErrorFlags !== 0 ||
       lastNameErrorFlags !== 0
   ) {
-    return false;
+    return;
   }
 
   const firstName = $('#first-name-input').val();
   const lastName = $('#last-name-input').val();
 
-  submitTo('/api/user/update-name', { firstName, lastName });
+  submitTo('/api/user/update-name', { firstName, lastName }, null, finishedCB, saveIcon);
 
-  return true;
 }
 
-function submitProfilePicture(file) {
+function submitProfilePicture(file, finishedCB, saveIcon) {
 
   const reader = new FileReader();
   const image = $('#profile-picture');
@@ -171,7 +189,22 @@ function submitProfilePicture(file) {
 
   reader.readAsDataURL(file);
 
-  // TODO: Here we would upload the change to the server.
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const baseUrl = $('[base-url]').attr('base-url');
+  
+  console.log("sending!");
+  $.ajax({
+    type: 'PUT',
+    url: baseUrl + '/api/user/update-profile-pic',
+    data: formData,
+    processData: false,
+    contentType: false,
+    error: (res) => {
+      processServerErrorResponse(res);
+    }
+  });
 }
 
 $(document).ready(function() {
@@ -187,7 +220,6 @@ $(document).ready(function() {
     selector.onchange = () => {
       const file = selector.files[0];
       if (!file) {
-        console.log("no file selected");
         return;
       }
 
@@ -274,61 +306,61 @@ $(document).ready(function() {
   // Turn the edit box off if the user clicks the edit button and save.
   $('.save-icon').each((_, saveIcon) => {
     $(saveIcon).on('click', () => {
+      
+      if ($(saveIcon).attr('#req-save') === "true") {
+        // Still has not finished it's previous request. Waiting
+        // on the response first.
+        return;
+      }
+
       const row = $(saveIcon).closest('.tab-row-entry');
       const editField = row.find('.editable-field');
       const staticField = row.find('.static-field');
       
+      const finishedCB = () => {
+        if (spanId === 'address-span') {
+          const addressLine1 = $('#address-line1-input').val();
+          const addressLine2 = $('#address-line2-input').val();
+          const county = $('#county-input').find(":selected").val().replaceAll("-", " ");
+          const state = $('#state-input').find(":selected").val();
+          const zipCode = $('#zip-code-input').val();
+          const space = addressLine2 !== "" ? " " : "";
+          staticField.text(`${addressLine1}${space}${addressLine2} ${county} ${state}, ${zipCode}`);
+        } else if (spanId === 'name-span') {
+          const firstName = $('#first-name-input').val();
+          const lastName = $('#last-name-input').val();
+          staticField.text(`${firstName} ${lastName}`);
+        } else if (spanId !== 'password-span') {
+          staticField.text(editField.val());
+        }
+        
+        staticField.css("display", "block");
+        editField.css("display", "none");
+        row.find('.edit-icon').css("display", "inline");
+        row.find('.save-icon').css("display", "none");
+        row.find('.select-with-search').css("display", "none");
+      };
+
       // Validating inputs for the different fields.
       const spanId = staticField.attr('id');
+      if (spanId === 'password-span') {
+        const oldPassword = $('#old-password-input').val();
+        const newPassword = $('#new-password-input').val();
+        if (oldPassword === "" && newPassword === "") {
+          // Close immediately if the user did not input anything.
+          finishedCB();
+          return;
+        }
+      }
+
+
       switch (spanId) {
-      case 'email-span':
-        if (!submitEmail()) {
-          return;
-        }
-        break;
-      case 'phone-number-span':
-        if (!submitPhoneNumber()) {
-          return;
-        }
-        break;
-      case 'address-span':
-        if (!submitAddress()) {
-          return;
-        }  
-        break;
-      case 'password-span':
-        if (!submitPassword()) {
-          return;
-        }
-        break;
-      case 'name-span':
-        if (!submitName()) {
-          return;
-        }
-        break;
+      case 'email-span':        submitEmail(finishedCB, $(saveIcon)); break;
+      case 'phone-number-span': submitPhoneNumber(finishedCB, $(saveIcon)); break;
+      case 'address-span':      submitAddress(finishedCB, $(saveIcon)); break;
+      case 'password-span':     submitPassword(finishedCB, $(saveIcon)); break;
+      case 'name-span':         submitName(finishedCB, $(saveIcon)); break;
       }
-    
-      if (spanId === 'address-span') {
-        const addressLine1 = $('#address-line1-input').val();
-        const addressLine2 = $('#address-line2-input').val();
-        const county = $('#county-input').find(":selected").val().replaceAll("-", " ");
-        const state = $('#state-input').find(":selected").val();
-        const zipCode = $('#zip-code-input').val();
-        const space = addressLine2 !== "" ? " " : "";
-        staticField.text(`${addressLine1}${space}${addressLine2} ${county} ${state}, ${zipCode}`);
-      } else if (spanId === 'name-span') {
-        const firstName = $('#first-name-input').val();
-        const lastName = $('#last-name-input').val();
-        staticField.text(`${firstName} ${lastName}`);
-      } else if (spanId !== 'password-span') {
-        staticField.text(editField.val());
-      }
-      
-      staticField.css("display", "block");
-      editField.css("display", "none");
-      row.find('.edit-icon').css("display", "inline");
-      row.find('.save-icon').css("display", "none");
-      row.find('.select-with-search').css("display", "none");
     });
   });
 });
