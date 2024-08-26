@@ -30,7 +30,6 @@ router.get('/user-profile', controller(async (req, res) => {
     // User information
     firstName: user.firstName,
     lastName: user.lastName,
-    profilePicture: "/images/default-profile-icon.jpg", // TODO: Here the profile would be loaded from database.
     email: user.email,
     phone: user.phone,
     addressLine1: user.addressLine1,
