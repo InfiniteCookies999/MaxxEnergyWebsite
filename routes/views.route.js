@@ -32,7 +32,6 @@ router.get('/user-profile', controller(async (req, res) => {
     .join()
     .substring(1);
 
-  console.log(acceptedMimeTypes);
   res.render('user-profile', {
     // User information
     firstName: user.firstName,

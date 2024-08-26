@@ -73,8 +73,9 @@ class UserRepository {
 
     delete user.id; // Do not want to insert user's id into the table.
     await conn.execute(`INSERT INTO user (firstName, lastName, email, phone, state, county,
-                                          addressLine1, addressLine2, zipCode, password, joinDate)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                          addressLine1, addressLine2, zipCode, password,
+                                          joinDate, profilePicFile)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
       Object.values(user));
     
@@ -84,7 +85,8 @@ class UserRepository {
   async doesUserExistByEmail(email) {
     const conn = await getDBConnection();
 
-    const [ results ] = await conn.execute(`SELECT id FROM user WHERE email=?`, [ email ]);
+    const [ results ] = await conn.execute(`SELECT id FROM user WHERE email COLLATE utf8mb4_general_ci=?`,
+      [ email ]);
     return results.length > 0;
   }
 
