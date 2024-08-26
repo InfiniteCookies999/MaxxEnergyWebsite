@@ -25,6 +25,10 @@ function reroute(req, res, next) {
     }
   }
   
+  if (!req.url.startsWith('/')) {
+    req.url = '/' + req.url;
+  }
+
   console.log("req.url: ", req.url);
 
   if (req.method === 'GET') {
