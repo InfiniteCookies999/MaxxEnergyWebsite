@@ -328,6 +328,17 @@ $(document).ready(function() {
 
       // Validating inputs for the different fields.
       const spanId = staticField.attr('id');
+      if (spanId === 'password-span') {
+        const oldPassword = $('#old-password-input').val();
+        const newPassword = $('#new-password-input').val();
+        if (oldPassword === "" && newPassword === "") {
+          // Close immediately if the user did not input anything.
+          finishedCB();
+          return;
+        }
+      }
+
+
       switch (spanId) {
       case 'email-span':        submitEmail(finishedCB, $(saveIcon)); break;
       case 'phone-number-span': submitPhoneNumber(finishedCB, $(saveIcon)); break;
