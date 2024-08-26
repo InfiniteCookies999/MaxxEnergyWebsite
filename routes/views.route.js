@@ -26,6 +26,13 @@ router.get('/user-profile', controller(async (req, res) => {
                    "upload/profilepics",
                    "images/default-profile-icon.jpg");
   
+  const acceptedMimeTypes = UserRepository.validProfilePicMimetypes()
+    .map(s => s.substring(s.indexOf('/') + 1))
+    .map(s => " ." + s)
+    .join()
+    .substring(1);
+
+  console.log(acceptedMimeTypes);
   res.render('user-profile', {
     // User information
     firstName: user.firstName,
@@ -38,6 +45,7 @@ router.get('/user-profile', controller(async (req, res) => {
     state: user.state,
     zipCode: user.zipCode,
     profilePicFile: profilePicFile,
+    acceptedMimeTypes: acceptedMimeTypes,
 
     // Form restrictions
     maxNameLength: UserRepository.maxNameLength(),
