@@ -30,23 +30,21 @@
   text-align: center;
   font-size: 2.5rem;
   margin-bottom: 1.5rem;
-  color: #333; /* Darker color for contrast */
+  color: #333; 
   max-width: 80%;
   margin-left: auto;
   margin-right: auto;
-  color: white;
 }
 
 .about-container p {
   text-align: center;
   font-size: 1.2rem;
   margin-bottom: 1.2rem;
-  color: #555; /* Slightly lighter color for paragraphs */
+  color: #555;
   line-height: 1.6; /* Improve readability */
   max-width: 70%;
   margin-left: auto;
   margin-right: auto;
-  color: white;
 }
 
 /* Custom Container */
@@ -82,17 +80,109 @@
   transform: scale(1.1); /* Slightly zoom in the image */
   cursor: pointer; /* Change the cursor to a pointer */
 }
+.wider-container {
+  max-width: 80%; /* or any desired width */
+}
 
 
-/* Responsive Adjustments */
-@media (max-width: 767px) {
-  .about-images {
-    max-width: 300px;
+.cta-container {
+  display: flex;
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 200px;
+}
+.cta-fl-column {
+  min-width: 40%;
+}
+.cta-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover; 
+  min-width: 100px;
+  max-width: 600px;
+  border-radius: 25px;
+}
+.cta-fr-column {
+  min-width: 40%;
+  margin: 0 auto;
+  padding-left: 80px;
+}
+.who-we-are {
+  line-height: 1.5;
+}
+.learn-more {
+  border: none;
+  background-color: rgb(74, 154, 245);
+  color: white;
+  width: 200px;
+  height: 50px;
+  border-radius: 10px;
+  font-size: 25px;
+}
+
+/* Tablets */
+@media (min-width: 767px) and (max-width: 1330px) {
+  h1 {
+    font-size: 32px;
+  }
+  h2 {
+    font-size: 24px;
+  }
+  .flex-row, .flex-row2 {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+  .flex-row p, .flex-row2 p {
+    flex-basis: calc(25% - 30px);
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  .cta-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .cta-fl-column, .cta-fr-column {
+    min-width: 80%;
   }
 }
 
-@media (max-width: 576px) {
+/* Smart phones */
+@media (max-width: 767px) {
+  h1 {
+    font-size: 28px;
+  }
+  h2 {
+    font-size: 20px;
+  }
+  .flex-row, .flex-row2 {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  .flex-row p, .flex-row2 p {
+    flex-basis: calc(25% - 30px);
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  .cta-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .cta-image {
+    margin: 0 auto;
+    
+  }
   .about-images {
-    max-width: 250px;
+    max-width: 300px;
   }
 }
