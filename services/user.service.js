@@ -8,6 +8,7 @@ const HASH_STRENGTH = 10
 class UserService {
 
   async register(dto, session) {
+
     if (session.user) {
       // The user is already logged in. They cannot register while logged in.
       throw new HttpError("Already logged in", 409);
@@ -71,9 +72,12 @@ class UserService {
   async updateEmail(userId, email, session) {
     userId = this.getUserIdForUpdate(userId, session);
 
+    const user = await UserRepository.getUserById(userId);
+    const changeToExisting = user.email.toLowerCase() === email.toLowerCase();
+
     // TODO: This needs to be fixed so that if the email is already the
     // user's email then it should be fine with "updating it".
-    if (await UserRepository.doesUserExistByEmail(email)) {
+    if ((await UserRepository.doesUserExistByEmail(email)) && !changeToExisting) {
       throw new HttpError("Email taken", 403);
     }
 
