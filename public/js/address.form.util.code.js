@@ -86,13 +86,16 @@ function setCounties(dropdown, key, userCounty) {
 
 function addStatesAndCounties(stateDropdown, countyDropdown, userState, userCounty) {
   
+  console.log("userState: ", userState);
+  console.log("userCounty: ", userCounty);
+
   let selectedAbbreviation = "VA"; // Default to Virginia.
   stateDropdown.selectpicker();
   for (const state of STATES) {
     let name = state.name.toLowerCase();
     name = name.charAt(0).toUpperCase() + name.slice(1);
 
-    if (name === userState) {
+    if (state.abbreviation === userState) {
       selectedAbbreviation = state.abbreviation;
     }
 
