@@ -20,7 +20,7 @@ function submitTo(url, body, errorContainer) {
   const baseUrl = $('[base-url]').attr('base-url');
   
   $.ajax({
-    type: 'POST',
+    type: 'PUT',
     url: baseUrl + url,
     data: body,
     error: (res) => {
@@ -41,6 +41,7 @@ function submitEmail() {
 
   const email = $('#email-input').val();
 
+  // TODO: fix issue where we have to wait on response!
   submitTo('/api/user/update-email', { email }, $('#email-error'));
 
   return true;

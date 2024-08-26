@@ -88,7 +88,7 @@ router.post('/user/login',
   })
 );
 
-router.post('/user/update-name/:id?',
+router.put('/user/update-name/:id?',
   validateName('firstName'),
   validateName('lastName'),
 
@@ -103,7 +103,7 @@ router.post('/user/update-name/:id?',
   })
 )
 
-router.post('/user/update-email/:id?',
+router.put('/user/update-email/:id?',
   body('email').isEmail().withMessage("Expected valid email address"),
   
   validateBody,
