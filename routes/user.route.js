@@ -92,12 +92,26 @@ router.post('/user/update-name/:id?',
   validateName('firstName'),
   validateName('lastName'),
 
+  validateBody,
   validateLoggedIn,
   controller(async (req, res) => {
     await UserService.updateName(req.params.id,
                                  req.body.firstName,
                                  req.body.lastName,
-                                req.session);
+                                 req.session);
+    res.send();
+  })
+)
+
+router.post('/user/update-email/:id?',
+  body('email').isEmail().withMessage("Expected valid email address"),
+  
+  validateBody,
+  validateLoggedIn,
+  controller(async (req, res) => {
+    await UserService.updateEmail(req.params.id,
+                                  req.body.email,
+                                  req.session);
     res.send();
   })
 )

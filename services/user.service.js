@@ -67,6 +67,16 @@ class UserService {
     await UserRepository.updateUsersName(userId, firstName, lastName);
   }
 
+  async updateEmail(userId, email, session) {
+    userId = this.getUserIdForUpdate(userId, session);
+
+    if (await UserRepository.doesUserExistByEmail(email)) {
+      throw new HttpError("Email taken", 403);
+    }
+
+    await UserRepository.updateUsersEmail(userId, email)
+  }
+
   async getUser(session) {
     if (!(session.user)) {
       throw new HttpError("Cannot get user's information. Not logged in", 401);

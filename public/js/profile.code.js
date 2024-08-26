@@ -15,6 +15,20 @@ function getLastNameErrorFlags() {
   return getNonEmptyErrorFlagsFn($('#last-name-input'))();
 }
 
+function submitTo(url, body, errorContainer) {
+  
+  const baseUrl = $('[base-url]').attr('base-url');
+  
+  $.ajax({
+    type: 'POST',
+    url: baseUrl + url,
+    data: body,
+    error: (res) => {
+      processServerErrorResponse(res, errorContainer);
+    }
+  });
+}
+
 function submitEmail() {
   const errorFlags = getEmailErrorFlagsFn($('#email-input'))();
   
@@ -25,7 +39,9 @@ function submitEmail() {
     return false;
   }
 
-  // TODO: Here we would submit the new email to the server.
+  const email = $('#email-input').val();
+
+  submitTo('/api/user/update-email', { email }, $('#email-error'));
 
   return true;
 }
@@ -139,19 +155,7 @@ function submitName() {
   const firstName = $('#first-name-input').val();
   const lastName = $('#last-name-input').val();
 
-  const baseUrl = $('[base-url]').attr('base-url');
-
-  $.ajax({
-    type: 'POST',
-    url: baseUrl + '/api/user/update-name',
-    data: {
-      firstName,
-      lastName
-    },
-    error: (res) => {
-      processServerErrorResponse(res);
-    }
-  });
+  submitTo('/api/user/update-name', { firstName, lastName });
 
   return true;
 }
