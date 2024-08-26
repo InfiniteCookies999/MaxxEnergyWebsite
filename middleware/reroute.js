@@ -29,6 +29,7 @@ function reroute(req, res, next) {
     req.url = '/' + req.url;
   }
 
+  console.log("req.headers: ", req.headers);
   console.log("req.url: ", req.url);
 
   if (req.method === 'GET') {
