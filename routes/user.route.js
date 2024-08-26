@@ -37,12 +37,16 @@ function validateAddressLine(fieldName, isOptional) {
     .matches(ADDRESS_LINE_PATTERN).withMessage("Invalid address format");
 }
 
+function validatePhoneNumber(fieldName) {
+  return body(fieldName).notEmpty().withMessage("Cannot be empty")
+    .matches(PHONE_PATTERN).withMessage("Invalid phone format");
+}
+
 router.post('/user/register',
   validateName('firstName'),
   validateName('lastName'),
   body('email').isEmail().withMessage("Expected valid email address"),
-  body('phoneNumber').notEmpty().withMessage("Cannot be empty")
-    .matches(PHONE_PATTERN).withMessage("Invalid phone format"),
+  validatePhoneNumber('phoneNumber'),
   body('state')
     .notEmpty().withMessage("Cannot be empty")
     .isIn(UserRepository.validStates()).withMessage("Unknown state"),
@@ -101,7 +105,7 @@ router.put('/user/update-name/:id?',
                                  req.session);
     res.send();
   })
-)
+);
 
 router.put('/user/update-email/:id?',
   body('email').isEmail().withMessage("Expected valid email address"),
@@ -114,6 +118,19 @@ router.put('/user/update-email/:id?',
                                   req.session);
     res.send();
   })
-)
+);
+
+router.put('/user/update-phone/:id?',
+  validatePhoneNumber('phoneNumber'),
+  
+  validateBody,
+  validateLoggedIn,
+  controller(async (req, res) => {
+    await UserService.updatePhoneNumber(req.params.id,
+                                        req.body.phoneNumber,
+                                        req.session);
+    res.send();
+  })
+);
 
 module.exports = router;

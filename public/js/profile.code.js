@@ -60,8 +60,10 @@ function submitPhoneNumber() {
     return false;
   }
 
-  // TODO: Here we would submit the new phone number to the server.
+  const phoneNumber = $('#phone-number-input').val();
 
+  submitTo('/api/user/update-phone', { phoneNumber }, $('#phone-number-error'));
+  
   return true;
 }
 

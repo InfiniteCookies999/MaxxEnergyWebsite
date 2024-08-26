@@ -70,11 +70,19 @@ class UserService {
   async updateEmail(userId, email, session) {
     userId = this.getUserIdForUpdate(userId, session);
 
+    // TODO: This needs to be fixed so that if the email is already the
+    // user's email then it should be fine with "updating it".
     if (await UserRepository.doesUserExistByEmail(email)) {
       throw new HttpError("Email taken", 403);
     }
 
     await UserRepository.updateUsersEmail(userId, email)
+  }
+
+  async updatePhoneNumber(userId, phone, session) {
+    userId = this.getUserIdForUpdate(userId, session);
+
+    await UserRepository.updateUsersPhone(userId, phone);
   }
 
   async getUser(session) {
