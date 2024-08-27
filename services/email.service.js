@@ -36,13 +36,13 @@ class EmailService {
     }));
   }
 
-  sendHbs(options, context) {
+  sendHbs(options) {
     const sendOptions = {
       from: config.EMAIL_ADDRESS,
       to: options.to,
       subject: options.subject,
       template: options.hbsFile,
-      context
+      context: options.context
     };
 
     this.transporter.sendMail(sendOptions, (err, info) => {

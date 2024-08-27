@@ -29,6 +29,19 @@ function createApp() {
     cookie: { maxAge: 60000 * 1440 /* One day */  },
   }));
 
+  app.use((req, _, next) => {
+    const host = req.get('host');
+    const idx = host.indexOf(':');
+    if (idx === -1) {
+      req.serverAddress = host + ":" + config.SERVER_PORT;
+    } else {
+      req.serverAddress = host;
+    }
+    if (config.REROUTE_PATH) {
+      req.serverAddress += "/" + config.REROUTE_PATH;
+    }
+    next();
+  });
   app.use(replaceImports);
   app.use(reroute);
 

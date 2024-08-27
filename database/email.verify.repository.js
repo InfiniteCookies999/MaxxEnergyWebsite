@@ -1,0 +1,44 @@
+const getDBConnection = require('./connection');
+const EmailVerify = require('./email.verify.model');
+
+class EmailVerifyRepository {
+  
+  async initialize() {
+    const conn = await getDBConnection();
+
+    await conn.query(`CREATE TABLE IF NOT EXISTS EmailVerify (
+      id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+      userId INT NOT NULL,
+      verifyKey VARCHAR(255) NOT NULL UNIQUE,
+      createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+      FOREIGN KEY (UserId) REFERENCES user(id)
+      )`);
+  }
+
+  async saveEmailVerify(emailVerify) {
+    const conn = await getDBConnection();
+
+    delete emailVerify.id;
+    delete emailVerify.createdAt;
+    await conn.execute(`INSERT INTO EmailVerify (userId, verifyKey) VALUES (?, ?)`,
+      Object.values(emailVerify));
+    
+    return await this.getEmailVerifyByUserId(emailVerify.userId);
+  }
+
+  async getEmailVerifyByUserId(userId) {
+    const conn = await getDBConnection();
+
+    const [ results ] = await conn.execute(`SELECT * FROM EmailVerify WHERE userId=?`, [ userId ]);
+    if (results.length === 0) {
+      return null;
+    }
+
+    const emailVerify = new EmailVerify(...Object.values(results[0]));
+    return emailVerify;
+  }
+
+}
+
+module.exports = new EmailVerifyRepository();

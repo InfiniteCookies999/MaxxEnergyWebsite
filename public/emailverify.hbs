@@ -4,8 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verify Email</title>
+
+    <style>
+        button {
+            padding: 0.5rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            background-color: rgb(85, 85, 170);
+            border-radius: 10px;
+            font-size: 1.2rem;
+            border-style: none;
+            color: rgb(240, 240, 240);
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: rgb(58, 58, 129);
+        }
+    </style>
 </head>
 <body>
-    <h1>Please verify your email address {{name}}</h1>
+    <img src="{{maxxLogoPath}}" />
+    <h3>Thanks for joining Maxx Energy {{name}}!</h3>
+    <p>Please click the following link to proceed with verifying your email address</p>
+    <button type="button" onclick="location.href='{{verifyLink}}'">
+        Verify
+    </button>
 </body>
 </html>

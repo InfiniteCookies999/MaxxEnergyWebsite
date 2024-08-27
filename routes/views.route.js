@@ -82,8 +82,16 @@ router.get('/logout', controller(async (req, res) => {
   res.redirect(`/${getReroute()}`);
 }));
 
-router.get('/faq', controller(async (req, res) => {
+router.get('/faq', controller(async (_, res) => {
   res.render("faq");
+}));
+
+router.get('/email', controller(async (req, res) => {
+  res.render("emailverify", {
+    name: "Maddie Rugh",
+    maxxLogoPath: "http://" + req.serverAddress + "/images/maxx-logo.png",
+    verifyLink: "http://" + req.serverAddress + "/verify/"
+  });
 }));
 
 module.exports = router;
