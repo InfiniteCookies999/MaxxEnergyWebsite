@@ -1,5 +1,7 @@
 const nodemailer = require('nodemailer');
+const path = require('path');
 const config = require('../config');
+const hbs = require('nodemailer-express-handlebars');
 
 class EmailService {
   
@@ -23,14 +25,24 @@ class EmailService {
         pass: config.EMAIL_PASSWORD
       }
     });
+
+    this.transporter.use('compile', hbs({
+      viewEngine: {
+        extName: '.hbs',
+        defaultLayout: false,
+      },
+      viewPath: path.resolve('./public'),
+      extName: '.hbs',
+    }));
   }
 
-  send(options) {
+  sendHbs(options, context) {
     const sendOptions = {
       from: config.EMAIL_ADDRESS,
       to: options.to,
       subject: options.subject,
-      html: options.body
+      template: options.hbsFile,
+      context
     };
 
     this.transporter.sendMail(sendOptions, (err, info) => {

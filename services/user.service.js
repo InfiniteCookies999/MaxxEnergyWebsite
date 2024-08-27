@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const { HttpError } = require('../middleware');
 const { UserRepository, User } = require('../database');
 const FileService = require('./file.service');
+const EmailService = require('./email.service');
 
 const HASH_STRENGTH = 10
 
