@@ -1,6 +1,6 @@
 /* Hero Section */
 .hero-section {
-  background-image: url('images/about.png');
+  background-image: url('/images/about.png');
   height: 800px;
   background-repeat: no-repeat;
   background-size: cover;
@@ -80,11 +80,12 @@
   transform: scale(1.1); /* Slightly zoom in the image */
   cursor: pointer; /* Change the cursor to a pointer */
 }
+
 .wider-container {
   max-width: 80%; /* or any desired width */
 }
 
-
+/* Call-to-Action Container */
 .cta-container {
   display: flex;
   width: 80%;
@@ -94,9 +95,11 @@
   padding-bottom: 20px;
   margin-bottom: 200px;
 }
+
 .cta-fl-column {
   min-width: 40%;
 }
+
 .cta-image {
   width: 100%;
   height: auto;
@@ -105,14 +108,17 @@
   max-width: 600px;
   border-radius: 25px;
 }
+
 .cta-fr-column {
   min-width: 40%;
   margin: 0 auto;
   padding-left: 80px;
 }
+
 .who-we-are {
   line-height: 1.5;
 }
+
 .learn-more {
   border: none;
   background-color: rgb(74, 154, 245);
@@ -131,25 +137,54 @@
   h2 {
     font-size: 24px;
   }
+  
   .flex-row, .flex-row2 {
     flex-wrap: wrap;
     justify-content: center;
     gap: 15px;
   }
+  
   .flex-row p, .flex-row2 p {
     flex-basis: calc(25% - 30px);
     text-align: center;
     margin-bottom: 10px;
   }
+  
   .cta-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
+    min-width: 80%;
   }
+  
   .cta-fl-column, .cta-fr-column {
     min-width: 80%;
+    margin: 0 auto;
+  }
+  
+  .cta-image {
+    margin: 0 auto;
+    width: 100%;
+    min-width: 600px; /* Ensure image size remains consistent */
+    object-fit: cover;
+    border-radius: 25px;
+  }
+
+  .cta-fr-column {
+    margin-top: 20px;
+    width: 100%;
+    padding: 0 20px;
+  }
+
+  .learn-more {
+    margin-top: 20px;
+    width: 200px;
+    background-color: rgb(74, 154, 245);
+    color: white;
+    border-radius: 10px;
+    font-size: 20px;
   }
 }
 
@@ -161,16 +196,7 @@
   h2 {
     font-size: 20px;
   }
-  .flex-row, .flex-row2 {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-  }
-  .flex-row p, .flex-row2 p {
-    flex-basis: calc(25% - 30px);
-    text-align: center;
-    margin-bottom: 10px;
-  }
+
   .cta-container {
     display: flex;
     flex-direction: column;
@@ -178,11 +204,27 @@
     align-items: center;
     text-align: center;
   }
+
   .cta-image {
     margin: 0 auto;
-    
+    width: 100%;
+    min-width: 400px; /* Ensure image size remains consistent */
+    object-fit: cover;
+    border-radius: 25px;
   }
-  .about-images {
-    max-width: 300px;
+
+  .cta-fr-column {
+    margin-top: 20px;
+    width: 100%;
+    padding: 0 20px;
+  }
+
+  .learn-more {
+    margin-top: 20px;
+    width: 200px;
+    background-color: rgb(74, 154, 245);
+    color: white;
+    border-radius: 10px;
+    font-size: 20px;
   }
 }

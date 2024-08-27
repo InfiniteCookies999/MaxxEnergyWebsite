@@ -17,9 +17,11 @@ class ContactRepository {
     this.maxMessageLength = 600;
   }
 
+  //connects to the database
   async initialize() {
     const conn = await getDBConnection();
     
+    //Makes the table only if it doesn't exist 
     await conn.query(`CREATE TABLE IF NOT EXISTS ContactMessage (
       id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
       firstName VARCHAR(${this.maxNameLength}) NOT NULL,
@@ -30,6 +32,7 @@ class ContactRepository {
     )`);
   }
 
+  //inserts message into contact message
   async insertContactMessage(contactMessage) {
     const conn = await getDBConnection();
     await conn.query('INSERT INTO ContactMessage SET ?', {

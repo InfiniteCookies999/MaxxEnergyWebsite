@@ -89,19 +89,19 @@
   align-items: center;
   color: white;
   text-align: center;
-  transition: background-image 1s ease-in-out; /* Smooth transition */
+  transition: background-image 1s ease-in-out;
 }
 
 .hero-bg-1 {
-  background-image: url('images/homepage.jpg');
+  background-image: url('/images/homepage.jpg');
 }
 
 .hero-bg-2 {
-  background-image: url('images/homepage2.jpg');
+  background-image: url('/images/homepage2.jpg');
 }
 
 .hero-bg-3 {
-  background-image: url('images/homepage3.jpg');
+  background-image: url('/images/homepage3.jpg');
 }
 
 
