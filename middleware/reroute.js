@@ -11,6 +11,14 @@ function replaceRoutes(body) {
       return `href='/${config.REROUTE_PATH}${slash}${p2}'`;
     }
   })
+  .replaceAll(/src=(["'])((?!http).*)\1/g, (match, _, p2) => {
+    const slash = p2.startsWith('/') ? '' : '/';
+    if (match.includes("\"")) {
+      return `src="/${config.REROUTE_PATH}${slash}${p2}"`;
+    } else {
+      return `src='/${config.REROUTE_PATH}${slash}${p2}'`;
+    }
+  })
   // Add the base url for javascript.
   .replaceAll(/base-url=""/g, `base-url="/${config.REROUTE_PATH}"`);
 }
