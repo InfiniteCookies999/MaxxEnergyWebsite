@@ -33,9 +33,9 @@ function createApp() {
     const host = req.get('host');
     const idx = host.indexOf(':');
     if (idx === -1) {
-      req.serverAddress = host + ":" + config.SERVER_PORT;
-    } else {
       req.serverAddress = host;
+    } else {
+      req.serverAddress = host.substring(idx + 1);
     }
     if (config.REROUTE_PATH) {
       req.serverAddress += "/" + config.REROUTE_PATH;
