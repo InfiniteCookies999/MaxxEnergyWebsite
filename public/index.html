@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
    
   <!-- Common links -->
-	<link rel="stylesheet" type="text/css" href="index.style.css">
-  <link rel="stylesheet" type="text/css" href="header.style.css">
+	<link rel="stylesheet" type="text/css" href="styles/index.style.css">
+  <link rel="stylesheet" type="text/css" href="styles/header.style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
       <!-- Bootstrap CSS -->
@@ -15,8 +15,8 @@
       <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
   
       <!-- Custom CSS -->
-      <link rel="stylesheet" href="common.style.css">
-      <link rel="stylesheet" href="footer.style.css">
+      <link rel="stylesheet" href="styles/common.style.css">
+      <link rel="stylesheet" href="styles/footer.style.css">
 
   <title>Homepage</title>
   <!-- TODO: Move common header links elsewhere -->
@@ -27,13 +27,13 @@
 </head>
 <body>
 
-  <!-- TO DO: CHANGED Header from "<div data-include="header"></div>" to using <import value="/header"></import>  -->
   <import value="/header"></import>
   <div id="hero-background" class="hero-background hero-bg-1">
     <div class="homepage-text">
         <h1 class="hero">Innovative Clean Energy Solutions for a Sustainable Future</h1>
         <p class="hero-p">Leading the charge in sustainable energy with cutting-edge technology and eco-friendly solutions.</p>
     </div>
+    <!--Added clickable dots lets users manually switch the background image-->
     <div class="click-links">
       <span class="hero-dot" data-index="0"></span>
       <span class="hero-dot" data-index="1"></span>
