@@ -27,7 +27,7 @@ class ContactRepository {
       firstName VARCHAR(${this.maxNameLength}) NOT NULL,
       lastName VARCHAR(${this.maxNameLength}) NOT NULL,
       email VARCHAR(320) NOT NULL,
-      phone VARCHAR(12), 
+      phone CHAR(12), 
       message VARCHAR(${this.maxMessageLength}) NOT NULL
     )`);
   }

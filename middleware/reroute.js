@@ -11,6 +11,14 @@ function replaceRoutes(body) {
       return `href='/${config.REROUTE_PATH}${slash}${p2}'`;
     }
   })
+  .replaceAll(/src=(["'])((?!http).*)\1/g, (match, _, p2) => {
+    const slash = p2.startsWith('/') ? '' : '/';
+    if (match.includes("\"")) {
+      return `src="/${config.REROUTE_PATH}${slash}${p2}"`;
+    } else {
+      return `src='/${config.REROUTE_PATH}${slash}${p2}'`;
+    }
+  })
   // Add the base url for javascript.
   .replaceAll(/base-url=""/g, `base-url="/${config.REROUTE_PATH}"`);
 }
@@ -25,7 +33,14 @@ function reroute(req, res, next) {
     }
   }
   
-  console.log("req.url: ", req.url);
+  if (!req.url.startsWith('/')) {
+    req.url = '/' + req.url;
+  }
+
+  if (req.url.endsWith('/') && req.url !== '/') {
+    res.status(404).send("404 Not found");
+    return;
+  }
 
   if (req.method === 'GET') {
     const pathExtension = path.extname(req.url).toLowerCase();

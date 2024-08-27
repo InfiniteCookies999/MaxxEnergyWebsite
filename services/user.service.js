@@ -2,12 +2,14 @@ const bcrypt = require('bcryptjs');
 const { HttpError } = require('../middleware');
 const { UserRepository, User } = require('../database');
 const FileService = require('./file.service');
+const EmailVerifyService = require('./email.verify.service');
 
 const HASH_STRENGTH = 10
 
 class UserService {
 
-  async register(dto, session) {
+  async register(dto, session, serverAddress) {
+
     if (session.user) {
       // The user is already logged in. They cannot register while logged in.
       throw new HttpError("Already logged in", 409);
@@ -15,7 +17,7 @@ class UserService {
     if (await UserRepository.doesUserExistByEmail(dto.email)) {
       throw new HttpError("Email taken", 403);
     }
-    
+
     const hashedPassword = await bcrypt.hash(dto.password, HASH_STRENGTH);
 
     const user = await UserRepository.saveUser(new User(0,
@@ -23,6 +25,8 @@ class UserService {
       dto.state, dto.county, dto.addressLine1, dto.addressLine2 || null,
       dto.zipCode, hashedPassword, new Date(), null
     ));
+
+    await EmailVerifyService.sendVerificationEmail(user, serverAddress);
 
     session.user = {
       id: user.id
@@ -71,9 +75,12 @@ class UserService {
   async updateEmail(userId, email, session) {
     userId = this.getUserIdForUpdate(userId, session);
 
+    const user = await UserRepository.getUserById(userId);
+    const changeToExisting = user.email.toLowerCase() === email.toLowerCase();
+
     // TODO: This needs to be fixed so that if the email is already the
     // user's email then it should be fine with "updating it".
-    if (await UserRepository.doesUserExistByEmail(email)) {
+    if ((await UserRepository.doesUserExistByEmail(email)) && !changeToExisting) {
       throw new HttpError("Email taken", 403);
     }
 

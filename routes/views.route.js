@@ -23,9 +23,15 @@ router.get('/user-profile', controller(async (req, res) => {
   const profilePicFile = FileService
     .fixStoredFile(user.id,
                    user.profilePicFile,
-                   "/upload/profilepics",
-                   "/images/default-profile-icon.jpg");
+                   "upload/profilepics",
+                   "images/default-profile-icon.jpg");
   
+  const acceptedMimeTypes = UserRepository.validProfilePicMimetypes()
+    .map(s => s.substring(s.indexOf('/') + 1))
+    .map(s => " ." + s)
+    .join()
+    .substring(1);
+
   res.render('user-profile', {
     // User information
     firstName: user.firstName,
@@ -38,6 +44,7 @@ router.get('/user-profile', controller(async (req, res) => {
     state: user.state,
     zipCode: user.zipCode,
     profilePicFile: profilePicFile,
+    acceptedMimeTypes: acceptedMimeTypes,
 
     // Form restrictions
     maxNameLength: UserRepository.maxNameLength(),
@@ -75,8 +82,16 @@ router.get('/logout', controller(async (req, res) => {
   res.redirect(`/${getReroute()}`);
 }));
 
-router.get('/faq', controller(async (req, res) => {
+router.get('/faq', controller(async (_, res) => {
   res.render("faq");
+}));
+
+router.get('/email', controller(async (req, res) => {
+  res.render("emailverify", {
+    name: "Maddie Rugh",
+    maxxLogoPath: "http://" + req.serverAddress + "/images/maxx-logo.png",
+    verifyLink: "http://" + req.serverAddress + "/verify/"
+  });
 }));
 
 module.exports = router;
