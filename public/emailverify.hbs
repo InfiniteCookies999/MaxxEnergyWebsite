@@ -6,7 +6,7 @@
     <title>Verify Email</title>
 
     <style>
-        button {
+        #verify-btn {
             padding: 0.5rem;
             padding-left: 1rem;
             padding-right: 1rem;
@@ -16,9 +16,10 @@
             border-style: none;
             color: rgb(240, 240, 240);
             cursor: pointer;
+            text-decoration: none;
         }
 
-        button:hover {
+        #verify-btn:hover {
             background-color: rgb(58, 58, 129);
         }
     </style>
@@ -27,8 +28,8 @@
     <img src="{{maxxLogoPath}}" />
     <h3>Thanks for joining Maxx Energy {{name}}!</h3>
     <p>Please click the following link to proceed with verifying your email address</p>
-    <button type="button" onclick="location.href='{{verifyLink}}'">
+    <a id="verify-btn" href="{{verifyLink}}">
         Verify
-    </button>
+    </a>
 </body>
 </html>
