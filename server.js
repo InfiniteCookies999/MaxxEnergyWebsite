@@ -1,12 +1,15 @@
 const createApp = require('./create.app');
 const config = require('./config');
 const { getDBConnection, UserRepository, ContactRepository } = require('./database');
+const { EmailService } = require('./services');
 
 (async () => {
   await getDBConnection();
   
   await UserRepository.initialize();
   await ContactRepository.initialize();
+
+  EmailService.initialize();
 
   const PORT = config.SERVER_PORT || 3000;
 
