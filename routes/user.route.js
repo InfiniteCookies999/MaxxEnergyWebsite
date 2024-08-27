@@ -108,7 +108,7 @@ router.post('/user/register',
 
   validateBody,
   controller(async (req, res) => {
-    await UserService.register(req.body, req.session);
+    await UserService.register(req.body, req.session, req.serverAddress);
     res.send();
 }));
 

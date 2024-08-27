@@ -2,12 +2,13 @@ const bcrypt = require('bcryptjs');
 const { HttpError } = require('../middleware');
 const { UserRepository, User } = require('../database');
 const FileService = require('./file.service');
+const EmailVerifyService = require('./email.verify.service');
 
 const HASH_STRENGTH = 10
 
 class UserService {
 
-  async register(dto, session) {
+  async register(dto, session, serverAddress) {
 
     if (session.user) {
       // The user is already logged in. They cannot register while logged in.
@@ -16,7 +17,7 @@ class UserService {
     if (await UserRepository.doesUserExistByEmail(dto.email)) {
       throw new HttpError("Email taken", 403);
     }
-    
+
     const hashedPassword = await bcrypt.hash(dto.password, HASH_STRENGTH);
 
     const user = await UserRepository.saveUser(new User(0,
@@ -24,6 +25,8 @@ class UserService {
       dto.state, dto.county, dto.addressLine1, dto.addressLine2 || null,
       dto.zipCode, hashedPassword, new Date(), null
     ));
+
+    await EmailVerifyService.sendVerificationEmail(user, serverAddress);
 
     session.user = {
       id: user.id
