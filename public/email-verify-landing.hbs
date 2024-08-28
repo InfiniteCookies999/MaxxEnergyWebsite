@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification</title>
+
+    <import value="/common-links"></import>
+    <link rel="stylesheet" href="styles/shared.auth.style.css">
+    <link rel="stylesheet" href="styles/email.verify.landing.css">
+
+</head>
+<body>
+    <import value="/header"></import>
+
+    
+
+    <div class="outer-container">
+        <div class="p-4 centered-container">
+            {{#if notValid}}
+                <h3>Invalid email token!</h3>
+                <p id="invalid-text">The email verification token may have expired</p>
+                <p id="invalid-text">
+                    {{#if isLoggedIn}}
+                        If you need a new token visit your 
+                        <a href="/user-profile">
+                            profile page
+                        </a>
+                    {{else}}
+                        If you need a new token
+                        <a href="/login">
+                            login
+                        </a>
+                        and visit your profile page
+                    {{/if}}
+                </p>
+            {{else}}
+                <h3>Successfully verified email!</h3>
+                <img id="circle-check-mark" src="images/blue-circle.svg">
+                <p class="welcome-text">Welcome to Maxx Energy Maddie Rugh!</p>
+                <a id="profile-btn" href="/user-profile">Profile Page</a>
+            {{/if}}
+        </div>
+    </div>
+    
+    <import value="/footer"></import>
+
+</body>
+</html>

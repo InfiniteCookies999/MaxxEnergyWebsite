@@ -86,10 +86,10 @@ router.get('/faq', controller(async (_, res) => {
   res.render("faq");
 }));
 
-router.get('/email', controller(async (req, res) => {
-  res.render("emailverify", {
-    name: "Maddie Rugh",
-    verifyLink: "http://" + req.serverAddress + "/verify/"
+router.get('/email-verified', controller(async (req, res) => {
+  res.render("email-verify-landing", {
+    notValid: true,
+    isLoggedIn: true
   });
 }));
 
