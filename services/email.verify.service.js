@@ -22,7 +22,7 @@ class EmailVerifyService {
       },
       attachments: [{
         filename: "maxx-logo.png",
-        path: "images/maxx-logo.png",
+        path: "public/images/maxx-logo.png",
         cid: "logo@image"
       }]
     });
