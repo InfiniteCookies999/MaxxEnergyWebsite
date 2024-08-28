@@ -2,14 +2,18 @@ document.addEventListener("DOMContentLoaded", function () {
   const heroBackground = document.getElementById("hero-background");
   const heroBackgrounds = ['hero-bg-1', 'hero-bg-2', 'hero-bg-3'];
 
-  // Detect base URL based on the current environment
-  const baseUrl = window.location.href.includes('104.131.6.214/webdev') ? '/webdev/' : '/';
-  
-  // Set the base URL as a CSS variable
-  document.documentElement.style.setProperty('--base-url', `url('${baseUrl}`);
+  // Adjusts the image path based on the current URL (localhost vs. server)
+  const isServer = window.location.href.includes('104.131.6.214/webdev');
+  if (isServer) {
+    // Adjust image paths for the server environment by setting full URLs
+    document.documentElement.style.setProperty('--hero-bg-1-url', "url('/webdev/images/homepage.jpg')");
+    document.documentElement.style.setProperty('--hero-bg-2-url', "url('/webdev/images/homepage2.jpg')");
+    document.documentElement.style.setProperty('--hero-bg-3-url', "url('/webdev/images/homepage3.jpg')");
+  }
 
   // Finds all the dots that users can click to change the background image.
   const heroDots = document.querySelectorAll('.hero-dot');
+  // Keeps track of which background image is currently showing.
   let currentHeroIndex = 0;
 
   // Set the initial background and active dot
