@@ -23,13 +23,14 @@ class UserService {
     const user = await UserRepository.saveUser(new User(0,
       dto.firstName, dto.lastName, dto.email, dto.phoneNumber,
       dto.state, dto.county, dto.addressLine1, dto.addressLine2 || null,
-      dto.zipCode, hashedPassword, new Date(), null
+      dto.zipCode, hashedPassword, new Date(), null, false
     ));
 
     await EmailVerifyService.sendVerificationEmail(user, serverAddress);
 
     session.user = {
-      id: user.id
+      id: user.id,
+      emailVerified: false
     }
   }
 
@@ -54,7 +55,8 @@ class UserService {
 
     // The user provided correct credentials. Creating a user session.
     session.user = {
-      id: user.id
+      id: user.id,
+      emailVerified: user.emailVerified !== 0
     }
   }
 
@@ -127,12 +129,32 @@ class UserService {
     await UserRepository.updateProfilePic(userId, profilePicFile);
   }
 
+  async verifyEmail(token, session) {
+    
+    const userId = await EmailVerifyService.verifyEmail(token);
+
+    // Updating the user's database entry.
+    await UserRepository.updateEmailVerified(userId, true);
+
+    if (session.user) {
+      if (session.user.id === userId) {
+        session.user.emailVerified = true;
+      }
+    }
+
+    return userId;
+  }
+
   async getUser(session) {
     if (!(session.user)) {
       throw new HttpError("Cannot get user's information. Not logged in", 401);
     }
 
     return await UserRepository.getUserById(session.user.id);
+  }
+
+  async getUserById(userId) {
+    return await UserRepository.getUserById(userId);
   }
 }
 

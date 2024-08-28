@@ -24,13 +24,13 @@ class EmailVerifyRepository {
     await conn.execute(`INSERT INTO EmailVerify (userId, verifyKey) VALUES (?, ?)`,
       Object.values(emailVerify));
     
-    return await this.getEmailVerifyByUserId(emailVerify.userId);
+    return await this.getEmailVerifyByVerifyKey(emailVerify.verifyKey);
   }
 
-  async getEmailVerifyByUserId(userId) {
+  async getEmailVerifyByVerifyKey(key) {
     const conn = await getDBConnection();
 
-    const [ results ] = await conn.execute(`SELECT * FROM EmailVerify WHERE userId=?`, [ userId ]);
+    const [ results ] = await conn.execute(`SELECT * FROM EmailVerify WHERE verifyKey=?`, [ key ]);
     if (results.length === 0) {
       return null;
     }

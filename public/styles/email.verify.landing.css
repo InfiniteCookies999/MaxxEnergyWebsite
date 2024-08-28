@@ -22,7 +22,7 @@
   display: inline-block;
   text-decoration: none;
   color: white;
-  background-color: var(--site-blue-color);
+  background-color: var(--site-blue-color) !important;
   padding: 1rem;
   border-radius: 15px;
 }

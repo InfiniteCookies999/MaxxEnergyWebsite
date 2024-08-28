@@ -57,25 +57,42 @@ class UserRepository {
       )`);
 
       // Adding a column for the profile picture if it does not exist.
-      const [rows] = await conn.execute(
-        `SELECT * FROM INFORMATION_SCHEMA.COLUMNS
-         WHERE TABLE_NAME = ? AND COLUMN_NAME = ?`,
-         ["user", "profilePicFile"]
-      );
-
-      if (rows.length === 0) {
-        await conn.execute(`ALTER TABLE user ADD COLUMN profilePicFile CHAR(100)`);
+      {
+        const [rows] = await conn.execute(
+          `SELECT * FROM INFORMATION_SCHEMA.COLUMNS
+           WHERE TABLE_NAME = ? AND COLUMN_NAME = ?`,
+           ["user", "profilePicFile"]
+        );
+  
+        if (rows.length === 0) {
+          await conn.execute(`ALTER TABLE user ADD COLUMN profilePicFile CHAR(100)`);
+        }
+      }
+      // Adding a column for if the user's email is verified if it does not exist.
+      {
+        const [rows] = await conn.execute(
+          `SELECT * FROM INFORMATION_SCHEMA.COLUMNS
+           WHERE TABLE_NAME = ? AND COLUMN_NAME = ?`,
+           ["user", "emailVerified"]
+        );
+  
+        if (rows.length === 0) {
+          await conn.execute(`ALTER TABLE user ADD COLUMN emailVerified BOOLEAN DEFAULT FALSE`);
+        }
       }
   }
 
   async saveUser(user) {
     const conn = await getDBConnection();
 
-    delete user.id; // Do not want to insert user's id into the table.
+    // Removing fields that do not get saved.
+    delete user.id;
+    delete user.profilePicFile;
+    delete user.emailVerified;
     await conn.execute(`INSERT INTO user (firstName, lastName, email, phone, state, county,
                                           addressLine1, addressLine2, zipCode, password,
-                                          joinDate, profilePicFile)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                          joinDate)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
       Object.values(user));
     
@@ -146,6 +163,14 @@ class UserRepository {
 
     await conn.execute(`UPDATE user SET password=? WHERE id=?`,
       [newPassword, userId]
+    );
+  }
+
+  async updateEmailVerified(userId, isVerified) {
+    const conn = await getDBConnection();
+
+    await conn.execute(`UPDATE user SET emailVerified=? WHERE id=?`,
+      [isVerified ? 1 : 0, userId]
     );
   }
 

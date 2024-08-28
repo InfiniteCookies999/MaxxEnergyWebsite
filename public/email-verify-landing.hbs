@@ -6,18 +6,25 @@
     <title>Email Verification</title>
 
     <import value="/common-links"></import>
-    <link rel="stylesheet" href="styles/shared.auth.style.css">
-    <link rel="stylesheet" href="styles/email.verify.landing.css">
+    <link rel="stylesheet" href="/styles/shared.auth.style.css">
+    <link rel="stylesheet" href="/styles/email.verify.landing.css">
 
 </head>
 <body>
     <import value="/header"></import>
 
-    
-
     <div class="outer-container">
         <div class="p-4 centered-container">
-            {{#if notValid}}
+            {{#if isValid}}
+                <h3>Successfully verified email!</h3>
+                <img id="circle-check-mark" src="/images/blue-circle.svg">
+                <p class="welcome-text">Welcome to Maxx Energy {{name}}!</p>
+                {{#if userIdMatches}}
+                    <a id="profile-btn" href="/user-profile">Profile Page</a>
+                {{else}}
+                    <a id="profile-btn" href="/">Go Home</a>
+                {{/if}}
+            {{else}}
                 <h3>Invalid email token!</h3>
                 <p id="invalid-text">The email verification token may have expired</p>
                 <p id="invalid-text">
@@ -34,11 +41,6 @@
                         and visit your profile page
                     {{/if}}
                 </p>
-            {{else}}
-                <h3>Successfully verified email!</h3>
-                <img id="circle-check-mark" src="images/blue-circle.svg">
-                <p class="welcome-text">Welcome to Maxx Energy Maddie Rugh!</p>
-                <a id="profile-btn" href="/user-profile">Profile Page</a>
             {{/if}}
         </div>
     </div>

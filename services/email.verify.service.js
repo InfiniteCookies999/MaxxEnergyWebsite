@@ -1,6 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 const EmailService = require('./email.service');
 const { EmailVerifyRepository, EmailVerify } = require('../database');
+const { HttpError } = require('../middleware');
 
 class EmailVerifyService {
 
@@ -18,7 +19,7 @@ class EmailVerifyService {
       context: {
         name: user.firstName + " " + user.lastName,
         maxxLogoCID: "logo@image",
-        verifyLink: "http://" + serverAddress + `/verify/${verifyKey}`
+        verifyLink: "http://" + serverAddress + `/verify-email/${verifyKey}`
       },
       attachments: [{
         filename: "maxx-logo.png",
@@ -26,6 +27,15 @@ class EmailVerifyService {
         cid: "logo@image"
       }]
     });
+  }
+
+  async verifyEmail(token) {
+    // TODO: Drop the table entry!
+    const emailVerify = await EmailVerifyRepository.getEmailVerifyByVerifyKey(token);
+    if (!emailVerify) {
+      throw new HttpError("Invalid email token", 401);
+    }
+    return emailVerify.userId;
   }
 }
 

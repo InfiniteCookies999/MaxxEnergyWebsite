@@ -211,6 +211,14 @@ router.put('/user/update-profile-pic/:id?',
                                        req.session);
     res.send();
   })
-)
+);
+
+router.put('/user/verify-email/:token',
+  
+  controller(async (req, res) => {
+    const userId = await UserService.verifyEmail(req.params.token, req.session);
+    res.json({ userId });
+  })
+);
 
 module.exports = router;
