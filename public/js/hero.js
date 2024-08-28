@@ -7,29 +7,34 @@ document.addEventListener("DOMContentLoaded", function () {
   //Keeps track of which background image is currently showing.
   let currentHeroIndex = 0;
 
-  //Function that changes the background image and updates the active dot.
+  // Function that changes the background image and updates the active dot.
   function updateHeroBackground(index = null) {
     heroBackground.classList.remove(heroBackgrounds[currentHeroIndex]);
     
-    //Either go to the clicked image or move to the next one automatically.
+    // Either go to the clicked image or move to the next one automatically.
     if (index !== null) {
       currentHeroIndex = index;
     } else {
       currentHeroIndex = (currentHeroIndex + 1) % heroBackgrounds.length;
     }
 
-    //Sets the new background image for the hero section.
+    // Sets the new background image for the hero section.
     heroBackground.classList.add(heroBackgrounds[currentHeroIndex]);
-    //Changes which dot is highlighted to match the current background.
+    // Changes which dot is highlighted to match the current background.
     heroDots.forEach(dot => dot.classList.remove('active'));
     heroDots[currentHeroIndex].classList.add('active');
   }
-  //Listens for clicks on the dots to change the background image.
+
+  // Set the first dot as active when the page loads.
+  heroDots[currentHeroIndex].classList.add('active');
+
+  // Listens for clicks on the dots to change the background image.
   heroDots.forEach((dot, index) => {
     dot.addEventListener('click', function () {
       updateHeroBackground(index);
     });
   });
-  //Automatically switches the background image every 8 seconds.
+
+  // Automatically switches the background image every 8 seconds.
   setInterval(updateHeroBackground, 8000); 
 });
