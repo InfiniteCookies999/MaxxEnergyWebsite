@@ -35,6 +35,9 @@ class EmailVerifyService {
     if (!emailVerify) {
       throw new HttpError("Invalid email token", 401);
     }
+
+    await EmailVerifyRepository.deleteAllVerifyEntriesByUserId(emailVerify.userId);
+
     return emailVerify.userId;
   }
 }

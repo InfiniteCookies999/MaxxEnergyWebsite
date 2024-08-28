@@ -39,6 +39,11 @@ class EmailVerifyRepository {
     return emailVerify;
   }
 
+  async deleteAllVerifyEntriesByUserId(userId) {
+    const conn = await getDBConnection();
+
+    await conn.execute(`DELETE FROM EmailVerify WHERE userId=?`, [ userId ]);
+  }
 }
 
 module.exports = new EmailVerifyRepository();
