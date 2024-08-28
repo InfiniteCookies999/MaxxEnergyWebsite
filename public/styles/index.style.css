@@ -3,7 +3,6 @@
   --hero-bg-2-url: url('/images/homepage2.jpg');
   --hero-bg-3-url: url('/images/homepage3.jpg');
 }
-
 .hero-container {
   position: relative;
   height: 100vh;
