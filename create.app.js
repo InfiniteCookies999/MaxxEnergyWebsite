@@ -35,11 +35,14 @@ function createApp() {
     if (idx === -1) {
       req.serverAddress = host;
     } else {
-      req.serverAddress = host.substring(idx + 1);
+      req.serverAddress = host.substring(0, idx);
     }
     if (config.REROUTE_PATH) {
       req.serverAddress += "/" + config.REROUTE_PATH;
+    } else {
+      req.serverAddress += ":" + config.SERVER_PORT || 3000;
     }
+    console.log("req.serverAddress: ", req.serverAddress);
     next();
   });
   app.use(replaceImports);

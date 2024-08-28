@@ -7,6 +7,7 @@
 
     <style>
         #verify-btn {
+            display: inline-block;
             padding: 0.5rem;
             padding-left: 1rem;
             padding-right: 1rem;
@@ -22,14 +23,21 @@
         #verify-btn:hover {
             background-color: rgb(58, 58, 129);
         }
+
+        .email-container {
+            height: fit-content;
+            padding: 1rem;
+        }
     </style>
 </head>
 <body>
-    <img src="{{maxxLogoPath}}" />
-    <h3>Thanks for joining Maxx Energy {{name}}!</h3>
-    <p>Please click the following link to proceed with verifying your email address</p>
-    <a id="verify-btn" href="{{verifyLink}}">
-        Verify
-    </a>
+    <div class="email-container">
+        <img src="{{maxxLogoPath}}" />
+        <h3>Thanks for joining Maxx Energy {{name}}!</h3>
+        <p>Please click the following link to proceed with verifying your email address</p>
+        <a id="verify-btn" href="{{verifyLink}}">
+            Verify
+        </a>
+    </div>
 </body>
 </html>
