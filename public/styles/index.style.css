@@ -93,7 +93,7 @@
 }
 
 .hero-bg-1 {
-  background-image: url('webdev/images/homepage.jpg');
+  background-image: url('/webdev/images/homepage.jpg');
 }
 
 .hero-bg-2 {
@@ -101,7 +101,7 @@
 }
 
 .hero-bg-3 {
-  background-image: url('webdev/images/homepage3.jpg');
+  background-image: url('/webdev/images/homepage3.jpg');
 }
 
 
