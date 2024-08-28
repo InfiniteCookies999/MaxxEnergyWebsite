@@ -87,9 +87,11 @@ router.get('/faq', controller(async (_, res) => {
 }));
 
 router.get('/email-verified', controller(async (req, res) => {
+  const isLoggedIn = req.session.user !== undefined;
+
   res.render("email-verify-landing", {
     notValid: true,
-    isLoggedIn: true
+    isLoggedIn
   });
 }));
 
