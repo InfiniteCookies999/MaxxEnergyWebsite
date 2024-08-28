@@ -1,16 +1,22 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const heroBackground = document.getElementById("hero-background"); 
+  const heroBackground = document.getElementById("hero-background");
   const heroBackgrounds = ['hero-bg-1', 'hero-bg-2', 'hero-bg-3'];
-  
-  //Finds all the dots that users can click to change the background image.
+
+  // Adjusts the image path based on the current URL (localhost vs. server)
+  const isServer = window.location.href.includes('104.131.6.214/webdev');
+  if (isServer) {
+    document.documentElement.style.setProperty('--image-path', '/webdev/images');
+  }
+
+  // Finds all the dots that users can click to change the background image.
   const heroDots = document.querySelectorAll('.hero-dot');
-  //Keeps track of which background image is currently showing.
+  // Keeps track of which background image is currently showing.
   let currentHeroIndex = 0;
 
   // Function that changes the background image and updates the active dot.
   function updateHeroBackground(index = null) {
     heroBackground.classList.remove(heroBackgrounds[currentHeroIndex]);
-    
+
     // Either go to the clicked image or move to the next one automatically.
     if (index !== null) {
       currentHeroIndex = index;
@@ -25,9 +31,6 @@ document.addEventListener("DOMContentLoaded", function () {
     heroDots[currentHeroIndex].classList.add('active');
   }
 
-  // Set the first dot as active when the page loads.
-  heroDots[currentHeroIndex].classList.add('active');
-
   // Listens for clicks on the dots to change the background image.
   heroDots.forEach((dot, index) => {
     dot.addEventListener('click', function () {
@@ -36,5 +39,5 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Automatically switches the background image every 8 seconds.
-  setInterval(updateHeroBackground, 8000); 
+  setInterval(updateHeroBackground, 8000);
 });
