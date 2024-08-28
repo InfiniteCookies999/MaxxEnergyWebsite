@@ -17,9 +17,14 @@ class EmailVerifyService {
       hbsFile: "emailverify",
       context: {
         name: user.firstName + " " + user.lastName,
-        maxxLogoPath: "http://" + serverAddress + "/images/maxx-logo.png",
+        maxxLogoCID: "logo@image",
         verifyLink: "http://" + serverAddress + `/verify/${verifyKey}`
-      }
+      },
+      attachments: [{
+        filename: "maxx-logo.png",
+        path: "images/maxx-logo.png",
+        cid: "logo@image"
+      }]
     });
   }
 }

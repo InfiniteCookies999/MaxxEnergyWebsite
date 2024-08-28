@@ -42,7 +42,8 @@ class EmailService {
       to: options.to,
       subject: options.subject,
       template: options.hbsFile,
-      context: options.context
+      context: options.context,
+      attachments: options.attachments
     };
 
     this.transporter.sendMail(sendOptions, (err, info) => {
