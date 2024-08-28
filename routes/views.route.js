@@ -89,7 +89,6 @@ router.get('/faq', controller(async (_, res) => {
 router.get('/email', controller(async (req, res) => {
   res.render("emailverify", {
     name: "Maddie Rugh",
-    maxxLogoPath: "http://" + req.serverAddress + "/images/maxx-logo.png",
     verifyLink: "http://" + req.serverAddress + "/verify/"
   });
 }));

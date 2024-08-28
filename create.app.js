@@ -42,7 +42,6 @@ function createApp() {
     } else {
       req.serverAddress += ":" + config.SERVER_PORT || 3000;
     }
-    console.log("req.serverAddress: ", req.serverAddress);
     next();
   });
   app.use(replaceImports);
