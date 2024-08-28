@@ -16,6 +16,10 @@ document.addEventListener("DOMContentLoaded", function () {
   // Keeps track of which background image is currently showing.
   let currentHeroIndex = 0;
 
+  // Set the initial background and active dot
+  heroBackground.classList.add(heroBackgrounds[currentHeroIndex]);
+  heroDots[currentHeroIndex].classList.add('active');
+
   // Function that changes the background image and updates the active dot.
   function updateHeroBackground(index = null) {
     heroBackground.classList.remove(heroBackgrounds[currentHeroIndex]);
