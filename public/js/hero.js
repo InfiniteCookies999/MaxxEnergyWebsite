@@ -1,50 +1,63 @@
 document.addEventListener("DOMContentLoaded", function () {
   const heroBackground = document.getElementById("hero-background");
-  const heroBackgrounds = ['hero-bg-1', 'hero-bg-2', 'hero-bg-3'];
+  const heroDots = document.querySelectorAll(".hero-dot");
 
-  // Adjusts the image path based on the current URL (localhost vs. server)
-  const isServer = window.location.href.includes('104.131.6.214/webdev');
+  // Array of background image URLs
+  const heroBackgrounds = [
+    "/images/homepage.jpg",
+    "/images/homepage2.jpg",
+    "/images/homepage3.jpg",
+  ];
+
+  // Adjust the image paths for the server environment if needed
+  const isServer = window.location.href.includes("104.131.6.214/webdev");
   if (isServer) {
-    // Adjust image paths for the server environment by setting full URLs
-    document.documentElement.style.setProperty('--hero-bg-1-url', "url('/webdev/images/homepage.jpg')");
-    document.documentElement.style.setProperty('--hero-bg-2-url', "url('/webdev/images/homepage2.jpg')");
-    document.documentElement.style.setProperty('--hero-bg-3-url', "url('/webdev/images/homepage3.jpg')");
+    heroBackgrounds[0] = "/webdev/images/homepage.jpg";
+    heroBackgrounds[1] = "/webdev/images/homepage2.jpg";
+    heroBackgrounds[2] = "/webdev/images/homepage3.jpg";
   }
 
-  // Finds all the dots that users can click to change the background image.
-  const heroDots = document.querySelectorAll('.hero-dot');
-  // Keeps track of which background image is currently showing.
   let currentHeroIndex = 0;
 
   // Set the initial background and active dot
-  heroBackground.classList.add(heroBackgrounds[currentHeroIndex]);
-  heroDots[currentHeroIndex].classList.add('active');
+  setHeroBackground(currentHeroIndex);
+  heroDots[currentHeroIndex].classList.add("active");
 
-  // Function that changes the background image and updates the active dot.
+  // Function to set the hero background dynamically
+  function setHeroBackground(index) {
+    const img = new Image();
+    img.src = heroBackgrounds[index];
+    img.onload = () => {
+      heroBackground.style.backgroundImage = `url(${heroBackgrounds[index]})`;
+    };
+  }
+
+  // Function that changes the background image and updates the active dot
   function updateHeroBackground(index = null) {
-    heroBackground.classList.remove(heroBackgrounds[currentHeroIndex]);
+    // Remove active class from current dot
+    heroDots[currentHeroIndex].classList.remove("active");
 
-    // Either go to the clicked image or move to the next one automatically.
+    // Update index to the next background or the clicked one
     if (index !== null) {
       currentHeroIndex = index;
     } else {
       currentHeroIndex = (currentHeroIndex + 1) % heroBackgrounds.length;
     }
 
-    // Sets the new background image for the hero section.
-    heroBackground.classList.add(heroBackgrounds[currentHeroIndex]);
-    // Changes which dot is highlighted to match the current background.
-    heroDots.forEach(dot => dot.classList.remove('active'));
-    heroDots[currentHeroIndex].classList.add('active');
+    // Set new background image
+    setHeroBackground(currentHeroIndex);
+
+    // Add active class to the new dot
+    heroDots[currentHeroIndex].classList.add("active");
   }
 
-  // Listens for clicks on the dots to change the background image.
+  // Add click event listeners to the dots
   heroDots.forEach((dot, index) => {
-    dot.addEventListener('click', function () {
+    dot.addEventListener("click", function () {
       updateHeroBackground(index);
     });
   });
 
-  // Automatically switches the background image every 8 seconds.
+  // Automatically switch background images every 8 seconds
   setInterval(updateHeroBackground, 8000);
 });
