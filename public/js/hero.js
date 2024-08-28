@@ -5,7 +5,10 @@ document.addEventListener("DOMContentLoaded", function () {
   // Adjusts the image path based on the current URL (localhost vs. server)
   const isServer = window.location.href.includes('104.131.6.214/webdev');
   if (isServer) {
-    document.documentElement.style.setProperty('--image-path', '/webdev/images');
+    // Adjust image paths for the server environment by setting full URLs
+    document.documentElement.style.setProperty('--hero-bg-1-url', "url('/webdev/images/homepage.jpg')");
+    document.documentElement.style.setProperty('--hero-bg-2-url', "url('/webdev/images/homepage2.jpg')");
+    document.documentElement.style.setProperty('--hero-bg-3-url', "url('/webdev/images/homepage3.jpg')");
   }
 
   // Finds all the dots that users can click to change the background image.
