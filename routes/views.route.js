@@ -14,12 +14,10 @@ function getReroute() {
 // https://stackoverflow.com/questions/14127411/use-a-route-as-an-alias-for-another-route-in-express-js
 router.get(['/', '/index', '/home', '/main'], controller(async (req, res) => {
   res.render('index', {
-    // Preloads my background images on my homepage, for no delay. 
-    preloadImages: [
-      '/webdev/images/homepage.jpg',
-      '/webdev/images/homepage2.jpg',
-      '/webdev/images/homepage3.jpg'
-    ]
+    // Send each preload image as a separate variable
+    preloadImage1: '/webdev/images/homepage.jpg',
+    preloadImage2: '/webdev/images/homepage2.jpg',
+    preloadImage3: '/webdev/images/homepage3.jpg'
   });
 }));
 
