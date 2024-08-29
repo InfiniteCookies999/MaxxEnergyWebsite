@@ -3,6 +3,7 @@ const { HttpError } = require('../middleware');
 const { UserRepository, User } = require('../database');
 const FileService = require('./file.service');
 const EmailVerifyService = require('./email.verify.service');
+const PasswordResetService = require('./password.reset.service');
 
 const HASH_STRENGTH = 10
 
@@ -33,7 +34,6 @@ class UserService {
       emailVerified: false
     }
   }
-
 
   async login(email, password, session) {
     if (session.user) {
@@ -87,6 +87,13 @@ class UserService {
     // Because the user switched emails they now need to verify the new email.
     user.email = email; // Set the new email for updating.
     await EmailVerifyService.updateEmail(user, serverAddress);
+    if (!changeToExisting) {
+      // If the user is logged in we want to say that their email is
+      // no longer verified.
+      if (session.user) {
+        session.emailVerified = false;
+      }
+    }
 
     await UserRepository.updateUsersEmail(userId, email)
   }
@@ -152,6 +159,16 @@ class UserService {
     const user = await this.getUser(session);
 
     await EmailVerifyService.sendVerificationEmail(user, serverAddress);
+  }
+
+  async sendPasswordReset(email) {
+    const user = await UserRepository.getUserByEmail(email);
+    if (!user) {
+      throw new HttpError("Could not find email", 401);
+    }
+
+    await PasswordResetService.sendPasswordResetEmail(email);
+
   }
 
   async getUser(session) {

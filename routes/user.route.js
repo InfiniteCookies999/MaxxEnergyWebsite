@@ -231,4 +231,13 @@ router.put('/user/resend-email-verification',
   })
 );
 
+router.post('/user/send-password-reset', 
+
+  validateLoggedIn,
+  controller(async (req, res) => {
+    await UserService.sendPasswordReset(req.email);
+    res.send();
+  })
+)
+
 module.exports = router;

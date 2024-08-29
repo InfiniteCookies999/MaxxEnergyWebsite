@@ -132,4 +132,17 @@ router.get('/verify-email/:token', controller(async (req, res) => {
   });
 }));
 
+router.get('/passreset', controller(async (req, res) => {
+  if (!req.session.user) {
+    
+  }
+
+
+  res.render('passreset', {
+    name: user.firstName + " " + user.lastName,
+    maxxLogoCID: "logo@image",
+    resetLink: "http://" + serverAddress + `/password-reset/${resetKey}`
+  });
+}));
+
 module.exports = router;

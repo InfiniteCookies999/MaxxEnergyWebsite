@@ -81,9 +81,13 @@
                                     <span id="email-resend-verification-span">Successfully sent verification</span>
                                 </td>
                                 <td class="icon-group edit-group">
-                                    {{#unless emailVerified}}
-                                        <button id="resend-email-verify-btn">Resend</button>
-                                    {{/unless}}
+                                    <button id="resend-email-verify-btn"
+                                        {{#if emailVerified}}
+                                        style="display: none;"
+                                        {{else}}
+                                        style="display: inline;"
+                                        {{/if}}
+                                        >Resend</button>
                                     <canvas id="email-resend-load-animation" width="25" height="25" style="display: none;"></canvas>
                                 </td>
                             </tr>
