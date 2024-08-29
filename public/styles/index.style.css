@@ -3,6 +3,7 @@
   --hero-bg-2-url: url('/images/homepage2.jpg');
   --hero-bg-3-url: url('/images/homepage3.jpg');
 }
+
 .hero-container {
   position: relative;
   height: 100vh;
@@ -96,6 +97,7 @@
   text-align: center;
   transition: background-image 1s ease-in-out;
 }
+
 .hero-bg-1 {
   background-image: var(--hero-bg-1-url);
 }
@@ -107,6 +109,7 @@
 .hero-bg-3 {
   background-image: var(--hero-bg-3-url);
 }
+
 .mission-column {
   background-color: rgb(74, 154, 245);
   color: white;
@@ -130,13 +133,51 @@
   margin-top: 20px;
   padding-bottom: 20px;
 }
-
 .flex-row {
   display: flex;
+  transition: transform 1s ease;
+  width: auto; 
+}
+.carousel {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  width: 80%;
-  justify-content: space-between;
+  position: relative;
+  width: 1100px; /* Adjust width to fit 5 items comfortably */
+  margin: auto;
+  overflow: hidden;
+}
+.state-item {
+  min-width: 180px; /*For 5 states at once*/
+  margin: 10px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 30px;
+}
+.state-image {
+  margin-top: 10px; /* Space between the text and the image */
+  width: 200px; /* Set a default width; adjust as needed */
+  height: 100px;
+}
+.carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  z-index: 100;
+  font-size: 18px;
+}
+
+.left {
+  left: 0;
+}
+
+.right {
+  right: 0;
 }
 
 .flex-row p {
@@ -144,20 +185,6 @@
   text-align: center;
   margin: 0;
 }
-.state-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.state-image {
-  margin-top: 10px; /* Space between the text and the image */
-  width: 100px; /* Set a default width; adjust as needed */
-  height: auto;
-}
-
-
 .container {
   display: flex;
   width: 80%;
@@ -315,7 +342,7 @@
   .mission-h {
     font-size: 18px;
   }
-  .flex-row, .flex-row2 {
+  .flex-row2 {
     flex-wrap: wrap;
     justify-content: center;
     gap: 15px;
@@ -341,8 +368,45 @@
   .fl-column2 {
     order: 2;
   }
+  .carousel {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 800px; /* Adjust width to fit 5 items comfortably */
+    margin: auto;
+    overflow: hidden;
+  }
+  .state-item {
+    min-width: 180px; /*For 5 states at once*/
+    margin: 10px;
+    text-align: center;
+  }
+  .state-image {
+    margin-top: 10px; /* Space between the text and the image */
+    width: 150px; /* Set a default width; adjust as needed */
+    height: 75px;
+  }
 }
-
+@media(max-width:830px){
+  .carousel {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 600px; 
+    margin: auto;
+    overflow: hidden;
+  }
+  .state-item {
+    min-width: 180px; 
+    margin: 10px;
+    text-align: center;
+  }
+  .state-image {
+    margin-top: 10px; 
+    width: 150px;
+    height: 75px;
+  }
+}
 /* Smart phones */
 @media (max-width: 767px) {
   .hero {
@@ -362,7 +426,7 @@
   .mission-h {
     font-size: 16px;
   }
-  .flex-row, .flex-row2 {
+  .flex-row2 {
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
@@ -391,4 +455,22 @@
   .same-size-image {
     margin: 0 auto;
   }
-}
+    .carousel {
+      display: flex;
+      align-items: center;
+      position: relative;
+      width: 400px; 
+      margin: auto;
+      overflow: hidden;
+    }
+    .state-item {
+      min-width: 180px; 
+      margin: 10px;
+      text-align: center;
+    }
+    .state-image {
+      margin-top: 10px; 
+      width: 150px;
+      height: 75px;
+    }
+  }
