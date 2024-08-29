@@ -108,7 +108,7 @@ router.get('/verify-email/:token', controller(async (req, res) => {
   let userIdMatches = true;
   try {
 
-    const verifyRes = await axios.put(`http://${req.serverAddress}/api/user/verify-email/${req.params.token}`);;
+    const verifyRes = await axios.put(`http://${req.serverAddress}/api/user/verify-email/${req.params.token}`);
     // TODO: Deal with this case better!
     if (req.session.user) {
       if (req.session.user.id !== verifyRes.userId) {
@@ -149,5 +149,9 @@ router.get('/request-password-reset', controller(async (req, res) => {
     email: req.query.email || ''
   });
 }));
+
+router.get('/header', (_, res) => {
+  res.render('header');
+});
 
 module.exports = router;
