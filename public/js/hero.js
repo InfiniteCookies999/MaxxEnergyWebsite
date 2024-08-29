@@ -2,6 +2,19 @@ document.addEventListener("DOMContentLoaded", function () {
   const heroBackground = document.getElementById("hero-background");
   const heroBackgrounds = ['hero-bg-1', 'hero-bg-2', 'hero-bg-3'];
 
+  // Array of image URLs to preload
+  const preloadImages = [
+    '/webdev/images/homepage.jpg',
+    '/webdev/images/homepage2.jpg',
+    '/webdev/images/homepage3.jpg'
+  ];
+
+  // Preload images
+  preloadImages.forEach(src => {
+    const img = new Image();
+    img.src = src;
+  });
+
   // Adjusts the image path based on the current URL (localhost vs. server)
   const isServer = window.location.href.includes('104.131.6.214/webdev');
   if (isServer) {
