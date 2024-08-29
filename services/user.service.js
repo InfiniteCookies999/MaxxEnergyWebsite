@@ -162,7 +162,6 @@ class UserService {
   }
 
   async sendPasswordReset(email, serverAddress) {
-    console.log("requested for: ", email);
     const user = await UserRepository.getUserByEmail(email);
     if (!user) {
       // We do not want to create an error because it would expose
