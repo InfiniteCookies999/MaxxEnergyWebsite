@@ -1,13 +1,14 @@
 const { v4: uuidv4 } = require('uuid');
-const { EmailVerifyRepository } = require('../database');
+const { PasswordResetRepository } = require('../database');
 const PasswordReset = require('../database/password.reset.model');
+const EmailService = require('./email.service');
 
 class PasswordResetService {
 
-  async sendPasswordResetEmail(user) {
+  async sendPasswordResetEmail(user, serverAddress) {
     const resetKey = uuidv4();
 
-    await EmailVerifyRepository.saveEmailVerify(new PasswordReset(
+    await PasswordResetRepository.savePasswordReset(new PasswordReset(
       null, user.id, resetKey, null
     ));
 

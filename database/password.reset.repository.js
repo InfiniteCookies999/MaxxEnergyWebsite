@@ -21,7 +21,7 @@ class PasswordResetRepository {
 
     delete passwordReset.id;
     delete passwordReset.createdAt;
-    await conn.execute(`INSERT INTO EmailVerify (userId, resetKey) VALUES (?, ?)`,
+    await conn.execute(`INSERT INTO PasswordReset (userId, resetKey) VALUES (?, ?)`,
       Object.values(passwordReset));
     
   }

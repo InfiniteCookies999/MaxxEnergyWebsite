@@ -161,13 +161,17 @@ class UserService {
     await EmailVerifyService.sendVerificationEmail(user, serverAddress);
   }
 
-  async sendPasswordReset(email) {
+  async sendPasswordReset(email, serverAddress) {
+    console.log("requested for: ", email);
     const user = await UserRepository.getUserByEmail(email);
     if (!user) {
-      throw new HttpError("Could not find email", 401);
+      // We do not want to create an error because it would expose
+      // if the email doesn't exist which is letting people know information
+      // that is private.
+      return;
     }
 
-    await PasswordResetService.sendPasswordResetEmail(email);
+    await PasswordResetService.sendPasswordResetEmail(user, serverAddress);
 
   }
 
