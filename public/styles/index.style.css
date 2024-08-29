@@ -1,24 +1,29 @@
+:root {
+  --hero-bg-1-url: url('/images/homepage.jpg');
+  --hero-bg-2-url: url('/images/homepage2.jpg');
+  --hero-bg-3-url: url('/images/homepage3.jpg');
+}
 .hero-container {
   position: relative;
-  height: 100vh; 
+  height: 100vh;
   width: 100%;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 #hero-background {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  height: 100%; 
+  height: 100%;
   width: 100%;
-  position: relative; 
+  position: relative;
 }
 
 .homepage-text {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); 
+  transform: translate(-50%, -50%);
   text-align: center;
   width: 80%;
 }
@@ -40,11 +45,11 @@
 
 .click-links {
   position: absolute;
-  bottom: 30px; 
+  bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
-  text-align: center; 
+  text-align: center;
 }
 
 .hero-dot {
@@ -63,7 +68,7 @@
 }
 
 .hero-dot.active {
-  background-color: orangered; 
+  background-color: orangered;
 }
 
 .middle {
@@ -91,21 +96,17 @@
   text-align: center;
   transition: background-image 1s ease-in-out;
 }
-
 .hero-bg-1 {
-  background-image: url('webdev/images/homepage.jpg');
+  background-image: var(--hero-bg-1-url);
 }
 
 .hero-bg-2 {
-  background-image: url('/webdev/images/homepage2.jpg');
+  background-image: var(--hero-bg-2-url);
 }
 
 .hero-bg-3 {
-  background-image: url('webdev/images/homepage3.jpg');
+  background-image: var(--hero-bg-3-url);
 }
-
-
-
 .mission-column {
   background-color: rgb(74, 154, 245);
   color: white;
@@ -143,6 +144,19 @@
   text-align: center;
   margin: 0;
 }
+.state-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.state-image {
+  margin-top: 10px; /* Space between the text and the image */
+  width: 100px; /* Set a default width; adjust as needed */
+  height: auto;
+}
+
 
 .container {
   display: flex;
