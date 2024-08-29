@@ -25,11 +25,7 @@ async function replace(body, serverAddress) {
     } else if (fs.existsSync(filePath + '.hbs')) {
       // Need to call the hbs end point.
       const response = await axios.get(`http://${serverAddress}/${p1.substring(1)}`);
-      let importBody = response.data;
-      if (config.REROUTE_PATH) {
-        importBody = replaceRoutes(importBody);
-      }
-      return { match, replacement: importBody };
+      return { match, replacement: response.data };
     } else {
       throw new HttpError("Could not find html or hbs file for importing", 404);
     }
