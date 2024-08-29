@@ -146,7 +146,8 @@ router.put('/user/update-email/:id?',
   controller(async (req, res) => {
     await UserService.updateEmail(req.params.id,
                                   req.body.email,
-                                  req.session);
+                                  req.session,
+                                  req.serverAddress);
     res.send();
   })
 );

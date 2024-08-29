@@ -74,17 +74,19 @@ class UserService {
     await UserRepository.updateUsersName(userId, firstName, lastName);
   }
 
-  async updateEmail(userId, email, session) {
+  async updateEmail(userId, email, session, serverAddress) {
     userId = this.getUserIdForUpdate(userId, session);
 
     const user = await UserRepository.getUserById(userId);
     const changeToExisting = user.email.toLowerCase() === email.toLowerCase();
 
-    // TODO: This needs to be fixed so that if the email is already the
-    // user's email then it should be fine with "updating it".
     if ((await UserRepository.doesUserExistByEmail(email)) && !changeToExisting) {
       throw new HttpError("Email taken", 403);
     }
+
+    // Because the user switched emails they now need to verify the new email.
+    user.email = email; // Set the new email for updating.
+    await EmailVerifyService.updateEmail(user, serverAddress);
 
     await UserRepository.updateUsersEmail(userId, email)
   }

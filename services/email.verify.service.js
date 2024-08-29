@@ -30,7 +30,6 @@ class EmailVerifyService {
   }
 
   async verifyEmail(token) {
-    // TODO: Drop the table entry!
     const emailVerify = await EmailVerifyRepository.getEmailVerifyByVerifyKey(token);
     if (!emailVerify) {
       throw new HttpError("Invalid email token", 401);
@@ -39,6 +38,15 @@ class EmailVerifyService {
     await EmailVerifyRepository.deleteAllVerifyEntriesByUserId(emailVerify.userId);
 
     return emailVerify.userId;
+  }
+
+  async updateEmail(user, serverAddress) {
+
+    // Want to delete all the entries associated with the old email!
+    await EmailVerifyRepository.deleteAllVerifyEntriesByUserId(user.id);
+
+    // Send a new verification with the new email!
+    this.sendVerificationEmail(user, serverAddress);
   }
 }
 
