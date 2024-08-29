@@ -32,6 +32,10 @@ body {
   color: gray;
 }
 
+.edit-group i, button, canvas {
+  float: right;
+}
+
 .tab-row-entry .icon-group i, .editable-section .icon-group i {
   color: var(--site-color-darker-blue-color);
 }
@@ -56,4 +60,33 @@ body {
 
 .select-with-search .dropdown-menu {
   position: absolute;
+}
+
+#resend-email-verify-btn {
+  background-color: var(--site-blue-color);
+  color: white;
+  border-radius: 10px;
+  border-style: none;
+  padding: 0.2rem;
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+}
+
+#resend-email-verify-btn:hover {
+  cursor: pointer;
+  filter: brightness(0.85);
+}
+
+.email-verified-true {
+  color: var(--site-blue-color)
+}
+
+.email-verified-false {
+  color: gray;
+}
+
+#email-resend-verification-span {
+  display: none;
+  float: right;
+  color: rgb(0, 170, 0);
 }

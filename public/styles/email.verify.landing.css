@@ -1,0 +1,37 @@
+.centered-container {
+  text-align: center !important;
+}
+
+#circle-check-mark {
+  width: 10rem;
+  height: 10rem;
+}
+
+.welcome-text {
+  font-style: normal;
+  color: gray;
+  font-size: 1.4rem;
+}
+
+.centered-container {
+  padding-top: 8rem !important;
+  padding-bottom: 8rem !important;
+}
+
+#profile-btn {
+  display: inline-block;
+  text-decoration: none;
+  color: white;
+  background-color: var(--site-blue-color) !important;
+  padding: 1rem;
+  border-radius: 15px;
+}
+
+#profile-btn:hover {
+  filter: brightness(0.90);
+}
+
+#invalid-text {
+  color: gray;
+  font-size: 1.2rem;
+}

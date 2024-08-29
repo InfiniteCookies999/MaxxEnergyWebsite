@@ -47,6 +47,18 @@ function submitEmail(finishedCB, saveIcon) {
 
   const email = $('#email-input').val();
 
+  const originalFinishedCB = finishedCB;
+  finishedCB = () => {
+    originalFinishedCB();
+
+    const trueSpan = $('.email-verified-true');
+    trueSpan.removeClass("email-verified-true");
+    trueSpan.addClass("email-verified-false");
+    trueSpan.text('false');
+    
+    $('#resend-email-verify-btn').css("display", "inline");
+  };
+
   submitTo('/api/user/update-email', { email }, $('#email-error'), finishedCB, saveIcon);
 
 }
@@ -178,7 +190,7 @@ function submitName(finishedCB, saveIcon) {
 
 }
 
-function submitProfilePicture(file, finishedCB, saveIcon) {
+function submitProfilePicture(file) {
 
   const reader = new FileReader();
   const image = $('#profile-picture');
@@ -226,6 +238,35 @@ $(document).ready(function() {
       submitProfilePicture(file);
     };
     selector.click();
+  });
+
+  createLoadAnimation(document.getElementById("email-resend-load-animation"));
+  $('#email-verified-row button').click(() => {
+    
+    const button = $('#email-verified-row button');
+
+    $('#email-resend-verification-span').css("display", "none");
+    button.css("display", "none");
+    $('#email-resend-load-animation').css("display", "inline");
+    
+    const baseUrl = $('[base-url]').attr('base-url');
+
+    $.ajax({
+      type: 'PUT',
+      url: baseUrl + "/api/user/resend-email-verification",
+      data: {},
+      error: (res) => {
+        processServerErrorResponse(res, errorContainer);
+      },
+      success: () => {
+        $('#email-resend-verification-span').css("display", "inline");  
+      },
+      complete: () => {
+        $('#email-resend-load-animation').css("display", "none");
+        button.css("display", "inline");
+      }
+    });
+    
   });
 
   $('#profile-picture').on("dragover", (event) => {

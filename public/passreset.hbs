@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify Email</title>
+    <title>Password Reset</title>
 
     <style>
-        #verify-btn {
+
+        #reset-btn {
             display: inline-block;
             padding: 0.5rem;
             padding-left: 1rem;
@@ -20,23 +21,21 @@
             text-decoration: none;
         }
 
-        #verify-btn:hover {
-            background-color: rgb(58, 58, 129);
-        }
-
-        .email-container {
+        .pass-container {
             height: fit-content;
             padding: 1rem;
         }
+
     </style>
 </head>
 <body>
-    <div class="email-container">
+    <div class="pass-container">
         <img src="cid:{{maxxLogoCID}}" />
-        <h3>Thanks for joining Maxx Energy {{name}}!</h3>
-        <p>Please click the following link to proceed with verifying your email address</p>
-        <a id="verify-btn" href="{{verifyLink}}">
-            Verify
+        <h3>Hello there {{name}}!</h3>
+        <p>Having difficulties accessing your account?</p>
+        <p>Please follow this temporary link to reset your password</p>
+        <a id="reset-btn" href="{{resetLink}}">
+            Reset
         </a>
     </div>
 </body>

@@ -1,6 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 const EmailService = require('./email.service');
 const { EmailVerifyRepository, EmailVerify } = require('../database');
+const { HttpError } = require('../middleware');
 
 class EmailVerifyService {
 
@@ -17,10 +18,35 @@ class EmailVerifyService {
       hbsFile: "emailverify",
       context: {
         name: user.firstName + " " + user.lastName,
-        maxxLogoPath: "http://" + serverAddress + "/images/maxx-logo.png",
-        verifyLink: "http://" + serverAddress + `/verify/${verifyKey}`
-      }
+        maxxLogoCID: "logo@image",
+        verifyLink: "http://" + serverAddress + `/verify-email/${verifyKey}`
+      },
+      attachments: [{
+        filename: "maxx-logo.png",
+        path: "public/images/maxx-logo.png",
+        cid: "logo@image"
+      }]
     });
+  }
+
+  async verifyEmail(token) {
+    const emailVerify = await EmailVerifyRepository.getEmailVerifyByVerifyKey(token);
+    if (!emailVerify) {
+      throw new HttpError("Invalid email token", 401);
+    }
+
+    await EmailVerifyRepository.deleteAllVerifyEntriesByUserId(emailVerify.userId);
+
+    return emailVerify.userId;
+  }
+
+  async updateEmail(user, serverAddress) {
+
+    // Want to delete all the entries associated with the old email!
+    await EmailVerifyRepository.deleteAllVerifyEntriesByUserId(user.id);
+
+    // Send a new verification with the new email!
+    this.sendVerificationEmail(user, serverAddress);
   }
 }
 
