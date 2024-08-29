@@ -222,4 +222,13 @@ router.put('/user/verify-email/:token',
   })
 );
 
+router.put('/user/resend-email-verification',
+
+  validateLoggedIn,
+  controller(async (req, res) => {
+    await UserService.resendEmailVerification(req.session, req.serverAddress);
+    res.send();
+  })
+);
+
 module.exports = router;

@@ -228,6 +228,35 @@ $(document).ready(function() {
     selector.click();
   });
 
+  createLoadAnimation(document.getElementById("email-resend-load-animation"));
+  $('#email-verified-row button').click(() => {
+    
+    const button = $('#email-verified-row button');
+
+    $('#email-resend-verification-span').css("display", "none");
+    button.css("display", "none");
+    $('#email-resend-load-animation').css("display", "inline");
+    
+    const baseUrl = $('[base-url]').attr('base-url');
+
+    $.ajax({
+      type: 'PUT',
+      url: baseUrl + "/api/user/resend-email-verification",
+      data: {},
+      error: (res) => {
+        processServerErrorResponse(res, errorContainer);
+      },
+      success: () => {
+        $('#email-resend-verification-span').css("display", "inline");  
+      },
+      complete: () => {
+        $('#email-resend-load-animation').css("display", "none");
+        button.css("display", "inline");
+      }
+    });
+    
+  });
+
   $('#profile-picture').on("dragover", (event) => {
     event.preventDefault();
     $('#profile-picture').addClass('profile-drag-border');

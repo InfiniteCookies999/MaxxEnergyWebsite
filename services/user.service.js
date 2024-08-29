@@ -147,6 +147,13 @@ class UserService {
     return userId;
   }
 
+  async resendEmailVerification(session, serverAddress) {
+    
+    const user = await this.getUser(session);
+
+    await EmailVerifyService.sendVerificationEmail(user, serverAddress);
+  }
+
   async getUser(session) {
     if (!(session.user)) {
       throw new HttpError("Cannot get user's information. Not logged in", 401);

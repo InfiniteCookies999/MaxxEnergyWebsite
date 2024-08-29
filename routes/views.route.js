@@ -46,6 +46,7 @@ router.get('/user-profile', controller(async (req, res) => {
     zipCode: user.zipCode,
     profilePicFile: profilePicFile,
     acceptedMimeTypes: acceptedMimeTypes,
+    emailVerified: user.emailVerified,
 
     // Form restrictions
     maxNameLength: UserRepository.maxNameLength(),
