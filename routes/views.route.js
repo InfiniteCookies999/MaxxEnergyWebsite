@@ -1,4 +1,5 @@
 const express = require('express');
+const axios = require('axios');
 const { controller } = require('../middleware'); 
 const { UserService, FileService } = require('../services');
 const { UserRepository } = require('../database');
@@ -57,6 +58,7 @@ router.get('/user-profile', controller(async (req, res) => {
     zipCode: user.zipCode,
     profilePicFile: profilePicFile,
     acceptedMimeTypes: acceptedMimeTypes,
+    emailVerified: user.emailVerified,
 
     // Form restrictions
     maxNameLength: UserRepository.maxNameLength(),
@@ -98,10 +100,53 @@ router.get('/faq', controller(async (_, res) => {
   res.render("faq");
 }));
 
-router.get('/email', controller(async (req, res) => {
-  res.render("emailverify", {
-    name: "Maddie Rugh",
-    verifyLink: "http://" + req.serverAddress + "/verify/"
+router.get('/verify-email/:token', controller(async (req, res) => {
+  const isLoggedIn = req.session.user !== undefined;
+
+  let isValid = true;
+  let userId = 0;
+  let userIdMatches = true;
+  try {
+
+    const verifyRes = await axios.put(`http://${req.serverAddress}/api/user/verify-email/${req.params.token}`);;
+    // TODO: Deal with this case better!
+    if (req.session.user) {
+      if (req.session.user.id !== verifyRes.userId) {
+        userIdMatches = false;
+      }
+    }
+
+    userId = verifyRes.data.userId;
+
+  } catch (err) {
+    const response = err.response;
+    if (response.status === 401 && response.data !== undefined 
+      && response.data.message === "Invalid email token") {
+      isValid = false;
+    } else {
+      throw err;
+    }
+  }
+
+  let firstName = '';
+  let lastName = '';
+  if (isValid) {
+    const user = await UserService.getUserById(userId);
+    firstName = user.firstName;
+    lastName = user.lastName;
+  }
+
+  res.render("email-verify-landing", {
+    isValid,
+    isLoggedIn,
+    userIdMatches,
+    name: firstName + " " + lastName
+  });
+}));
+
+router.get('/request-password-reset', controller(async (req, res) => {
+  res.render('request-password-reset', {
+    email: req.query.email || ''
   });
 }));
 

@@ -146,7 +146,8 @@ router.put('/user/update-email/:id?',
   controller(async (req, res) => {
     await UserService.updateEmail(req.params.id,
                                   req.body.email,
-                                  req.session);
+                                  req.session,
+                                  req.serverAddress);
     res.send();
   })
 );
@@ -211,6 +212,32 @@ router.put('/user/update-profile-pic/:id?',
                                        req.session);
     res.send();
   })
-)
+);
+
+router.put('/user/verify-email/:token',
+  
+  controller(async (req, res) => {
+    const userId = await UserService.verifyEmail(req.params.token, req.session);
+    res.json({ userId });
+  })
+);
+
+router.put('/user/resend-email-verification',
+
+  validateLoggedIn,
+  controller(async (req, res) => {
+    await UserService.resendEmailVerification(req.session, req.serverAddress);
+    res.send();
+  })
+);
+
+router.post('/user/send-password-reset', 
+
+  validateLoggedIn,
+  controller(async (req, res) => {
+    await UserService.sendPasswordReset(req.email);
+    res.send();
+  })
+);
 
 module.exports = router;

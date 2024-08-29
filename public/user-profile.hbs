@@ -7,9 +7,10 @@
 
     <div base-url=""></div>
     <import value="/common-links"></import>
-    <link rel="stylesheet" href="styles/shared.auth.style.css">
-    <link rel="stylesheet" href="styles/profile.style.css">
-    <script src="js/profile.code.js"></script>
+    <link rel="stylesheet" href="/styles/shared.auth.style.css">
+    <link rel="stylesheet" href="/styles/profile.style.css">
+    <import value="form-links"></import>
+    <script src="/js/profile.code.js"></script>
 
 </head>
 <body>
@@ -64,9 +65,30 @@
                                            value="{{email}}"/>
                                     <div id="email-error" class="info-errors"></div>
                                 </td>
-                                <td class="icon-group">
+                                <td class="icon-group edit-group">
                                     <i class="bx bx-edit-alt edit-icon"></i>
                                     <i class="bx bx-save save-icon" req-save="false"></i>
+                                </td>
+                            </tr>
+                            <tr id="email-verified-row">
+                                <th scope="row">Email verified</th>
+                                <td>
+                                    {{#if emailVerified}}
+                                        <span class="email-verified-true">true</span>
+                                    {{else}}
+                                        <span class="email-verified-false">false</span>
+                                    {{/if}}
+                                    <span id="email-resend-verification-span">Successfully sent verification</span>
+                                </td>
+                                <td class="icon-group edit-group">
+                                    <button id="resend-email-verify-btn"
+                                        {{#if emailVerified}}
+                                        style="display: none;"
+                                        {{else}}
+                                        style="display: inline;"
+                                        {{/if}}
+                                        >Resend</button>
+                                    <canvas id="email-resend-load-animation" width="25" height="25" style="display: none;"></canvas>
                                 </td>
                             </tr>
                             <tr class="tab-row-entry">
@@ -81,7 +103,7 @@
                                            maxlength="12"/> 
                                     <div id="phone-number-error" class="info-errors"></div>
                                 </td>
-                                <td class="icon-group">
+                                <td class="icon-group edit-group">
                                     <i class="bx bx-edit-alt edit-icon"></i>
                                     <i class="bx bx-save save-icon" req-save="false"></i>
                                 </td>
@@ -135,7 +157,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="icon-group">
+                                <td class="icon-group edit-group">
                                     <i class="bx bx-edit-alt edit-icon"></i>
                                     <i class="bx bx-save save-icon" req-save="false"></i>
                                 </td>
@@ -159,7 +181,7 @@
                                            maxlength="{{maxPasswordLength}}"/>
                                     <div id="new-password-error" class="info-errors"></div>
                                 </td>
-                                <td class="icon-group">
+                                <td class="icon-group edit-group">
                                     <i class="bx bx-edit-alt edit-icon"></i>
                                     <i class="bx bx-save save-icon" req-save="false"></i>
                                 </td>

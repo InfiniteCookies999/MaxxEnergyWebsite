@@ -7,9 +7,12 @@
     
     <div base-url=""></div>
     <import value="/common-links"></import>
-    <link rel="stylesheet" href="styles/shared.auth.style.css">
-    <link rel="stylesheet" href="styles/login.style.css">
-    <script src="js/login.code.js"></script>
+    <link rel="stylesheet" href="/styles/shared.auth.style.css">
+    <link rel="stylesheet" href="/styles/login.style.css">
+    <script src="/js/load.anim.code.js"></script>
+    <script src="/js/form.utils.code.js"></script>
+    <script src="/js/shared.auth.code.js"></script>
+    <script src="/js/login.code.js"></script>
     
 </head>
 <div>
@@ -38,7 +41,7 @@
                         <input type="checkbox" autocomplete="off" class="styled-checkbox" id="password-check">
                         <label class="form-check-label" for="password-check">Show Password</label>
                     </div>
-                    <a class="smaller-text" href="/password_reset">Forgot your password?</a>
+                    <a id="password-reset-link" href="/request-password-reset" class="smaller-text">Forgot your password?</a>
                 </div>
                 <div class="bottom-btn-group">
                     <button class="bottom-btn" id="submit-btn" type="submit">Login</button>
