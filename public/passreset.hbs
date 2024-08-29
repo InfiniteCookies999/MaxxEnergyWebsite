@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Reset</title>
+
+    <style>
+
+        #reset-btn {
+            display: inline-block;
+            padding: 0.5rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            background-color: rgb(85, 85, 170);
+            border-radius: 10px;
+            font-size: 1.2rem;
+            border-style: none;
+            color: rgb(240, 240, 240);
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .pass-container {
+            height: fit-content;
+            padding: 1rem;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="pass-container">
+        <img src="cid:{{maxxLogoCID}}" />
+        <h3>Hello there {{name}}!</h3>
+        <p>Having difficulties accessing your account?</p>
+        <p>Please follow this temporary link to reset your password</p>
+        <a id="reset-btn" href="{{resetLink}}">
+            Reset
+        </a>
+    </div>
+</body>
+</html>

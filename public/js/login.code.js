@@ -63,6 +63,16 @@ $(document).ready(function () {
     });
   });
 
+  $('#password-reset-link').click(() => {
+    const email = $('#email-input').val();
+
+    if (email !== '') {
+      const params = $.param({ email });
+      const url = $('#password-reset-link').attr('href');
+      $('#password-reset-link').attr('href', `${url}?${params}`);
+    }
+  });
+
   createLoadAnimation(document.getElementById("load-animation"));
 
   checkForChangeInErrors($('#password-error'), $('#password-input'), getPasswordErrorFlags);

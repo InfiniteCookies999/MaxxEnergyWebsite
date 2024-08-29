@@ -238,6 +238,6 @@ router.post('/user/send-password-reset',
     await UserService.sendPasswordReset(req.email);
     res.send();
   })
-)
+);
 
 module.exports = router;
