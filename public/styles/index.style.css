@@ -1,9 +1,3 @@
-:root {
-  --hero-bg-1-url: url('/images/homepage.jpg');
-  --hero-bg-2-url: url('/images/homepage2.jpg');
-  --hero-bg-3-url: url('/images/homepage3.jpg');
-}
-
 .hero-container {
   position: relative;
   height: 100vh;
@@ -97,19 +91,6 @@
   text-align: center;
   transition: background-image 1s ease-in-out;
 }
-
-.hero-bg-1 {
-  background-image: var(--hero-bg-1-url);
-}
-
-.hero-bg-2 {
-  background-image: var(--hero-bg-2-url);
-}
-
-.hero-bg-3 {
-  background-image: var(--hero-bg-3-url);
-}
-
 .mission-column {
   background-color: rgb(74, 154, 245);
   color: white;

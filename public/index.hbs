@@ -4,10 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <!-- Preload each image individually -->
-  <link rel="preload" href="{{preloadImage1}}" as="image">
-  <link rel="preload" href="{{preloadImage2}}" as="image">
-  <link rel="preload" href="{{preloadImage3}}" as="image">
+  <div base-url=""></div>
   
   <!-- Import common links -->
   <import value="/common-links"></import>
@@ -27,7 +24,7 @@
   <import value="/header"></import>
   
   <!-- Hero Section -->
-  <div id="hero-background" class="hero-background hero-bg-1">
+  <div id="hero-background" class="hero-background" style="background-image: url('{{preloadImage1}}');">
     <div class="homepage-text">
         <h1 class="hero">Innovative Clean Energy Solutions for a Sustainable Future</h1>
         <p class="hero-p">Leading the charge in sustainable energy with cutting-edge technology and eco-friendly solutions.</p>

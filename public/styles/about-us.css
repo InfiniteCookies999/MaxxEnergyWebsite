@@ -128,6 +128,10 @@
   border-radius: 10px;
   font-size: 25px;
 }
+.learn-more:hover {
+  background-color: rgb(44, 124, 215);
+  cursor: pointer;
+}
 
 /* Tablets */
 @media (min-width: 767px) and (max-width: 1330px) {
