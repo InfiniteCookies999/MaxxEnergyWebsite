@@ -231,11 +231,11 @@ router.put('/user/resend-email-verification',
   })
 );
 
-router.post('/user/send-password-reset', 
+router.post('/user/request-password-reset', 
+  body('email').isEmail().withMessage("Expected valid email address"),
 
-  validateLoggedIn,
   controller(async (req, res) => {
-    await UserService.sendPasswordReset(req.email);
+    await UserService.sendPasswordReset(req.body.email, req.serverAddress);
     res.send();
   })
 );
