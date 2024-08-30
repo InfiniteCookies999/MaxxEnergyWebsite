@@ -40,7 +40,7 @@ function createApp() {
     if (config.REROUTE_PATH) {
       req.serverAddress += "/" + config.REROUTE_PATH;
     } else {
-      req.serverAddress += ":" + config.SERVER_PORT || 3000;
+      req.serverAddress += ":" + (config.SERVER_PORT || 3000);
     }
     next();
   });
