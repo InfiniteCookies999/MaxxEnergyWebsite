@@ -135,7 +135,7 @@ router.get('/verify-email/:token', controller(async (req, res) => {
     lastName = user.lastName;
   }
 
-  res.render("email-verify-landing", {
+  res.render("email-verify", {
     isValid,
     isLoggedIn,
     userIdMatches,
@@ -144,7 +144,7 @@ router.get('/verify-email/:token', controller(async (req, res) => {
 }));
 
 router.get('/password-reset/:token', controller(async (req, res) => {
-  res.render('password-reset-landing');
+  res.render('password-reset');
 }));
 
 router.get('/request-password-reset', controller(async (req, res) => {
