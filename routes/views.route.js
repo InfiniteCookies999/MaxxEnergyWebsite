@@ -16,7 +16,7 @@ function getReroute() {
 router.get(['/', '/index', '/home', '/main'], controller(async (req, res) => {
   let baseUrl = '';
   if (config.REROUTE_PATH) {
-    baseUrl = config.REROUTE_PATH + "/";
+    baseUrl = "/" + config.REROUTE_PATH + "/";
   }
   res.render('index', {
     preloadImage1: baseUrl + '/images/homepage1.jpg',
