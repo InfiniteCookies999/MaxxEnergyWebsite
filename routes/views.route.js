@@ -11,7 +11,6 @@ function getReroute() {
   return config.REROUTE_PATH || '';
 }
 
-
 // https://stackoverflow.com/questions/14127411/use-a-route-as-an-alias-for-another-route-in-express-js
 router.get(['/', '/index', '/home', '/main'], controller(async (req, res) => {
   let baseUrl = '';
@@ -109,7 +108,7 @@ router.get('/verify-email/:token', controller(async (req, res) => {
   try {
 
     const verifyRes = await axios.put(`http://${req.serverAddress}/api/user/verify-email/${req.params.token}`);
-    // TODO: Deal with this case better!
+    
     if (req.session.user) {
       if (req.session.user.id !== verifyRes.userId) {
         userIdMatches = false;
@@ -142,6 +141,10 @@ router.get('/verify-email/:token', controller(async (req, res) => {
     userIdMatches,
     name: firstName + " " + lastName
   });
+}));
+
+router.get('/password-reset/:token', controller(async (req, res) => {
+  res.render('password-reset-landing');
 }));
 
 router.get('/request-password-reset', controller(async (req, res) => {

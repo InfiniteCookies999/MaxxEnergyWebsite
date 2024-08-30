@@ -1,10 +1,9 @@
 
-
 $(document).ready(function () {
 
   const baseUrl = $('[base-url]').attr('base-url');
 
-  $('#reset-button').click(() => {
+  $('#bottom-button').click(() => {
     $('#success-span').css("display", "none");
 
     const emailErrorFlags = getEmailErrorFlagsFn($('#email-input'))();

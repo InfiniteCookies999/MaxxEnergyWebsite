@@ -50,7 +50,9 @@ function reroute(req, res, next) {
         req.url = "/index";
       }
       
-      let filePath = path.join(__dirname, '../public', req.url);
+      const incompletePath = req.url.split('/')[1];
+
+      let filePath = path.join(__dirname, '../public', incompletePath);
       if (filePath.endsWith('.html')) {
         filePath = filePath.substring(0, filePath.length() - 5);
       }

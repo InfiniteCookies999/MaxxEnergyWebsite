@@ -174,6 +174,16 @@ class UserService {
 
   }
 
+  async resetPassword(token, newPassword) {
+
+    const user = await PasswordResetService.getUserByTokenAndDelete(token);
+
+    // Updating the password.
+    const newHashedPassword = await bcrypt.hash(newPassword, HASH_STRENGTH);
+    await UserRepository.updatePassword(user.id, newHashedPassword);
+    
+  }
+
   async getUser(session) {
     if (!(session.user)) {
       throw new HttpError("Cannot get user's information. Not logged in", 401);
