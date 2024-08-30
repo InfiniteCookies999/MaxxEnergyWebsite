@@ -135,7 +135,7 @@ router.get('/verify-email/:token', controller(async (req, res) => {
     lastName = user.lastName;
   }
 
-  res.render("email-verify", {
+  res.render("verify-email", {
     isValid,
     isLoggedIn,
     userIdMatches,
@@ -144,7 +144,16 @@ router.get('/verify-email/:token', controller(async (req, res) => {
 }));
 
 router.get('/password-reset/:token', controller(async (req, res) => {
-  res.render('password-reset');
+  if (req.session.user) {
+    // Cannot reset the token when the user is logged in.
+    return res.redirect("/");
+  }
+
+  const response = await axios.get(`http://${req.serverAddress}/api/user/check-password-reset-token/${req.params.token}`);
+
+  res.render('password-reset', {
+    isValid: response.data.isValid
+  });
 }));
 
 router.get('/request-password-reset', controller(async (req, res) => {

@@ -10,7 +10,7 @@ const {
 const { body } = require('express-validator');
 const COUNTIES = require('./counties');
 const { UserRepository } = require('../database');
-const { UserService } = require('../services');
+const { UserService, PasswordResetService } = require('../services');
 
 const NAME_PATTERN = /^[a-zA-Z0-9]+$/;
 
@@ -245,10 +245,15 @@ router.put('/user/password-reset',
   validatePassword('newPassword'),
 
   controller(async (req, res) => {
-    console.log("req.body.token: ", req.body.token);
-    console.log("req.body.newPassword: ", req.body.newPassword);
-    //await UserService.resetPassword(req.body.token, req.body.newPassword);
+    await UserService.resetPassword(req.body.token, req.body.newPassword);
     res.send();
+  })
+);
+
+router.get('/user/check-password-reset-token/:token',
+  controller(async (req, res) => {
+    const isValid = await PasswordResetService.isValidToken(req.params.token);
+    res.json({ isValid });
   })
 );
 

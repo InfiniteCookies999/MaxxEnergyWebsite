@@ -29,21 +29,31 @@ $(document).ready(function () {
     const path = new URL(url).pathname;
     const token = path.split('/').pop();
 
-    console.log("token: ", token);
-    console.log("password: ", password);
-    
     $.ajax({
-        type: 'POST',
+        type: 'PUT',
         url: baseUrl + '/api/user/password-reset',
         data: {
           token: token,
           newPassword: password
         },
         success: () => {
-          $('#success-span').css("display", "inline");
+          window.location.href = baseUrl + "/login";
         },
         error: (res) => {
-          processServerErrorResponse(res, $('#submit-error'));
+          if (res.status === 401) {
+            try {
+              const errorMsg = $.parseJSON(res.responseText).message;
+              if (errorMsg === "Invalid token") {
+                $('#invalid-token-msg').css("display", "block");
+              } else {
+                processServerErrorResponse(res);
+              }
+            } catch (error) {
+              processServerErrorResponse(res);  
+            }
+          } else {
+            processServerErrorResponse(res);
+          }
         }
       });
     });
