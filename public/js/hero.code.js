@@ -2,6 +2,28 @@ document.addEventListener("DOMContentLoaded", function () {
   const heroBackground = document.getElementById("hero-background");
   const heroBackgrounds = ['hero-bg-1', 'hero-bg-2', 'hero-bg-3'];
 
+  // Array of image URLs to preload
+  const preloadImages = [
+    '/webdev/images/homepage.jpg',
+    '/webdev/images/homepage2.jpg',
+    '/webdev/images/homepage3.jpg'
+  ];
+
+  // Preload images
+  preloadImages.forEach(src => {
+    const img = new Image();
+    img.src = src;
+  });
+
+  // Adjusts the image path based on the current URL (localhost vs. server)
+  const isServer = window.location.href.includes('104.131.6.214/webdev');
+  if (isServer) {
+    // Adjust image paths for the server environment by setting full URLs
+    document.documentElement.style.setProperty('--hero-bg-1-url', "url('/webdev/images/homepage.jpg')");
+    document.documentElement.style.setProperty('--hero-bg-2-url', "url('/webdev/images/homepage2.jpg')");
+    document.documentElement.style.setProperty('--hero-bg-3-url', "url('/webdev/images/homepage3.jpg')");
+  }
+
   // Finds all the dots that users can click to change the background image.
   const heroDots = document.querySelectorAll('.hero-dot');
   // Keeps track of which background image is currently showing.
@@ -11,17 +33,8 @@ document.addEventListener("DOMContentLoaded", function () {
   heroBackground.classList.add(heroBackgrounds[currentHeroIndex]);
   heroDots[currentHeroIndex].classList.add('active');
 
-  // Retrieve the base URL from the custom attribute 
-  const baseUrl = document.querySelector('[base-url]').getAttribute('base-url');
-
   // Function that changes the background image and updates the active dot.
   function updateHeroBackground(index = null) {
-    // Calculate the next hero image URL (Ensure correct calculation of URL)
-    const nextHeroImageURL = baseUrl + `/images/homepage${currentHeroIndex + 1}.jpg`;
-    console.log(nextHeroImageURL);
-    
-    // Directly set the background image using JavaScript (Changed from using CSS variables)
-    heroBackground.style.backgroundImage = `url('${nextHeroImageURL}')`; 
     heroBackground.classList.remove(heroBackgrounds[currentHeroIndex]);
 
     // Either go to the clicked image or move to the next one automatically.
