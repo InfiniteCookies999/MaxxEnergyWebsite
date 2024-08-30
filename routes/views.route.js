@@ -135,7 +135,7 @@ router.get('/verify-email/:token', controller(async (req, res) => {
     lastName = user.lastName;
   }
 
-  res.render("email-verify", {
+  res.render("verify-email", {
     isValid,
     isLoggedIn,
     userIdMatches,
