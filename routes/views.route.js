@@ -14,8 +14,12 @@ function getReroute() {
 
 // https://stackoverflow.com/questions/14127411/use-a-route-as-an-alias-for-another-route-in-express-js
 router.get(['/', '/index', '/home', '/main'], controller(async (req, res) => {
+  let baseUrl = '';
+  if (config.REROUTE_PATH) {
+    baseUrl = config.REROUTE_PATH + "/";
+  }
   res.render('index', {
-    preloadImage1: req.serverAddress + '/images/homepage1.jpg',
+    preloadImage1: baseUrl + '/images/homepage1.jpg',
   });
 }));
 
