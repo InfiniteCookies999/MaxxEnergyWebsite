@@ -26,7 +26,7 @@ class PasswordResetRepository {
     
   }
 
-  async getUserByToken(key) {
+  async getByToken(key) {
     const conn = await getDBConnection();
 
     const [ results ] = await conn.execute(`SELECT * FROM PasswordReset WHERE resetKey=?`, [ key ]);
@@ -34,6 +34,7 @@ class PasswordResetRepository {
       return null;
     }
 
+    // TODO: This is returning the wrong value!
     const passwordReset = new PasswordReset(...Object.values(results[0]));
     return passwordReset;
   }

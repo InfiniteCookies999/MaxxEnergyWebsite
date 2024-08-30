@@ -30,13 +30,19 @@ class PasswordResetService {
     });
   }
 
-  async getUserByTokenAndDelete(token) {
-    const user = await PasswordResetRepository.getUserByToken(token);
-    if (!user) {
+  async getByTokenAndDelete(token) {
+    const passwordReset = await PasswordResetRepository.getByToken(token);
+    if (!passwordReset) {
       throw new HttpError("Invalid token", 401);
     }
 
     await PasswordResetRepository.deletePasswordResetByToken(token);
+    
+    return passwordReset;
+  }
+
+  async isValidToken(token) {
+    return (await PasswordResetRepository.getByToken(token)) != null;
   }
 }
 

@@ -176,11 +176,11 @@ class UserService {
 
   async resetPassword(token, newPassword) {
 
-    const user = await PasswordResetService.getUserByTokenAndDelete(token);
+    const passwordReset = await PasswordResetService.getByTokenAndDelete(token);
 
     // Updating the password.
     const newHashedPassword = await bcrypt.hash(newPassword, HASH_STRENGTH);
-    await UserRepository.updatePassword(user.id, newHashedPassword);
+    await UserRepository.updatePassword(passwordReset.userId, newHashedPassword);
     
   }
 
