@@ -240,4 +240,16 @@ router.post('/user/request-password-reset',
   })
 );
 
+router.put('/user/password-reset',
+  body('token').notEmpty().withMessage("Token cannot be empty"),
+  validatePassword('newPassword'),
+
+  controller(async (req, res) => {
+    console.log("req.body.token: ", req.body.token);
+    console.log("req.body.newPassword: ", req.body.newPassword);
+    //await UserService.resetPassword(req.body.token, req.body.newPassword);
+    res.send();
+  })
+);
+
 module.exports = router;
