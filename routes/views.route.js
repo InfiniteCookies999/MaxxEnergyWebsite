@@ -166,4 +166,16 @@ router.get('/header', (_, res) => {
   res.render('header');
 });
 
+router.get('/about-us', controller(async (req, res) => {
+  let baseUrl = '';
+  if (config.REROUTE_PATH) {
+    baseUrl = "/" + config.REROUTE_PATH + "/";
+  }
+  res.render('about-us', {
+    preloadImage: baseUrl + '/images/about.png',  // Ensure this path is correct
+  });
+}));
+
+
+
 module.exports = router;
