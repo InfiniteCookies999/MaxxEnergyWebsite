@@ -172,7 +172,7 @@ router.get('/about-us', controller(async (req, res) => {
     baseUrl = "/" + config.REROUTE_PATH + "/";
   }
   res.render('about-us', {
-    preloadImage: baseUrl + '/images/about.png',  // Ensure this path is correct
+    preloadImage: baseUrl + '/images/about.png',
   });
 }));
 
