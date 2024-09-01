@@ -11,32 +11,35 @@ function getReroute() {
   return config.REROUTE_PATH || '';
 }
 
-// https://stackoverflow.com/questions/14127411/use-a-route-as-an-alias-for-another-route-in-express-js
+// Middleware to set login status
+router.use((req, res, next) => {
+  res.locals.isLoggedIn = !!req.session.user; // true if user is logged in, false otherwise
+  next();
+});
+
+// Home route
 router.get(['/', '/index', '/home', '/main'], controller(async (req, res) => {
   let baseUrl = '';
   if (config.REROUTE_PATH) {
     baseUrl = "/" + config.REROUTE_PATH + "/";
   }
+
   res.render('index', {
-    preloadImage1: baseUrl + '/images/homepage1.jpg',
+    preloadImage1: baseUrl + '/images/homepage1.jpg'
   });
 }));
 
+// User profile route
 router.get('/user-profile', controller(async (req, res) => {
-  
   if (!req.session.user) {
-    // Cannot display the user's profile page if the user is not even
-    // logged in. Redirecting the user to the home page.
+    // Cannot display the user's profile page if the user is not even logged in
     return res.redirect(`/${getReroute()}`);
   }
 
   const user = await UserService.getUser(req.session);
 
   const profilePicFile = FileService
-    .fixStoredFile(user.id,
-                   user.profilePicFile,
-                   "upload/profilepics",
-                   "images/default-profile-icon.jpg");
+    .fixStoredFile(user.id, user.profilePicFile, "upload/profilepics", "images/default-profile-icon.jpg");
   
   const acceptedMimeTypes = UserRepository.validProfilePicMimetypes()
     .map(s => s.substring(s.indexOf('/') + 1))
@@ -66,21 +69,23 @@ router.get('/user-profile', controller(async (req, res) => {
   });
 }));
 
+// Login route
 router.get('/login', controller(async (req, res) => {
   if (req.session.user) {
-    // The user is already logged in so redirecting them to the home page.
+    // The user is already logged in, so redirect them to the home page
     return res.redirect(`/${getReroute()}`);
   }
-  
+
   res.render("login");
 }));
 
+// Register route
 router.get('/register', controller(async (req, res) => {
   if (req.session.user) {
-    // The user is already logged in so redirecting them to the home page.
+    // The user is already logged in, so redirect them to the home page
     return res.redirect(`/${getReroute()}`);
   }
-  
+
   res.render("register", {
     maxNameLength: UserRepository.maxNameLength(),
     maxAddressLineLength: UserRepository.maxAddressLineLength(),
@@ -88,17 +93,38 @@ router.get('/register', controller(async (req, res) => {
   });
 }));
 
+// Logout route
 router.get('/logout', controller(async (req, res) => {
   if (req.session.user) {
-    delete req.session.destroy();
+    req.session.destroy();  // Destroy session properly
   }
   res.redirect(`/${getReroute()}`);
 }));
 
-router.get('/faq', controller(async (_, res) => {
+// FAQ route
+router.get('/faq', controller(async (req, res) => {
   res.render("faq");
 }));
 
+// About Us route
+router.get('/about-us', controller(async (req, res) => {
+  let baseUrl = '';
+  if (config.REROUTE_PATH) {
+    baseUrl = "/" + config.REROUTE_PATH + "/";
+  }
+
+  res.render('about-us', {
+    preloadImage: baseUrl + '/images/about.png'
+  });
+}));
+
+// Route for rendering the header
+router.get('/header', controller(async (req, res) => {
+  // Render the header view with login status
+  res.render('header', { isLoggedIn: res.locals.isLoggedIn });
+}));
+
+// Verify Email route
 router.get('/verify-email/:token', controller(async (req, res) => {
   const isLoggedIn = req.session.user !== undefined;
 
@@ -106,7 +132,6 @@ router.get('/verify-email/:token', controller(async (req, res) => {
   let userId = 0;
   let userIdMatches = true;
   try {
-
     const verifyRes = await axios.put(`http://${req.serverAddress}/api/user/verify-email/${req.params.token}`);
     
     if (req.session.user) {
@@ -137,12 +162,12 @@ router.get('/verify-email/:token', controller(async (req, res) => {
 
   res.render("verify-email", {
     isValid,
-    isLoggedIn,
     userIdMatches,
     name: firstName + " " + lastName
   });
 }));
 
+// Password Reset route
 router.get('/password-reset/:token', controller(async (req, res) => {
   if (req.session.user) {
     // Cannot reset the token when the user is logged in.
@@ -156,29 +181,20 @@ router.get('/password-reset/:token', controller(async (req, res) => {
   });
 }));
 
+// Request Password Reset route
 router.get('/request-password-reset', controller(async (req, res) => {
   res.render('request-password-reset', {
     email: req.query.email || ''
   });
 }));
 
-router.get('/header', (_, res) => {
-  res.render('header');
-});
-
-//So about-us hbs and background image for the webpage load
-router.get('/about-us', controller(async (req, res) => {
-  let baseUrl = '';
-  if (config.REROUTE_PATH) {
-    baseUrl = "/" + config.REROUTE_PATH + "/";
-  }
-  res.render('about-us', {
-    preloadImage: baseUrl + '/images/about.png',
-  });
-}));
-
-//So about-us hbs and background image for the webpage load
+// Data route for background image load
 router.get('/data', controller(async (req, res) => {
+  if (!req.session.user) {
+    // Cannot display the user's profile page if the user is not even logged in. Redirecting the user to the home page.
+    return res.redirect(`/${getReroute()}`);
+  }
+
   let baseUrl = '';
   if (config.REROUTE_PATH) {
     baseUrl = "/" + config.REROUTE_PATH + "/";
@@ -187,7 +203,5 @@ router.get('/data', controller(async (req, res) => {
     preloadImage: baseUrl + '/images/data.png',
   });
 }));
-
-
 
 module.exports = router;
