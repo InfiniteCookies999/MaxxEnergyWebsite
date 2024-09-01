@@ -166,6 +166,7 @@ router.get('/header', (_, res) => {
   res.render('header');
 });
 
+//So about-us hbs and background image for the webpage load
 router.get('/about-us', controller(async (req, res) => {
   let baseUrl = '';
   if (config.REROUTE_PATH) {
@@ -173,6 +174,17 @@ router.get('/about-us', controller(async (req, res) => {
   }
   res.render('about-us', {
     preloadImage: baseUrl + '/images/about.png',
+  });
+}));
+
+//So about-us hbs and background image for the webpage load
+router.get('/data', controller(async (req, res) => {
+  let baseUrl = '';
+  if (config.REROUTE_PATH) {
+    baseUrl = "/" + config.REROUTE_PATH + "/";
+  }
+  res.render('data', {
+    preloadImage: baseUrl + '/images/data.png',
   });
 }));
 
