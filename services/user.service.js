@@ -86,7 +86,10 @@ class UserService {
 
     // Because the user switched emails they now need to verify the new email.
     user.email = email; // Set the new email for updating.
-    await EmailVerifyService.updateEmail(user, serverAddress, !changeToExisting);
+    if (!changeToExisting) {
+      // Send a new email as long as the email is new.
+      await EmailVerifyService.updateEmail(user, serverAddress);
+    }
     if (!changeToExisting) {
       // If the user is logged in we want to say that their email is
       // no longer verified.
@@ -95,7 +98,7 @@ class UserService {
       }
     }
 
-    await UserRepository.updateUsersEmail(userId, email)
+    await UserRepository.updateUsersEmail(userId, email, changeToExisting && user.emailVerified)
   }
 
   async updatePhoneNumber(userId, phone, session) {

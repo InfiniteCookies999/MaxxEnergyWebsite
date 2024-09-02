@@ -40,15 +40,13 @@ class EmailVerifyService {
     return emailVerify.userId;
   }
 
-  async updateEmail(user, serverAddress, sendNewVerify) {
+  async updateEmail(user, serverAddress) {
 
     // Want to delete all the entries associated with the old email!
     await EmailVerifyRepository.deleteAllVerifyEntriesByUserId(user.id);
 
     // Send a new verification with the new email!
-    if (sendNewVerify) {
-      this.sendVerificationEmail(user, serverAddress);
-    }
+    this.sendVerificationEmail(user, serverAddress);
   }
 }
 
