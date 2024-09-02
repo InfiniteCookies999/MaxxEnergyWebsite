@@ -166,4 +166,9 @@ router.get('/header', (_, res) => {
   res.render('header');
 });
 
+router.get('/contact-messages', (req, res) => {
+
+  res.render("contact-messages");
+});
+
 module.exports = router;
