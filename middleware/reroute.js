@@ -49,49 +49,44 @@ function reroute(req, res, next) {
       if (req.url === '/') {
         req.url = "/index";
       }
-      
-      const incompletePath = "/" + req.url.split('/')[1];
 
-      let filePath = path.join(__dirname, '../public', incompletePath);
-      if (filePath.endsWith('.html')) {
-        filePath = filePath.substring(0, filePath.length() - 5);
+      let htmlFilePath = path.join(__dirname, '../public', req.url);
+      if (!htmlFilePath.endsWith('.html')) {
+        htmlFilePath = htmlFilePath + ".html";
       }
       
-      if (fs.existsSync(filePath + '.html')) {
+      if (fs.existsSync(htmlFilePath + '.html')) {
         // Manually serving the html.
 
-        let body = fs.readFileSync(filePath + '.html', 'utf8');
+        let body = fs.readFileSync(htmlFilePath + '.html', 'utf8');
         res.setHeader('Content-Type', 'text/html');
         if (config.REROUTE_PATH) {
           body = replaceRoutes(body);
         }
-        console.log("sending html: ", filePath);
-        res.send(body);
+        console.log("sending html: ", htmlFilePath);
+        return res.send(body);
 
-      } else if (fs.existsSync(filePath + '.hbs')) {
-        // Because of redirect mechanisms it can cache. Disabling that.
-        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-        res.setHeader('Pragma', 'no-cache');
-        res.setHeader('Expires', '0');
-        
-        // We have to replace at the point of send because the hbs
-        // engine needs to do it's work first!
-        if (config.REROUTE_PATH) {
-          const osend = res.send;
-          res.send = function (body) {
-            return osend.call(this, replaceRoutes(body));
-          };
-        }
-        next();
-      } else {
-        next();
       }
-    } else {
-      next();
-    }
-  } else {
-    next();
+
+      // At this point we can assume it is an hbs endpoint
+      // Because of redirect mechanisms it can cache. Disabling that.
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
+
+      // We have to replace at the point of send because the hbs
+      // engine needs to do it's work first!
+      if (config.REROUTE_PATH) {
+        const osend = res.send;
+        res.send = function (body) {
+          return osend.call(this, replaceRoutes(body));
+        };
+      }
+      return next();
+    } 
   }
+
+  next();
 }
 
 module.exports = { 
