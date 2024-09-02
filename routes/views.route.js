@@ -167,8 +167,37 @@ router.get('/header', (_, res) => {
 });
 
 router.get('/contact-messages', (req, res) => {
-
   res.render("contact-messages");
 });
+
+//So about-us hbs and background image for the webpage load
+router.get('/about-us', controller(async (req, res) => {
+  let baseUrl = '';
+  if (config.REROUTE_PATH) {
+    baseUrl = "/" + config.REROUTE_PATH + "/";
+  }
+  res.render('about-us', {
+    preloadImage: baseUrl + '/images/about.png',
+  });
+}));
+
+//So about-us hbs and background image for the webpage load
+router.get('/data', controller(async (req, res) => {
+
+  if (!req.session.user) {
+    // Cannot display the user's profile page if the user is not even
+    // logged in. Redirecting the user to the home page.
+    // Same code for the user-profile requiring login
+    return res.redirect(`/${getReroute()}`);
+  }
+
+  let baseUrl = '';
+  if (config.REROUTE_PATH) {
+    baseUrl = "/" + config.REROUTE_PATH + "/";
+  }
+  res.render('data', {
+    preloadImage: baseUrl + '/images/data.png',
+  });
+}));
 
 module.exports = router;
