@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const { controller } = require('../middleware'); 
 const { UserService, FileService } = require('../services');
-const { UserRepository, UserRoleRepository } = require('../database');
+const { UserRepository, UserRoleRepository, ContactRepository } = require('../database');
 const config = require('../config');
 
 const router = express.Router();
@@ -207,7 +207,12 @@ router.get('/contact-messages', controller(async (req, res) => {
     return res.redirect(`/${getReroute()}`);
   }
 
-  res.render("contact-messages");
+  const contactMessages = await ContactRepository.getPageOfContactMessages(0, 10);
+  console.log("sending messages: ", contactMessages);
+
+  res.render("contact-messages", {
+    initialialMessages: contactMessages
+  });
 }));
 
 module.exports = router;

@@ -45,9 +45,10 @@ class ContactRepository {
   }
 
   async getPageOfContactMessages(pageNumber, pageSize) {
+    const conn = await getDBConnection();
     
-    const messages = await conn.query(`SELECT * FROM ContactMessage
-      ORDER BY id DESC
+    const [ messages ] = await conn.query(`SELECT * FROM ContactMessage
+      ORDER BY id ASC
       LIMIT ${pageSize} OFFSET ${pageNumber * pageSize}
       `);
 

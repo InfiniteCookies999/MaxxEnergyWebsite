@@ -14,7 +14,15 @@
 
     <div class="container">
         <div id="messages-container">
-            
+            {{#each initialialMessages}}
+                <ul>
+                    <li>
+                        Name: {{firstName}} {{lastName}}
+                    </li>
+                </ul>
+            {{else}}
+                <span>No messages found!</span>
+            {{/each}}
         </div>    
     </div>
     
