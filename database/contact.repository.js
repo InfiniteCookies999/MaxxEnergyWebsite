@@ -43,6 +43,16 @@ class ContactRepository {
       message: contactMessage.message
     });
   }
+
+  async getPageOfContactMessages(pageNumber, pageSize) {
+    
+    const messages = await conn.query(`SELECT * FROM ContactMessage
+      ORDER BY id DESC
+      LIMIT ${pageSize} OFFSET ${pageNumber * pageSize}
+      `);
+
+    return messages;
+  }
 }
 
 module.exports = {
