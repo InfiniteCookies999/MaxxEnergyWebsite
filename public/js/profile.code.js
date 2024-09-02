@@ -47,6 +47,11 @@ function submitEmail(finishedCB, saveIcon) {
 
   const email = $('#email-input').val();
 
+  if (email === $('#email-input').attr("curvalue")) {
+    finishedCB();
+    return;
+  }
+
   const originalFinishedCB = finishedCB;
   finishedCB = () => {
     originalFinishedCB();
