@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Messages</title>
 
+    <div base-url=""></div>
     <import value="/common-links"></import>
     <import value="form-links"></import>
     <link rel="stylesheet" href="/styles/contact.messages.style.css">
@@ -13,8 +14,6 @@
 </head>
 <body>
     <import value="/header"></import>
-
-    
 
     <div class="container">
         <div id="messages-container">
@@ -31,8 +30,9 @@
                                type="text"
                                class="form-control mx-2"
                                placeholder="1"
+                               value="1"
                                aria-label="Page number">
-                        <span>of {{totalPages}}</span>
+                        <span id="total-page-span">of {{totalPages}}</span>
                     </div>
                     <button id="next-page-btn" class="btn" aria-label="Next">
                         <span aria-hidden="true">Next &raquo;</span>

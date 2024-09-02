@@ -28,8 +28,7 @@ router.get('/pages/:page',
   validateLoggedIn,
 
   controller(async (req, res) => {
-    console.log("END POINT REACHED?: ", req.session);
-
+    
     if (!(await UserService.userSessionHasRole(req.session, UserRoleRepository.adminRole()))) {
       throw new HttpError("Only admins can access", 401);
     }
