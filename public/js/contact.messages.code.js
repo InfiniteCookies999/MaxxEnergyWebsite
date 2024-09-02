@@ -1,7 +1,6 @@
 function finishPageChange(newPage, res) {
   $("#page-number-input").val(newPage);
   
-  console.log("newPage !== 1: ", newPage !== 1);
   $('#prev-page-btn').prop('disabled', newPage === 1);
   $('#next-page-btn').prop('disabled', newPage === res.totalPages);
 
@@ -55,4 +54,14 @@ $(document).ready(() => {
     makePageRequest(page);
   });
 
+  $('#page-number-input').keydown((event) => {
+    if (event.key == 'Enter') {
+      event.preventDefault();
+      $(event.currentTarget).blur();
+    }
+  })
+  .blur(() => {
+    const page = parseInt($("#page-number-input").val());
+    makePageRequest(page);
+  });
 });
