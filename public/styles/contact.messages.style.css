@@ -1,4 +1,44 @@
 #messages-container {
   margin-top: 10rem;
-  
+  margin-bottom: 10rem;
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.table {
+  border: 1px solid #ddd;
+}
+
+.pagination-container {
+  margin-bottom: 0px;
+  border: 1px solid #ddd;
+  border-bottom: 0px solid #ddd;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.pagination-controls {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.pagination-controls input {
+  width: 3rem;
+  text-align: center;
+}
+
+.pagination-controls button {
+  width: 6rem;
+  margin-right: 1rem;
+  margin-left: 1rem;
+  background-color: var(--site-blue-color);
+  color: white;
+}
+
+.pagination-controls button:hover:not([disabled]) {
+  filter: brightness(0.85);
 }

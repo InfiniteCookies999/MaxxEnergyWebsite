@@ -1,5 +1,7 @@
 const express = require('express');
-const { ContactRepository, ContactMessage } = require('../database');
+const { ContactRepository, ContactMessage, UserRoleRepository } = require('../database');
+const { validateLoggedIn, HttpError, controller } = require('../middleware');
+const { UserService } = require('../services');
 
 const router = express.Router();
 
@@ -21,5 +23,27 @@ router.post('/submit', async (req, res) => {
     res.status(500).json({ status: 'error', message: 'There was an error saving your message. Please try again later.' });
   }
 });
+
+router.get('/pages/:page',
+  validateLoggedIn,
+
+  controller(async (req, res) => {
+    console.log("END POINT REACHED?: ", req.session);
+
+    if (!(await UserService.userSessionHasRole(req.session, UserRoleRepository.adminRole()))) {
+      throw new HttpError("Only admins can access", 401);
+    }
+
+    const pageNumber = req.params.page;
+
+    const pageSize = 12;
+    const messages = await ContactRepository.getPageOfContactMessages(pageNumber, pageSize);
+    const total = await ContactRepository.totalContactMessages();
+
+    res.json({
+      messages,
+      totalPages: Math.ceil(total / pageSize)
+    });
+}));
 
 module.exports = router;

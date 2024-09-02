@@ -6,25 +6,68 @@
     <title>Contact Messages</title>
 
     <import value="/common-links"></import>
+    <import value="form-links"></import>
     <link rel="stylesheet" href="/styles/contact.messages.style.css">
+    <script src="/js/contact.messages.code.js"></script>
 
 </head>
 <body>
     <import value="/header"></import>
 
+    
+
     <div class="container">
         <div id="messages-container">
-            {{#each initialialMessages}}
-                <ul>
-                    <li>
-                        Name: {{firstName}} {{lastName}}
-                    </li>
-                </ul>
-            {{else}}
-                <span>No messages found!</span>
-            {{/each}}
+
+            <div class="pagination-container">
+                <!-- Pagination Controls -->
+                <div class="pagination-controls">
+                    <button id="prev-page-btn" class="btn" aria-label="Previous" disabled="true">
+                        <span aria-hidden="true">&laquo; Previous</span>
+                    </button>
+                    <div class="d-flex align-items-center">
+                        <span>Page</span>
+                        <input id="page-number-input"
+                               type="text"
+                               class="form-control mx-2"
+                               placeholder="1"
+                               aria-label="Page number">
+                        <span>of {{totalPages}}</span>
+                    </div>
+                    <button id="next-page-btn" class="btn" aria-label="Next">
+                        <span aria-hidden="true">Next &raquo;</span>
+                    </button>
+                </div>
+            </div>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Message</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each initialialMessages}}
+                        <tr>
+                            <td scope="row">{{id}}</td>
+                            <td>{{firstName}} {{lastName}}</td>
+                            <td>{{email}}</td>
+                            <td>{{message}}</td>
+                        </tr>
+                    {{else}}
+                        <tr>
+                            <td colspan="5">No messages found.</td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
         </div>    
     </div>
     
+    <import value="/footer"></import>
+
 </body>
 </html>

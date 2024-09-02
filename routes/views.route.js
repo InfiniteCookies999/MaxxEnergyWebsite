@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const { controller } = require('../middleware'); 
 const { UserService, FileService } = require('../services');
-const { UserRepository, UserRoleRepository, ContactRepository } = require('../database');
+const { UserRepository, UserRoleRepository } = require('../database');
 const config = require('../config');
 
 const router = express.Router();
@@ -196,7 +196,7 @@ router.get('/data', controller(async (req, res) => {
   });
 }));
 
-router.get('/contact-messages', controller(async (req, res) => {
+router.get('/contact-messages/:pageNumber?', controller(async (req, res) => {
   // Make sure the user is logged in.
   if (!req.session.user) {
     return res.redirect(`/${getReroute()}`);
@@ -207,11 +207,20 @@ router.get('/contact-messages', controller(async (req, res) => {
     return res.redirect(`/${getReroute()}`);
   }
 
-  const contactMessages = await ContactRepository.getPageOfContactMessages(0, 10);
-  console.log("sending messages: ", contactMessages);
+  // We get the cookie to be able to bypass the required authentication!
+  const cookies = req.headers.cookie.split(';');
+  const sesssionCookie = cookies.find(cookie => cookie.trim().startsWith("connect.sid="));
+  
+  const response = await axios.get(`http://${req.serverAddress}/api/contact/pages/0`, {
+    headers: {
+      'Cookie': sesssionCookie
+    }
+  });
+  const messageInfo = response.data;
 
   res.render("contact-messages", {
-    initialialMessages: contactMessages
+    initialialMessages: messageInfo.messages,
+    totalPages: messageInfo.totalPages
   });
 }));
 

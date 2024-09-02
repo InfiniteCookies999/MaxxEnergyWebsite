@@ -54,6 +54,14 @@ class ContactRepository {
 
     return messages;
   }
+
+  async totalContactMessages() {
+    const conn = await getDBConnection();
+
+    const [result] = await conn.query(`SELECT COUNT(*) AS total FROM ContactMessage`);
+
+    return result[0].total;
+  }
 }
 
 module.exports = {
