@@ -95,7 +95,7 @@ class UserService {
       }
     }
 
-    await UserRepository.updateUsersEmail(userId, email)
+    await UserRepository.updateUsersEmail(userId, email, changeToExisting && user.emailVerified)
   }
 
   async updatePhoneNumber(userId, phone, session) {
