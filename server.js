@@ -5,7 +5,8 @@ const {
   UserRepository,
   ContactRepository,
   EmailVerifyRepository,
-  PasswordResetRepository
+  PasswordResetRepository,
+  UserRoleRepository
 } = require('./database');
 const { EmailService } = require('./services');
 
@@ -16,6 +17,7 @@ const { EmailService } = require('./services');
   await ContactRepository.initialize();
   await EmailVerifyRepository.initialize();
   await PasswordResetRepository.initialize();
+  await UserRoleRepository.initialize();
 
   EmailService.initialize();
 

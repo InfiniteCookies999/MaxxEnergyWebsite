@@ -166,10 +166,6 @@ router.get('/header', (_, res) => {
   res.render('header');
 });
 
-router.get('/contact-messages', (req, res) => {
-  res.render("contact-messages");
-});
-
 //So about-us hbs and background image for the webpage load
 router.get('/about-us', controller(async (req, res) => {
   let baseUrl = '';
@@ -199,5 +195,14 @@ router.get('/data', controller(async (req, res) => {
     preloadImage: baseUrl + '/images/data.png',
   });
 }));
+
+router.get('/contact-messages', (req, res) => {
+  // Make sure the user is logged in.
+  if (!req.session.user) {
+    return res.render("/");
+  }
+
+  res.render("contact-messages");
+});
 
 module.exports = router;

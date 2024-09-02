@@ -12,7 +12,7 @@ class EmailVerifyRepository {
       verifyKey VARCHAR(255) NOT NULL UNIQUE,
       createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-      FOREIGN KEY (UserId) REFERENCES user(id)
+      FOREIGN KEY (userId) REFERENCES user(id)
       )`);
   }
 
