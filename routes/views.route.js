@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const { controller } = require('../middleware'); 
 const { UserService, FileService } = require('../services');
-const { UserRepository } = require('../database');
+const { UserRepository, UserRoleRepository } = require('../database');
 const config = require('../config');
 
 const router = express.Router();
@@ -196,13 +196,18 @@ router.get('/data', controller(async (req, res) => {
   });
 }));
 
-router.get('/contact-messages', (req, res) => {
+router.get('/contact-messages', controller(async (req, res) => {
   // Make sure the user is logged in.
   if (!req.session.user) {
-    return res.render("/");
+    return res.redirect(`/${getReroute()}`);
+  }
+
+  if (!(await UserService.userSessionHasRole(req.session, UserRoleRepository.adminRole()))) {
+    // The user is not an administrator!
+    return res.redirect(`/${getReroute()}`);
   }
 
   res.render("contact-messages");
-});
+}));
 
 module.exports = router;

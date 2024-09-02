@@ -1,6 +1,11 @@
 const bcrypt = require('bcryptjs');
 const { HttpError } = require('../middleware');
-const { UserRepository, User } = require('../database');
+const {
+  UserRepository,
+  User,
+  UserRoleRepository,
+  UserRole
+} = require('../database');
 const FileService = require('./file.service');
 const EmailVerifyService = require('./email.verify.service');
 const PasswordResetService = require('./password.reset.service');
@@ -192,6 +197,14 @@ class UserService {
     }
 
     return await UserRepository.getUserById(session.user.id);
+  }
+
+  async userSessionHasRole(session, roleName) {
+    if (!session.user) {
+      throw new Error("Tried to check for user role without a valid session");
+    }
+
+    return await UserRoleRepository.hasUserRole(session.user.id, roleName);
   }
 
   async getUserById(userId) {
