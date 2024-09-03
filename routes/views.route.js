@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const { controller } = require('../middleware'); 
 const { UserService, FileService } = require('../services');
-const { UserRepository } = require('../database');
+const { UserRepository, UserRoleRepository } = require('../database');
 const config = require('../config');
 
 const router = express.Router();
@@ -166,10 +166,6 @@ router.get('/header', (_, res) => {
   res.render('header');
 });
 
-router.get('/contact-messages', (req, res) => {
-  res.render("contact-messages");
-});
-
 //So about-us hbs and background image for the webpage load
 router.get('/about-us', controller(async (req, res) => {
   let baseUrl = '';
@@ -197,6 +193,34 @@ router.get('/data', controller(async (req, res) => {
   }
   res.render('data', {
     preloadImage: baseUrl + '/images/data.png',
+  });
+}));
+
+router.get('/contact-messages', controller(async (req, res) => {
+  // Make sure the user is logged in.
+  if (!req.session.user) {
+    return res.redirect(`/${getReroute()}`);
+  }
+
+  if (!(await UserService.userSessionHasRole(req.session, UserRoleRepository.adminRole()))) {
+    // The user is not an administrator!
+    return res.redirect(`/${getReroute()}`);
+  }
+
+  // We get the cookie to be able to bypass the required authentication!
+  const cookies = req.headers.cookie.split(';');
+  const sesssionCookie = cookies.find(cookie => cookie.trim().startsWith("connect.sid="));
+  
+  const response = await axios.get(`http://${req.serverAddress}/api/contact/messages?page=0`, {
+    headers: {
+      'Cookie': sesssionCookie
+    }
+  });
+  const messageInfo = response.data;
+
+  res.render("contact-messages", {
+    initialialMessages: messageInfo.messages,
+    totalPages: messageInfo.totalPages
   });
 }));
 

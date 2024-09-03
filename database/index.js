@@ -6,6 +6,8 @@ const EmailVerify = require('./email.verify.model');
 const PasswordResetRepository = require('./password.reset.repository');
 const PassswordReset = require('./password.reset.model');
 const { ContactRepository, ContactMessage } = require('./contact.repository');
+const UserRole = require('./user.role.model');
+const UserRoleRepository = require('./user.role.repository');
 
 module.exports = {
   getDBConnection,
@@ -16,5 +18,7 @@ module.exports = {
   PasswordResetRepository,
   PassswordReset,
   ContactRepository,
-  ContactMessage
+  ContactMessage,
+  UserRole,
+  UserRoleRepository
 }

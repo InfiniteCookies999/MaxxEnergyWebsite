@@ -1,7 +1,7 @@
 const { validationResult } = require('express-validator');
 const HttpError = require('./http.error');
 
-function validateBody(req, res, next) {
+function validateBody(req, _, next) {
   const errorResult = validationResult(req);
   if (!errorResult.isEmpty()) {
     // Creating the error message from the express validator
@@ -16,7 +16,7 @@ function validateBody(req, res, next) {
   }
 }
 
-function validateLoggedIn(req, res, next) {
+function validateLoggedIn(req, _, next) {
   if (!req.session.user) {
     next(new HttpError("Must be logged in", 401));
   } else {
@@ -25,7 +25,7 @@ function validateLoggedIn(req, res, next) {
   }
 }
 
-function validateFileExists(req, res, next) {
+function validateFileExists(req, _, next) {
   if (!req.file) {
     next(new HttpError("Missing file", 400));
   } else {
