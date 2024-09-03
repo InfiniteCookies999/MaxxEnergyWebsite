@@ -43,7 +43,13 @@ function reroute(req, res, next) {
   }
 
   if (req.method === 'GET') {
-    const pathExtension = path.extname(req.url).toLowerCase();
+    let noQueryUrl = req.url;
+    const queryIdx = noQueryUrl.indexOf('?')
+    if (queryIdx !== -1) {
+      noQueryUrl = noQueryUrl.substring(queryIdx);
+    }
+    
+    const pathExtension = path.extname(noQueryUrl).toLowerCase();
     if (pathExtension === "" || pathExtension === "html") {
       
       if (req.url === '/') {
