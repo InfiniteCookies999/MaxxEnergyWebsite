@@ -58,6 +58,7 @@ function submitEmail(finishedCB, saveIcon) {
   finishedCB = () => {
     originalFinishedCB();
 
+    $('#email-input').attr("curvalue", email);
     if (email.toLowerCase() !== curEmail.toLowerCase()) {
       const trueSpan = $('.email-verified-true');
       trueSpan.removeClass("email-verified-true");
