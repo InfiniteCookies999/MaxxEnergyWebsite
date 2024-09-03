@@ -46,7 +46,7 @@ function reroute(req, res, next) {
     let noQueryUrl = req.url;
     const queryIdx = noQueryUrl.indexOf('?')
     if (queryIdx !== -1) {
-      noQueryUrl = noQueryUrl.substring(queryIdx);
+      noQueryUrl = noQueryUrl.substring(0, queryIdx - 1);
     }
     
     const pathExtension = path.extname(noQueryUrl).toLowerCase();
