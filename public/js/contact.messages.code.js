@@ -3,6 +3,7 @@ function finishPageChange(newPage, res) {
   
   $('#prev-page-btn').prop('disabled', newPage === 1);
   $('#next-page-btn').prop('disabled', newPage === res.totalPages);
+  $('#email-search-input, #page-number-input').prop('readonly', false);
 
   $('#total-page-span').text("of " + res.totalPages);
   const tableBody = $('.table tbody');
@@ -24,13 +25,17 @@ function makePageRequest(page) {
     page = page + 1;
   }
 
-  $('#next-page-btn #prev-page-btn').prop('disabled', true);
+  $('#next-page-btn, #prev-page-btn').prop('disabled', true);
+  $('#email-search-input, #page-number-input').prop('readonly', true);
 
   const baseUrl = $('[base-url]').attr('base-url');
 
+  const searchEmail = $('#email-search-input').val();
+
   $.ajax({
     type: 'GET',
-    url: baseUrl + '/api/contact/pages/' + (page - 1), // it is zero indexed.
+    // -1 because it is zero indexed.
+    url: `${baseUrl}/api/contact/messages?page=${page - 1}&email=${encodeURIComponent(searchEmail)}`, 
     success: (res) => {
       finishPageChange(page, res);
     },
@@ -61,6 +66,11 @@ $(document).ready(() => {
     }
   })
   .blur(() => {
+    const page = parseInt($("#page-number-input").val());
+    makePageRequest(page);
+  });
+
+  $('#email-search-input').on('input', () => {
     const page = parseInt($("#page-number-input").val());
     makePageRequest(page);
   });

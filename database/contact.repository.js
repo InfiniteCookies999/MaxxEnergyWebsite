@@ -44,21 +44,25 @@ class ContactRepository {
     });
   }
 
-  async getPageOfContactMessages(pageNumber, pageSize) {
+  async getPageOfContactMessages(pageNumber, pageSize, emailSearch) {
     const conn = await getDBConnection();
     
+    
     const [ messages ] = await conn.query(`SELECT * FROM ContactMessage
+      WHERE email LIKE ?
       ORDER BY id ASC
-      LIMIT ${pageSize} OFFSET ${pageNumber * pageSize}
-      `);
+      LIMIT ? OFFSET ?
+      `,
+      [ `%${emailSearch}%`, pageSize, pageNumber * pageSize ]);
 
     return messages;
   }
 
-  async totalContactMessages() {
+  async totalContactMessages(emailSearch) {
     const conn = await getDBConnection();
 
-    const [result] = await conn.query(`SELECT COUNT(*) AS total FROM ContactMessage`);
+    const [result] = await conn.query(`SELECT COUNT(*) AS total FROM ContactMessage
+      WHERE email LIKE ?`, [ `%${emailSearch}%` ]);
 
     return result[0].total;
   }

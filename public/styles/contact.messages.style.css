@@ -42,3 +42,7 @@ ul {
 .pagination-controls button:hover:not([disabled]) {
   filter: brightness(0.85);
 }
+
+#email-search-input {
+  display: inline;
+}

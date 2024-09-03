@@ -196,7 +196,7 @@ router.get('/data', controller(async (req, res) => {
   });
 }));
 
-router.get('/contact-messages/:pageNumber?', controller(async (req, res) => {
+router.get('/contact-messages', controller(async (req, res) => {
   // Make sure the user is logged in.
   if (!req.session.user) {
     return res.redirect(`/${getReroute()}`);
@@ -211,7 +211,7 @@ router.get('/contact-messages/:pageNumber?', controller(async (req, res) => {
   const cookies = req.headers.cookie.split(';');
   const sesssionCookie = cookies.find(cookie => cookie.trim().startsWith("connect.sid="));
   
-  const response = await axios.get(`http://${req.serverAddress}/api/contact/pages/0`, {
+  const response = await axios.get(`http://${req.serverAddress}/api/contact/messages?page=0`, {
     headers: {
       'Cookie': sesssionCookie
     }
