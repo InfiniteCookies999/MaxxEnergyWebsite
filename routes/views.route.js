@@ -146,7 +146,7 @@ router.get('/verify-email/:token', controller(async (req, res) => {
 router.get('/password-reset/:token', controller(async (req, res) => {
   if (req.session.user) {
     // Cannot reset the token when the user is logged in.
-    return res.redirect("/");
+    return res.redirect(`/${getReroute()}`);
   }
 
   const response = await axios.get(`http://${req.serverAddress}/api/user/check-password-reset-token/${req.params.token}`);
