@@ -216,6 +216,13 @@ class UserRepository {
 
     return result[0].total;
   }
+
+  async deleteUserById(userId) {
+    const conn = await getDBConnection();
+
+    await conn.query(`DELETE FROM user WHERE id=?`,
+      [userId]);
+  }
 }
 
 module.exports = new UserRepository();

@@ -46,3 +46,7 @@ ul {
 #email-search-input {
   display: inline;
 }
+
+.better-checkbox {
+  margin: 0;
+}

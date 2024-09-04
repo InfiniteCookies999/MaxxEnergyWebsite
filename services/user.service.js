@@ -208,8 +208,7 @@ class UserService {
   }
 
   async deleteUser(userId) {
-
-    
+    await UserRepository.deleteUserById(userId);
   }
 
   async getUserById(userId) {

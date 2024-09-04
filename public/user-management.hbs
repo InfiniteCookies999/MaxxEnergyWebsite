@@ -8,7 +8,7 @@
     <div base-url=""></div>
     <import value="/common-links"></import>
     <import value="form-links"></import>
-    <link rel="stylesheet" href="/styles/contact.messages.style.css">
+    <link rel="stylesheet" href="/styles/admin.tables.style.css">
     <script src="/js/admin.tables.js"></script>
     <script src="/js/user.management.code.js"></script>
 
@@ -48,6 +48,7 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
+                        <th scope="col">Sel</th>
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
                         <th scope="col">Email</th>
@@ -58,6 +59,12 @@
                 <tbody>
                     {{#each initialialUsers}}
                         <tr>
+                            <td>
+                                <div class="form-group smaller-text better-checkbox">
+                                    <input id="sel-check-{{id}}" type="checkbox" autocomplete="off" class="styled-checkbox">
+                                    <label class="form-check-label" for="sel-check-{{id}}"></label>
+                                </div>
+                            </td>
                             <td scope="row">{{id}}</td>
                             <td>{{firstName}} {{lastName}}</td>
                             <td>{{email}}</td>
