@@ -67,11 +67,20 @@ function createTable(partialUrl, createNewElementsCB) {
   });
 
   $('.better-checkbox input').change(() => {
-    $('.bx-trash').css("color", "gray");
+    const trash = $('.bx-trash');
+    trash.css("color", "gray");
+    trash.removeClass('trash-can-delete');
+    
     $('.better-checkbox input').each(function() {
       if ($(this).is(":checked")) {
-        $('.bx-trash').css("color", "red");
+        trash.css("color", "rgb(163, 24, 24)");
+        trash.addClass('trash-can-delete');
       }
+    });
+
+    $('.trash-can-delete').click(() => {
+      console.log("going to show the popup?");
+      $('.confirm-popup-background').css("display", "block");
     });
   });
 }

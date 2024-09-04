@@ -55,3 +55,29 @@ ul {
   font-size: 1.5rem;
   color: gray;
 }
+
+.trash-can-delete:hover {
+  cursor: pointer;
+  color: red !important;
+}
+
+.confirm-popup-background {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+}
+
+.confirm-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 20px;
+  padding: 2rem;
+}
