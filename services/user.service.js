@@ -207,6 +207,11 @@ class UserService {
     return await UserRoleRepository.hasUserRole(session.user.id, roleName);
   }
 
+  async deleteUser(userId) {
+
+    
+  }
+
   async getUserById(userId) {
     return await UserRepository.getUserById(userId);
   }

@@ -12,7 +12,8 @@ class PasswordResetRepository {
       resetKey VARCHAR(255) NOT NULL UNIQUE,
       createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-      FOREIGN KEY (UserId) REFERENCES user(id)
+      CONSTRAINT fk_passwordReset_userId
+      FOREIGN KEY (UserId) REFERENCES user(id) ON DELETE CASCADE
       )`);
   }
 

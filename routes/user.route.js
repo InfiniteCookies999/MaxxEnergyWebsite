@@ -281,4 +281,20 @@ router.get('/user/users',
   });
 }));
 
+router.delete('/user/:id',
+  validateLoggedIn,
+
+  controller(async (req, res) => {
+    
+    if (!(await UserService.userSessionHasRole(req.session, UserRoleRepository.adminRole()))) {
+      throw new HttpError("Only admins can access", 401);
+    }
+
+    const userId = req.id;
+
+    await UserService.deleteUser(userId);
+
+    res.send();
+}));
+
 module.exports = router;
