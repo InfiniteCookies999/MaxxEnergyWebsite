@@ -7,9 +7,9 @@ const {
   validateFileExists,
   fileFilter
 } = require('../middleware'); 
-const { body } = require('express-validator');
+const { body, query } = require('express-validator');
 const COUNTIES = require('./counties');
-const { UserRepository } = require('../database');
+const { UserRepository, UserRoleRepository } = require('../database');
 const { UserService, PasswordResetService } = require('../services');
 
 const NAME_PATTERN = /^[a-zA-Z0-9]+$/;
@@ -257,5 +257,28 @@ router.get('/user/check-password-reset-token/:token',
   })
 );
 
+router.get('/user/users',
+  query('page').notEmpty().withMessage("The page cannot be empty"),
+  query('email').optional(),
+  validateLoggedIn,
+
+  controller(async (req, res) => {
+
+  if (!(await UserService.userSessionHasRole(req.session, UserRoleRepository.adminRole()))) {
+    throw new HttpError("Only admins can access", 401);
+  }
+
+  const page = req.query.page;
+  const emailSearch = req.query.email || '';
+
+  const pageSize = 12;
+  const users = await UserRepository.getPageOfUsers(page, pageSize, emailSearch);
+  const total = await UserRepository.totalUsers(emailSearch);
+
+  res.json({
+    users,
+    totalPages: Math.ceil(total / pageSize)
+  });
+}));
 
 module.exports = router;

@@ -194,6 +194,28 @@ class UserRepository {
     return user;
   }
 
+  async getPageOfUsers(pageNumber, pageSize, emailSearch) {
+    const conn = await getDBConnection();
+    
+    
+    const [ users ] = await conn.query(`SELECT * FROM user
+      WHERE email LIKE ?
+      ORDER BY id ASC
+      LIMIT ? OFFSET ?
+      `,
+      [ `%${emailSearch}%`, pageSize, pageNumber * pageSize ]);
+
+    return users;
+  }
+
+  async totalUsers(emailSearch) {
+    const conn = await getDBConnection();
+
+    const [result] = await conn.query(`SELECT COUNT(*) AS total FROM user
+      WHERE email LIKE ?`, [ `%${emailSearch}%` ]);
+
+    return result[0].total;
+  }
 }
 
 module.exports = new UserRepository();

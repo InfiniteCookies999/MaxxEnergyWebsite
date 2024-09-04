@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Messages</title>
+    <title>User Management</title>
 
     <div base-url=""></div>
     <import value="/common-links"></import>
     <import value="form-links"></import>
     <link rel="stylesheet" href="/styles/contact.messages.style.css">
     <script src="/js/admin.tables.js"></script>
-    <script src="/js/contact.messages.code.js"></script>
+    <script src="/js/user.management.code.js"></script>
 
 </head>
 <body>
@@ -51,20 +51,22 @@
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
                         <th scope="col">Email</th>
-                        <th scope="col">Message</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Address</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {{#each initialialMessages}}
+                    {{#each initialialUsers}}
                         <tr>
                             <td scope="row">{{id}}</td>
                             <td>{{firstName}} {{lastName}}</td>
                             <td>{{email}}</td>
-                            <td>{{message}}</td>
+                            <td>{{phone}}</td>
+                            <td>{{addressLine1}} {{addressLine2}} {{county}} {{state}}, {{zipCode}}</td>
                         </tr>
                     {{else}}
                         <tr>
-                            <td colspan="5">No messages found.</td>
+                            <td colspan="5">No Users found.</td>
                         </tr>
                     {{/each}}
                 </tbody>

@@ -5,7 +5,7 @@ const hbs = require('nodemailer-express-handlebars');
 
 class EmailService {
   
-  initialize() {
+  async initialize() {
     if (!config.EMAIL_SERVICE) {
       throw new Error("Must include EMAIL_SERVICE in your .env file");
     }
