@@ -1,6 +1,11 @@
 const bcrypt = require('bcryptjs');
 const { HttpError } = require('../middleware');
-const { UserRepository, User } = require('../database');
+const {
+  UserRepository,
+  User,
+  UserRoleRepository,
+  UserRole
+} = require('../database');
 const FileService = require('./file.service');
 const EmailVerifyService = require('./email.verify.service');
 const PasswordResetService = require('./password.reset.service');
@@ -86,7 +91,10 @@ class UserService {
 
     // Because the user switched emails they now need to verify the new email.
     user.email = email; // Set the new email for updating.
-    await EmailVerifyService.updateEmail(user, serverAddress);
+    if (!changeToExisting) {
+      // Send a new email as long as the email is new.
+      await EmailVerifyService.updateEmail(user, serverAddress);
+    }
     if (!changeToExisting) {
       // If the user is logged in we want to say that their email is
       // no longer verified.
@@ -95,7 +103,7 @@ class UserService {
       }
     }
 
-    await UserRepository.updateUsersEmail(userId, email)
+    await UserRepository.updateUsersEmail(userId, email, changeToExisting && user.emailVerified)
   }
 
   async updatePhoneNumber(userId, phone, session) {
@@ -171,7 +179,6 @@ class UserService {
     }
 
     await PasswordResetService.sendPasswordResetEmail(user, serverAddress);
-
   }
 
   async resetPassword(token, newPassword) {
@@ -190,6 +197,14 @@ class UserService {
     }
 
     return await UserRepository.getUserById(session.user.id);
+  }
+
+  async userSessionHasRole(session, roleName) {
+    if (!session.user) {
+      throw new Error("Tried to check for user role without a valid session");
+    }
+
+    return await UserRoleRepository.hasUserRole(session.user.id, roleName);
   }
 
   async getUserById(userId) {

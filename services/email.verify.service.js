@@ -14,7 +14,7 @@ class EmailVerifyService {
 
     EmailService.sendHbs({
       to: user.email,
-      subject: "Verfy your Maxx Energy account",
+      subject: "Verify your Maxx Energy account",
       hbsFile: "emailverify",
       context: {
         name: user.firstName + " " + user.lastName,

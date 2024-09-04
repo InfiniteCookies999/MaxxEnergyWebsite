@@ -1,5 +1,8 @@
 const express = require('express');
-const { ContactRepository, ContactMessage } = require('../database');
+const { ContactRepository, ContactMessage, UserRoleRepository } = require('../database');
+const { validateLoggedIn, HttpError, controller } = require('../middleware');
+const { UserService } = require('../services');
+const { query } = require('express-validator');
 
 const router = express.Router();
 
@@ -21,5 +24,29 @@ router.post('/submit', async (req, res) => {
     res.status(500).json({ status: 'error', message: 'There was an error saving your message. Please try again later.' });
   }
 });
+
+router.get('/messages',
+  query('page').notEmpty().withMessage("The page cannot be empty"),
+  query('email').optional(),
+  validateLoggedIn,
+
+  controller(async (req, res) => {
+    
+    if (!(await UserService.userSessionHasRole(req.session, UserRoleRepository.adminRole()))) {
+      throw new HttpError("Only admins can access", 401);
+    }
+
+    const page = req.query.page;
+    const emailSearch = req.query.email || '';
+
+    const pageSize = 12;
+    const messages = await ContactRepository.getPageOfContactMessages(page, pageSize, emailSearch);
+    const total = await ContactRepository.totalContactMessages(emailSearch);
+
+    res.json({
+      messages,
+      totalPages: Math.ceil(total / pageSize)
+    });
+}));
 
 module.exports = router;

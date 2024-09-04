@@ -127,11 +127,11 @@ class UserRepository {
     );
   }
 
-  async updateUsersEmail(userId, email) {
+  async updateUsersEmail(userId, email, emailVerified) {
     const conn = await getDBConnection();
 
-    await conn.execute(`UPDATE user SET email=?, emailVerified=false WHERE id=?`,
-      [email, userId]
+    await conn.execute(`UPDATE user SET email=?, emailVerified=? WHERE id=?`,
+      [email, emailVerified, userId]
     );
   }
 

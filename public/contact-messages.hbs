@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Messages</title>
+
+    <div base-url=""></div>
+    <import value="/common-links"></import>
+    <import value="form-links"></import>
+    <link rel="stylesheet" href="/styles/contact.messages.style.css">
+    <script src="/js/contact.messages.code.js"></script>
+
+</head>
+<body>
+    <import value="/header"></import>
+
+    <div class="container">
+        <div id="messages-container">
+
+            <div class="d-flex pagination-container">
+                <!-- Pagination Controls -->
+                <div class="pagination-controls">
+                    <button id="prev-page-btn" class="btn" aria-label="Previous" disabled="true">
+                        <span aria-hidden="true">&laquo; Previous</span>
+                    </button>
+                    <div class="d-flex align-items-center">
+                        <span>Page</span>
+                        <input id="page-number-input"
+                               type="text"
+                               class="form-control mx-2"
+                               placeholder="1"
+                               value="1"
+                               aria-label="Page number">
+                        <span id="total-page-span">of {{totalPages}}</span>
+                    </div>
+                    <button id="next-page-btn" class="btn" aria-label="Next">
+                        <span aria-hidden="true">Next &raquo;</span>
+                    </button>
+                </div>
+                <input id="email-search-input"
+                       type="text"
+                       class="form-control mx-2"
+                       placeholder="susan@gmail.com">
+            </div>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Message</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each initialialMessages}}
+                        <tr>
+                            <td scope="row">{{id}}</td>
+                            <td>{{firstName}} {{lastName}}</td>
+                            <td>{{email}}</td>
+                            <td>{{message}}</td>
+                        </tr>
+                    {{else}}
+                        <tr>
+                            <td colspan="5">No messages found.</td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>    
+    </div>
+    
+    <import value="/footer"></import>
+
+</body>
+</html>

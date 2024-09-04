@@ -46,17 +46,27 @@ function submitEmail(finishedCB, saveIcon) {
   }
 
   const email = $('#email-input').val();
+  const curEmail = $('#email-input').attr("curvalue");
+
+  if (email === curEmail) {
+    // exact match there is no reason to update the server.
+    finishedCB();
+    return;
+  }
 
   const originalFinishedCB = finishedCB;
   finishedCB = () => {
     originalFinishedCB();
 
-    const trueSpan = $('.email-verified-true');
-    trueSpan.removeClass("email-verified-true");
-    trueSpan.addClass("email-verified-false");
-    trueSpan.text('false');
-    
-    $('#resend-email-verify-btn').css("display", "inline");
+    $('#email-input').attr("curvalue", email);
+    if (email.toLowerCase() !== curEmail.toLowerCase()) {
+      const trueSpan = $('.email-verified-true');
+      trueSpan.removeClass("email-verified-true");
+      trueSpan.addClass("email-verified-false");
+      trueSpan.text('false');
+      
+      $('#resend-email-verify-btn').css("display", "inline");
+    }
   };
 
   submitTo('/api/user/update-email', { email }, $('#email-error'), finishedCB, saveIcon);

@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const { controller } = require('../middleware'); 
 const { UserService, FileService } = require('../services');
-const { UserRepository } = require('../database');
+const { UserRepository, UserRoleRepository } = require('../database');
 const config = require('../config');
 
 const router = express.Router();
@@ -165,7 +165,7 @@ router.get('/verify-email/:token', controller(async (req, res) => {
 router.get('/password-reset/:token', controller(async (req, res) => {
   if (req.session.user) {
     // Cannot reset the token when the user is logged in.
-    return res.redirect("/");
+    return res.redirect(`/${getReroute()}`);
   }
 
   const response = await axios.get(`http://${req.serverAddress}/api/user/check-password-reset-token/${req.params.token}`);
@@ -198,7 +198,7 @@ router.get('/data', controller(async (req, res) => {
   });
 }));
 
-// About Us route
+// Security route
 router.get('/security', controller(async (req, res) => {
   let baseUrl = '';
   if (config.REROUTE_PATH) {
@@ -207,6 +207,35 @@ router.get('/security', controller(async (req, res) => {
 
   res.render('security', {
     preloadImage: baseUrl + '/images/security.jpeg'
+  });
+}));
+
+// Contact Messages route
+router.get('/contact-messages', controller(async (req, res) => {
+  // Make sure the user is logged in.
+  if (!req.session.user) {
+    return res.redirect(`/${getReroute()}`);
+  }
+
+  if (!(await UserService.userSessionHasRole(req.session, UserRoleRepository.adminRole()))) {
+    // The user is not an administrator!
+    return res.redirect(`/${getReroute()}`);
+  }
+
+  // We get the cookie to be able to bypass the required authentication!
+  const cookies = req.headers.cookie.split(';');
+  const sessionCookie = cookies.find(cookie => cookie.trim().startsWith("connect.sid="));
+  
+  const response = await axios.get(`http://${req.serverAddress}/api/contact/messages?page=0`, {
+    headers: {
+      'Cookie': sessionCookie
+    }
+  });
+  const messageInfo = response.data;
+
+  res.render("contact-messages", {
+    initialMessages: messageInfo.messages,
+    totalPages: messageInfo.totalPages
   });
 }));
 
