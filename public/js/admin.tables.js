@@ -65,4 +65,13 @@ function createTable(partialUrl, createNewElementsCB) {
     const page = parseInt($("#page-number-input").val());
     makePageRequest(page, partialUrl, createNewElementsCB);
   });
+
+  $('.better-checkbox input').change(() => {
+    $('.bx-trash').css("color", "gray");
+    $('.better-checkbox input').each(function() {
+      if ($(this).is(":checked")) {
+        $('.bx-trash').css("color", "red");
+      }
+    });
+  });
 }

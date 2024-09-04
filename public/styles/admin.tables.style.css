@@ -50,3 +50,8 @@ ul {
 .better-checkbox {
   margin: 0;
 }
+
+.bx-trash {
+  font-size: 1.5rem;
+  color: gray;
+}
