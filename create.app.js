@@ -55,7 +55,7 @@ function createApp() {
   app.use(replaceImports);
   app.use(reroute);
 
-  console.log("registering ifNotEquals")
+  // Custom handlebar handlers that we can use in our hbs files!
   Handlebars.registerHelper('ifEquals', (value1, value2, options) => {
     if (value1 === value2) {
       return options.fn(this); // Render the block if true
@@ -83,7 +83,7 @@ function createApp() {
 
   // Routers
   app.use('/api/', userRouter);
-  app.use('/api/contact', contactRouter); // Add the contact router
+  app.use('/api/', contactRouter); // Add the contact router
   app.use(viewsRouter);
   app.use(staticRouter);
 

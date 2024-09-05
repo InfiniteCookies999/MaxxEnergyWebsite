@@ -51,7 +51,5 @@ $(document).ready(() => {
         finishedCB();
       }
     });
-
-    console.log("userIds: ", userIds);
   });
 });

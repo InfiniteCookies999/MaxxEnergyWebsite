@@ -12,9 +12,13 @@ class ContactMessage {
 }
 
 class ContactRepository {
-  constructor() {
-    this.maxNameLength = 100;
-    this.maxMessageLength = 600;
+
+  maxNameLength() {
+    return 100;
+  }
+
+  maxMessageLength() {
+    return 600;
   }
 
   //connects to the database
@@ -24,11 +28,11 @@ class ContactRepository {
     //Makes the table only if it doesn't exist 
     await conn.query(`CREATE TABLE IF NOT EXISTS ContactMessage (
       id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-      firstName VARCHAR(${this.maxNameLength}) NOT NULL,
-      lastName VARCHAR(${this.maxNameLength}) NOT NULL,
+      firstName VARCHAR(${this.maxNameLength()}) NOT NULL,
+      lastName VARCHAR(${this.maxNameLength()}) NOT NULL,
       email VARCHAR(320) NOT NULL,
       phone CHAR(12), 
-      message VARCHAR(${this.maxMessageLength}) NOT NULL
+      message VARCHAR(${this.maxMessageLength()}) NOT NULL
     )`);
   }
 
@@ -65,6 +69,13 @@ class ContactRepository {
       WHERE email LIKE ?`, [ `%${emailSearch}%` ]);
 
     return result[0].total;
+  }
+
+  async deleteContactMessageById(messageId) {
+    const conn = await getDBConnection();
+
+    await conn.query(`DELETE FROM ContactMessage WHERE id=?`,
+      [messageId]);    
   }
 }
 

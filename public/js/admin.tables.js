@@ -94,6 +94,10 @@ function createTable(partialUrl, createNewElementsCB, onDeleteCB) {
     $('#load-animation').css("display", "block");
     $('#popup-confirm-btn').css("display", "none");
     $('#popup-cancel-btn').prop('disabled', true);
+    const trash = $('.bx-trash');
+    trash.css("color", "gray");
+    trash.removeClass('trash-can-delete');
+
     onDeleteCB(() => {
       $('#load-animation').css("display", "none");
       $('#popup-confirm-btn').css("display", "block");

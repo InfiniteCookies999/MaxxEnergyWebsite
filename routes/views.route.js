@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const { controller } = require('../middleware'); 
 const { UserService, FileService } = require('../services');
-const { UserRepository, UserRoleRepository } = require('../database');
+const { UserRepository, UserRoleRepository, ContactRepository } = require('../database');
 const config = require('../config');
 
 const router = express.Router();
@@ -25,6 +25,13 @@ router.get(['/', '/index', '/home', '/main'], controller(async (req, res) => {
 
   res.render('index', {
     preloadImage1: baseUrl + '/images/homepage1.jpg'
+  });
+}));
+
+router.get('/contact', controller(async (_, res) => {
+  res.render('contact', {
+    maxNameLength: ContactRepository.maxNameLength(),
+    maxMessageLength: ContactRepository.maxMessageLength()
   });
 }));
 
