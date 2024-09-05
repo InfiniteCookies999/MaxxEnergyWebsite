@@ -5,3 +5,46 @@
   --site-color-darker-blue-color: rgb(63, 134, 216);
   --site-color-darker-orange-color: rgb(233, 151, 0);
 }
+
+.better-checkbox {
+  margin-top: 1.1rem;
+}
+
+.better-checkbox input {
+  opacity: 0;
+  position: absolute;
+}
+
+/* See: https://www.youtube.com/watch?v=YyLzwR-iXtI */
+
+.better-checkbox label {
+  display: flex;
+}
+
+.better-checkbox label::before {
+  content: '';
+  width: 1.2rem;
+  height: 1.2rem;
+  min-width: 1.2rem;
+  min-height: 1.2rem;
+  border: 0.05rem solid gray;
+  border-radius: 6px;
+  margin-right: 0.4rem;
+  transform: translateY(0.4rem);
+}
+
+.better-checkbox input[type='checkbox']:checked + label::before {
+  content: '\2713\0020';
+  font-size: 0.8rem;
+  width: 0;
+  height: 0;
+  background-color: var(--site-blue-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.better-checkbox label:hover, input:hover {
+  cursor: pointer;
+}
