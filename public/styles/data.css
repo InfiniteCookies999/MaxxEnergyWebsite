@@ -1,21 +1,68 @@
-/* Hero Section */
-.hero-section {
-  background-image: url('/images/data.png');
-  height: 800px;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  position: relative;
+/* General Styles */
+.mission-h {
+  font-size: 32px;
 }
 
-.hero-section .mask {
-  background-color: rgba(0, 0, 0, 0.3);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+.mission-column, .hero-section, .liability-disclaimer {
+  background-color: rgb(74, 154, 245);
+  color: white;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.mission-column {
+  height: 200px;
+}
+
+.d-section {
+  font-size: 18px;
+  width: 70%;
+}
+
+.hero-section {
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+}
+
+.mask {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.liability-disclaimer {
+  padding: 20px;
+  background-color: rgb(231, 231, 231); 
+  color: #333; 
+}
+
+/* PDF Button Width */
+.pdf-button {
+  width: 200px;
+}
+
+/* Media Queries */
+
+/* Tablets */
+@media (min-width: 767px) and (max-width: 1330px) {
+  .mission-h {
+    font-size: 30px;
+  }
+  .d-section {
+    width: 90%;
+    font-size: 16px;
+  }
+}
+
+/* Smartphones */
+@media (max-width: 767px) {
+  .mission-h {
+    font-size: 28px;
+  }
+  .d-section {
+    width: 90%;
+    font-size: 16px;
+  }
 }

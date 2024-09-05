@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const { controller } = require('../middleware'); 
 const { UserService, FileService } = require('../services');
-const { UserRepository, UserRoleRepository } = require('../database');
+const { UserRepository } = require('../database');
 const config = require('../config');
 
 const router = express.Router();
@@ -22,26 +22,23 @@ router.get(['/', '/index', '/home', '/main'], controller(async (req, res) => {
   if (config.REROUTE_PATH) {
     baseUrl = "/" + config.REROUTE_PATH + "/";
   }
+
   res.render('index', {
-    preloadImage1: baseUrl + '/images/homepage1.jpg',
+    preloadImage1: baseUrl + '/images/homepage1.jpg'
   });
 }));
 
+// User profile route
 router.get('/user-profile', controller(async (req, res) => {
-  
   if (!req.session.user) {
-    // Cannot display the user's profile page if the user is not even
-    // logged in. Redirecting the user to the home page.
+    // Cannot display the user's profile page if the user is not even logged in
     return res.redirect(`/${getReroute()}`);
   }
 
   const user = await UserService.getUser(req.session);
 
   const profilePicFile = FileService
-    .fixStoredFile(user.id,
-                   user.profilePicFile,
-                   "upload/profilepics",
-                   "images/default-profile-icon.jpg");
+    .fixStoredFile(user.id, user.profilePicFile, "upload/profilepics", "images/default-profile-icon.jpg");
   
   const acceptedMimeTypes = UserRepository.validProfilePicMimetypes()
     .map(s => s.substring(s.indexOf('/') + 1))
@@ -71,21 +68,23 @@ router.get('/user-profile', controller(async (req, res) => {
   });
 }));
 
+// Login route
 router.get('/login', controller(async (req, res) => {
   if (req.session.user) {
-    // The user is already logged in so redirecting them to the home page.
+    // The user is already logged in, so redirect them to the home page
     return res.redirect(`/${getReroute()}`);
   }
-  
+
   res.render("login");
 }));
 
+// Register route
 router.get('/register', controller(async (req, res) => {
   if (req.session.user) {
-    // The user is already logged in so redirecting them to the home page.
+    // The user is already logged in, so redirect them to the home page
     return res.redirect(`/${getReroute()}`);
   }
-  
+
   res.render("register", {
     maxNameLength: UserRepository.maxNameLength(),
     maxAddressLineLength: UserRepository.maxAddressLineLength(),
@@ -93,17 +92,38 @@ router.get('/register', controller(async (req, res) => {
   });
 }));
 
+// Logout route
 router.get('/logout', controller(async (req, res) => {
   if (req.session.user) {
-    delete req.session.destroy();
+    req.session.destroy();  // Destroy session properly
   }
   res.redirect(`/${getReroute()}`);
 }));
 
-router.get('/faq', controller(async (_, res) => {
+// FAQ route
+router.get('/faq', controller(async (req, res) => {
   res.render("faq");
 }));
 
+// About Us route
+router.get('/about-us', controller(async (req, res) => {
+  let baseUrl = '';
+  if (config.REROUTE_PATH) {
+    baseUrl = "/" + config.REROUTE_PATH + "/";
+  }
+
+  res.render('about-us', {
+    preloadImage: baseUrl + '/images/about.png'
+  });
+}));
+
+// Route for rendering the header
+router.get('/header', controller(async (req, res) => {
+  // Render the header view with login status
+  res.render('header', { isLoggedIn : req.session.user !== undefined });
+}));
+
+// Verify Email route
 router.get('/verify-email/:token', controller(async (req, res) => {
   const isLoggedIn = req.session.user !== undefined;
 
@@ -111,7 +131,6 @@ router.get('/verify-email/:token', controller(async (req, res) => {
   let userId = 0;
   let userIdMatches = true;
   try {
-
     const verifyRes = await axios.put(`http://${req.serverAddress}/api/user/verify-email/${req.params.token}`);
     
     if (req.session.user) {
@@ -142,16 +161,16 @@ router.get('/verify-email/:token', controller(async (req, res) => {
 
   res.render("verify-email", {
     isValid,
-    isLoggedIn,
     userIdMatches,
     name: firstName + " " + lastName
   });
 }));
 
+// Password Reset route
 router.get('/password-reset/:token', controller(async (req, res) => {
   if (req.session.user) {
     // Cannot reset the token when the user is logged in.
-    return res.redirect(`/${getReroute()}`);
+    return res.redirect("/");
   }
 
   const response = await axios.get(`http://${req.serverAddress}/api/user/check-password-reset-token/${req.params.token}`);
@@ -161,34 +180,17 @@ router.get('/password-reset/:token', controller(async (req, res) => {
   });
 }));
 
+// Request Password Reset route
 router.get('/request-password-reset', controller(async (req, res) => {
   res.render('request-password-reset', {
     email: req.query.email || ''
   });
 }));
 
-router.get('/header', (_, res) => {
-  res.render('header');
-});
-
-//So about-us hbs and background image for the webpage load
-router.get('/about-us', controller(async (req, res) => {
-  let baseUrl = '';
-  if (config.REROUTE_PATH) {
-    baseUrl = "/" + config.REROUTE_PATH + "/";
-  }
-  res.render('about-us', {
-    preloadImage: baseUrl + '/images/about.png',
-  });
-}));
-
-//So about-us hbs and background image for the webpage load
+// Data route for background image load
 router.get('/data', controller(async (req, res) => {
-
   if (!req.session.user) {
-    // Cannot display the user's profile page if the user is not even
-    // logged in. Redirecting the user to the home page.
-    // Same code for the user-profile requiring login
+    // Cannot display the user's profile page if the user is not even logged in. Redirecting the user to the home page.
     return res.redirect(`/${getReroute()}`);
   }
 
@@ -246,6 +248,18 @@ router.get('/admin/user-management', controller(async (req, res) => {
   res.render('user-management', {
     totalPages: userInfo.totalPages,
     initialialUsers: userInfo.users
+  });
+}));
+
+// About Us route
+router.get('/security', controller(async (req, res) => {
+  let baseUrl = '';
+  if (config.REROUTE_PATH) {
+    baseUrl = "/" + config.REROUTE_PATH + "/";
+  }
+
+  res.render('security', {
+    preloadImage: baseUrl + '/images/security.jpeg'
   });
 }));
 
