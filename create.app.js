@@ -90,13 +90,13 @@ function createApp() {
   // Install middleware
   app.use(errorHandler);
 
-  /*app.get('*', (_, res) => {
-    res.status(404);
-    res.render("notfound", {
-      route: "/someroute"
+  app.get('*', async (req, res) => {
+    // If we get here then we are at the default not found
+    // route handling.
+    res.render("not-found", {
+      reqUrl: req.originalUrl || ''
     });
-    //.send();
-  });*/
+  });
 
   return app;
 }

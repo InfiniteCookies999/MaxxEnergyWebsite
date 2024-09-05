@@ -270,4 +270,12 @@ router.get('/security', controller(async (req, res) => {
   });
 }));
 
+router.get('/not-found', controller(async (req, res) => {
+  const reqUrl = req.originalUrl || '';
+
+  res.render("not-found", {
+    reqUrl: reqUrl
+  });
+}));
+
 module.exports = router;
