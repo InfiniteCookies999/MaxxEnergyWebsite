@@ -12,7 +12,8 @@ class EmailVerifyRepository {
       verifyKey VARCHAR(255) NOT NULL UNIQUE,
       createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-      FOREIGN KEY (userId) REFERENCES user(id)
+      CONSTRAINT fk_emailVerify_userId
+      FOREIGN KEY (userId) REFERENCES user(id) ON DELETE CASCADE
       )`);
   }
 

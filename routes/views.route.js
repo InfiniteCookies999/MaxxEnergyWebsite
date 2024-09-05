@@ -11,6 +11,11 @@ function getReroute() {
   return config.REROUTE_PATH || '';
 }
 
+function getSessionCookie(req) {
+  const cookies = req.headers.cookie.split(';');
+  return cookies.find(cookie => cookie.trim().startsWith("connect.sid="));
+}
+
 // https://stackoverflow.com/questions/14127411/use-a-route-as-an-alias-for-another-route-in-express-js
 router.get(['/', '/index', '/home', '/main'], controller(async (req, res) => {
   let baseUrl = '';
@@ -195,6 +200,54 @@ router.get('/data', controller(async (req, res) => {
   }
   res.render('data', {
     preloadImage: baseUrl + '/images/data.png',
+  });
+}));
+
+router.get('/admin/contact-messages', controller(async (req, res) => {
+  // Make sure the user is logged in.
+  if (!req.session.user) {
+    return res.redirect(`/${getReroute()}`);
+  }
+
+  if (!(await UserService.userSessionHasRole(req.session, UserRoleRepository.adminRole()))) {
+    // The user is not an administrator!
+    return res.redirect(`/${getReroute()}`);
+  }
+
+  const response = await axios.get(`http://${req.serverAddress}/api/contact/messages?page=0`, {
+    headers: {
+      'Cookie': getSessionCookie(req)
+    }
+  });
+  const messageInfo = response.data;
+
+  res.render("contact-messages", {
+    initialialMessages: messageInfo.messages,
+    totalPages: messageInfo.totalPages
+  });
+}));
+
+router.get('/admin/user-management', controller(async (req, res) => {
+  // Make sure the user is logged in.
+  if (!req.session.user) {
+    return res.redirect(`/${getReroute()}`);
+  }
+
+  if (!(await UserService.userSessionHasRole(req.session, UserRoleRepository.adminRole()))) {
+    // The user is not an administrator!
+    return res.redirect(`/${getReroute()}`);
+  }
+  
+  const response = await axios.get(`http://${req.serverAddress}/api/user/users?page=0`, {
+    headers: {
+      'Cookie': getSessionCookie(req)
+    }
+  });
+  const userInfo = response.data;
+
+  res.render('user-management', {
+    totalPages: userInfo.totalPages,
+    initialialUsers: userInfo.users
   });
 }));
 

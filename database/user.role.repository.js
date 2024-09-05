@@ -14,7 +14,8 @@ class UserRoleRepository {
       userId INT NOT NULL,
       roleName VARCHAR(255) NOT NULL,
 
-      FOREIGN KEY (userId) REFERENCES user(id)
+      CONSTRAINT fk_userRole_userId
+      FOREIGN KEY (userId) REFERENCES user(id) ON DELETE CASCADE
       )`);
   }
 

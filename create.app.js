@@ -2,7 +2,13 @@ const express = require('express');
 const session = require('express-session');
 const fs = require('fs');
 const config = require('./config');
-const { userRouter, staticRouter, viewsRouter, contactRouter } = require('./routes');
+const {
+  userRouter,
+  staticRouter,
+  viewsRouter,
+  contactRouter,
+  adminRouter
+} = require('./routes');
 const { errorHandler, reroute, replaceImports } = require('./middleware');
 
 function createApp() {
@@ -53,8 +59,8 @@ function createApp() {
 
   // Routers
   app.use('/api/', userRouter);
-  app.use(viewsRouter);
   app.use('/api/contact', contactRouter); // Add the contact router
+  app.use(viewsRouter);
   app.use(staticRouter);
 
   // Install middleware
