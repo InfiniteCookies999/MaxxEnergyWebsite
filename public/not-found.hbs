@@ -4,8 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404 Not found</title>
+    <link rel="stylesheet" href="/styles/not.found.style.css">
+    <import value="/common-links"></import>
 </head>
 <body>
-    <h1>Could not find: {{reqUrl}}</h1>
+    <import value="/header"></import>
+
+    <div id="not-found-container">
+        <div class="inner-container">
+            <img src="/images/wrench.png" width="200" height="200">
+            <h1>Page Not Found!</h1>
+            <p class="failed-route-text">Sorry we could not find {{reqUrl}} for you!</p>
+            <a href="/" class="home-btn">Back to Home</a>
+        </div>
+    </div>
+
+    <import value="/footer"></import>
 </body>
 </html>
