@@ -57,8 +57,10 @@ function makePageRequest(page, partialUrl, createNewElementsCB) {
   });
 }
 
-function createTable(partialUrl, createNewElementsCB) {
+function createTable(partialUrl, createNewElementsCB, onDeleteCB) {
   preventInvalidNonNumber($("#page-number-input"));
+
+  createLoadAnimation(document.getElementById("load-animation"));
 
   $('#next-page-btn').click(() => {
     const page = parseInt($("#page-number-input").val()) + 1;
@@ -89,8 +91,19 @@ function createTable(partialUrl, createNewElementsCB) {
   add_checkbox_behavior();
 
   $('#popup-confirm-btn').click(() => {
-    // TODO: Send information to the server!
-    $('.confirm-popup-background').css("display", "none");
+    $('#load-animation').css("display", "block");
+    $('#popup-confirm-btn').css("display", "none");
+    $('#popup-cancel-btn').prop('disabled', true);
+    onDeleteCB(() => {
+      $('#load-animation').css("display", "none");
+      $('#popup-confirm-btn').css("display", "block");
+      $('#popup-cancel-btn').prop('disabled', false);
+      $('.confirm-popup-background').css("display", "none");
+
+      // Reload current page with changes
+      const page = parseInt($("#page-number-input").val());
+      makePageRequest(page, partialUrl, createNewElementsCB);
+    });
   });
 
   $('#popup-cancel-btn').click(() => {

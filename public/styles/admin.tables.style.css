@@ -80,9 +80,6 @@ ul {
   background-color: white;
   border-radius: 20px;
   padding: 2rem;
-}
-
-.confirm-popup {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -91,11 +88,16 @@ ul {
 
 .btn-popup-group {
   display: flex;
-  gap: 10px;
+  align-items: center;
+  gap: 1rem;
 }
 
-.btn-popup-group button {
+.btn-popup-group button, canvas {
   flex: 1;
+}
+
+.load-animation {
+  transform: ;
 }
 
 .confirm-popup img {

@@ -234,6 +234,7 @@ router.put('/user/resend-email-verification',
 router.post('/user/request-password-reset', 
   body('email').isEmail().withMessage("Expected valid email address"),
 
+  validateBody,
   controller(async (req, res) => {
     await UserService.sendPasswordReset(req.body.email, req.serverAddress);
     res.send();
@@ -244,6 +245,7 @@ router.put('/user/password-reset',
   body('token').notEmpty().withMessage("Token cannot be empty"),
   validatePassword('newPassword'),
 
+  validateBody,
   controller(async (req, res) => {
     await UserService.resetPassword(req.body.token, req.body.newPassword);
     res.send();
@@ -260,8 +262,9 @@ router.get('/user/check-password-reset-token/:token',
 router.get('/user/users',
   query('page').notEmpty().withMessage("The page cannot be empty"),
   query('email').optional(),
-  validateLoggedIn,
+  validateBody,
 
+  validateLoggedIn,
   controller(async (req, res) => {
 
   if (!(await UserService.userSessionHasRole(req.session, UserRoleRepository.adminRole()))) {
@@ -281,18 +284,27 @@ router.get('/user/users',
   });
 }));
 
-router.delete('/user/:id',
-  validateLoggedIn,
+router.delete('/user',
+  body('userIds').notEmpty().withMessage("userIds cannot be empty")
+    .isArray({ min: 1 }).withMessage("Expected an array")
+    .bail()
+    .custom((arr) => {
+      return arr.every(e => Number.isInteger(e));
+    }).withMessage("All elements must be integers"),
+  validateBody,
 
+  validateLoggedIn,
   controller(async (req, res) => {
     
     if (!(await UserService.userSessionHasRole(req.session, UserRoleRepository.adminRole()))) {
       throw new HttpError("Only admins can access", 401);
     }
 
-    const userId = req.id;
+    const userIds = req.body.userIds;
 
-    await UserService.deleteUser(userId);
+    for (const userId of userIds) {
+      await UserService.deleteUser(userId);
+    }
 
     res.send();
 }));

@@ -1,13 +1,15 @@
 const express = require('express');
 const session = require('express-session');
+const Handlebars = require('handlebars');
+const path = require('path');
+const { engine } = require('express-handlebars');
 const fs = require('fs');
 const config = require('./config');
 const {
   userRouter,
   staticRouter,
   viewsRouter,
-  contactRouter,
-  adminRouter
+  contactRouter
 } = require('./routes');
 const { errorHandler, reroute, replaceImports } = require('./middleware');
 
@@ -53,7 +55,29 @@ function createApp() {
   app.use(replaceImports);
   app.use(reroute);
 
+  console.log("registering ifNotEquals")
+  Handlebars.registerHelper('ifEquals', (value1, value2, options) => {
+    if (value1 === value2) {
+      return options.fn(this); // Render the block if true
+    } else {
+      return options.inverse(this); // Render the inverse block if false
+    }
+  });
+  Handlebars.registerHelper('ifNotEquals', (value1, value2, options) => {
+    if (value1 !== value2) {
+      return options.fn(this); // Render the block if true
+    } else {
+      return options.inverse(this); // Render the inverse block if false
+    }
+  });
+
   // Set the view engine.
+  app.engine('hbs', engine({
+    extname: '.hbs',
+    layoutsDir: path.join(__dirname, 'public'),
+    defaultLayout: false, // Stop it from having defualt layouts.
+    helpers: Handlebars.helpers
+  }));
   app.set('view engine', 'hbs');
   app.set('views', 'public');
 

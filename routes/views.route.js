@@ -125,8 +125,7 @@ router.get('/header', controller(async (req, res) => {
 
 // Verify Email route
 router.get('/verify-email/:token', controller(async (req, res) => {
-  const isLoggedIn = req.session.user !== undefined;
-
+  
   let isValid = true;
   let userId = 0;
   let userIdMatches = true;
@@ -247,7 +246,8 @@ router.get('/admin/user-management', controller(async (req, res) => {
 
   res.render('user-management', {
     totalPages: userInfo.totalPages,
-    initialialUsers: userInfo.users
+    initialialUsers: userInfo.users,
+    adminId: req.session.user.id
   });
 }));
 
