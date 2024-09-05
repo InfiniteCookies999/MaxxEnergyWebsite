@@ -89,6 +89,15 @@ ul {
   text-align: center;
 }
 
+.btn-popup-group {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-popup-group button {
+  flex: 1;
+}
+
 .confirm-popup img {
   color: red;
 }

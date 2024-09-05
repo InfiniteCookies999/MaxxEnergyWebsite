@@ -1,4 +1,23 @@
 
+function add_checkbox_behavior() {
+  $('.better-checkbox input').change(() => {
+    const trash = $('.bx-trash');
+    trash.css("color", "gray");
+    trash.removeClass('trash-can-delete');
+    
+    $('.better-checkbox input').each(function() {
+      if ($(this).is(":checked")) {
+        trash.css("color", "rgb(163, 24, 24)");
+        trash.addClass('trash-can-delete');
+      }
+    });
+
+    $('.trash-can-delete').click(() => {
+      $('.confirm-popup-background').css("display", "block");
+    });
+  });
+}
+
 function finishPageChange(newPage, res, createNewElementsCB) {
   $("#page-number-input").val(newPage);
   
@@ -10,6 +29,7 @@ function finishPageChange(newPage, res, createNewElementsCB) {
   const tableBody = $('.table tbody');
   tableBody.empty(); // Remove all existing table entries!
   createNewElementsCB(tableBody, res);
+  add_checkbox_behavior();
 }
 
 function makePageRequest(page, partialUrl, createNewElementsCB) {
@@ -66,21 +86,14 @@ function createTable(partialUrl, createNewElementsCB) {
     makePageRequest(page, partialUrl, createNewElementsCB);
   });
 
-  $('.better-checkbox input').change(() => {
-    const trash = $('.bx-trash');
-    trash.css("color", "gray");
-    trash.removeClass('trash-can-delete');
-    
-    $('.better-checkbox input').each(function() {
-      if ($(this).is(":checked")) {
-        trash.css("color", "rgb(163, 24, 24)");
-        trash.addClass('trash-can-delete');
-      }
-    });
+  add_checkbox_behavior();
 
-    $('.trash-can-delete').click(() => {
-      console.log("going to show the popup?");
-      $('.confirm-popup-background').css("display", "block");
-    });
+  $('#popup-confirm-btn').click(() => {
+    // TODO: Send information to the server!
+    $('.confirm-popup-background').css("display", "none");
+  });
+
+  $('#popup-cancel-btn').click(() => {
+    $('.confirm-popup-background').css("display", "none");
   });
 }
