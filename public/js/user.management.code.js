@@ -51,5 +51,24 @@ $(document).ready(() => {
         finishedCB();
       }
     });
+  },
+  (enable) => {
+    const roleAddBtn = $('.bxs-shield-plus');
+    if (enable) {
+      roleAddBtn.css("color", "var(--site-blue-color)");
+      roleAddBtn.addClass('role-can-add');
+    } else {
+      roleAddBtn.css("color", "gray");
+      roleAddBtn.removeClass("role-can-add");
+    }
+  });
+
+  $(document).on('click', '.role-can-add', () => {
+    $('#add-role-popup').css("display", "block");
+  });
+
+
+  $('#finished-add-role-btn').click(() => {
+    $('#add-role-popup').css("display", "none");
   });
 });

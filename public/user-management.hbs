@@ -10,6 +10,7 @@
     <import value="/common-links"></import>
     <import value="form-links"></import>
     <link rel="stylesheet" href="/styles/admin.tables.style.css">
+    <link rel="stylesheet" href="/styles/user.management.style.css">
     <script src="/js/admin.tables.js"></script>
     <script src="/js/user.management.code.js"></script>
 
@@ -40,8 +41,9 @@
                         <span aria-hidden="true">Next &raquo;</span>
                     </button>
                 </div>
-                <div class="d-flex align-items-center mx-2">
-                    <i class='bx bx-trash'></i>
+                <div class="edit-icons d-flex align-items-center mx-2">
+                    <i class='bx bxs-shield-plus role-can-add'></i>
+                    <i class='ml-1 bx bx-trash'></i>
                 </div>
                 <input id="email-search-input"
                        type="text"
@@ -49,7 +51,7 @@
                        placeholder="susan@gmail.com">
             </div>
 
-            <div class="confirm-popup-background">
+            <div id="delete-popup" class="confirm-popup-background">
                 <div class="confirm-popup">
                     <img src="/images/warning-circle.png" width="150" height="150">
                     <h5>Are you sure you want to delete?</h5>
@@ -57,6 +59,30 @@
                         <canvas id="load-animation" width="30" height="30" style="display: none;"></canvas>
                         <button id="popup-confirm-btn" class="btn btn-primary">Confirm</button>
                         <button id="popup-cancel-btn" class="btn">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="add-role-popup" class="confirm-popup-background" style="display: block;">
+                <div class="confirm-popup">
+                    <h5>Add roles to Maddie Rugh</h5>
+                    <div id="current-sel-roles">
+                        <h6>Current Roles</h6>
+                        <ul>
+                            <!-- <li class="added-role">
+                                <span>Admin</span>
+                                <span class="remove-role-x">X</span>
+                            </li> -->
+                        </ul>
+                        <div class="add-role-dropdown-group">
+                            <select id="role-add-input" class="form-control">
+                                <option value="" disabled selected>Select Role</option>
+                                <option value="admin">Admin</option>
+                                <option value="member">Member</option>
+                            </select>
+                            <button id="add-role-btn" class="btn blue-btn">Add</button>
+                        </div>
+                        <button id="finished-add-role-btn" class="btn blue-btn">Finished</button>
                     </div>
                 </div>
             </div>
