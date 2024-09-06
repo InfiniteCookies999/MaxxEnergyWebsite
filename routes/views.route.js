@@ -293,8 +293,15 @@ router.get('/admin', controller(async (req, res) => {
     return res.redirect(`/${getReroute()}`);
   }
   
-  res.render('admin');
+  const totalUser = await UserRepository.totalUsers("");
+  const totalVerifiedUsers = await UserRepository.totalVerifiedUsers("");
+  const totalContactMessages = await ContactRepository.totalContactMessages("");
 
+  res.render('admin', {
+    totalUsers: totalUser,
+    totalVerifiedUsers: totalVerifiedUsers,
+    totalContactMessages: totalContactMessages
+  });
 }));
 
 module.exports = router;

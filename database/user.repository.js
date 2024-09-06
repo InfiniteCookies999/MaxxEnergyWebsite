@@ -217,6 +217,15 @@ class UserRepository {
     return result[0].total;
   }
 
+  async totalVerifiedUsers() {
+    const conn = await getDBConnection();
+
+    const [result] = await conn.query(`SELECT COUNT(*) AS total FROM user
+      WHERE emailVerified=1`);
+
+    return result[0].total;
+  }
+
   async deleteUserById(userId) {
     const conn = await getDBConnection();
 
