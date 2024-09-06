@@ -11,6 +11,16 @@ function getReroute() {
   return config.REROUTE_PATH || '';
 }
 
+async function isAdmin(req) {
+  if (!req.session.user) {
+    return false;
+  }
+  if (!(await UserService.userSessionHasRole(req.session, UserRoleRepository.adminRole()))) {
+    return false;
+  }
+  return true;
+}
+
 function getSessionCookie(req) {
   const cookies = req.headers.cookie.split(';');
   return cookies.find(cookie => cookie.trim().startsWith("connect.sid="));
@@ -127,7 +137,19 @@ router.get('/about-us', controller(async (req, res) => {
 // Route for rendering the header
 router.get('/header', controller(async (req, res) => {
   // Render the header view with login status
-  res.render('header', { isLoggedIn : req.session.user !== undefined });
+  let isAdmin = false;
+  const isLoggedIn = req.session.user !== undefined;
+  if (isLoggedIn) {
+    if (await UserRoleRepository.hasUserRole(
+      req.session.user.id, UserRoleRepository.adminRole())) {
+      isAdmin = true;
+    }
+  }
+  
+  res.render('header', {
+    isLoggedIn: isLoggedIn,
+    isAdmin: isAdmin
+  });
 }));
 
 // Verify Email route
@@ -210,13 +232,7 @@ router.get('/data', controller(async (req, res) => {
 }));
 
 router.get('/admin/contact-messages', controller(async (req, res) => {
-  // Make sure the user is logged in.
-  if (!req.session.user) {
-    return res.redirect(`/${getReroute()}`);
-  }
-
-  if (!(await UserService.userSessionHasRole(req.session, UserRoleRepository.adminRole()))) {
-    // The user is not an administrator!
+  if (!(await isAdmin(req))) {
     return res.redirect(`/${getReroute()}`);
   }
 
@@ -234,16 +250,10 @@ router.get('/admin/contact-messages', controller(async (req, res) => {
 }));
 
 router.get('/admin/user-management', controller(async (req, res) => {
-  // Make sure the user is logged in.
-  if (!req.session.user) {
+  if (!(await isAdmin(req))) {
     return res.redirect(`/${getReroute()}`);
   }
 
-  if (!(await UserService.userSessionHasRole(req.session, UserRoleRepository.adminRole()))) {
-    // The user is not an administrator!
-    return res.redirect(`/${getReroute()}`);
-  }
-  
   const response = await axios.get(`http://${req.serverAddress}/api/user/users?page=0`, {
     headers: {
       'Cookie': getSessionCookie(req)
@@ -276,6 +286,15 @@ router.get('/not-found', controller(async (req, res) => {
   res.render("not-found", {
     reqUrl: reqUrl
   });
+}));
+
+router.get('/admin', controller(async (req, res) => {
+  if (!(await isAdmin(req))) {
+    return res.redirect(`/${getReroute()}`);
+  }
+  
+  res.render('admin');
+
 }));
 
 module.exports = router;

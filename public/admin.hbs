@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <import value="/common-links"></import>
+    <link rel="stylesheet" href="/styles/admin.style.css">
+    <script src="/js/admin.code.js"></script>
+
+</head>
+<body>
+
+    <import value="/header"></import>
+    
+    <div class="container">
+        <div class="admin-container">
+            <h1 style="margin-bottom: 2rem;">Admin Portal</h1>
+            <div class="row">
+                <div class="col-6">
+                    <div class="section" onclick="location.href='/admin/user-management'">
+                        <i class='bx bx-user'></i>
+                        <h3>Edit Users</h3>
+                        <span class="section-desc">Update user information. Delete, and assign roles.</span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="section" onclick="location.href='/admin/contact-messages'">
+                        <i class='bx bx-message-dots'></i>
+                        <h3>View Contact Messages</h3>
+                        <span class="section-desc">Read contact messages.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="section" onclick="location.href='/admin/products'">
+                        <i class='bx bx-cart'></i>
+                        <h3>Store Products</h3>
+                        <span class="section-desc">Add products that can be viewed in the web store.</span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <import value="/footer"></import>
+
+</body>
+</html>
