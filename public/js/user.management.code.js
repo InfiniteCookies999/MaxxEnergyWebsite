@@ -65,6 +65,7 @@ $(document).ready(() => {
 
   $(document).on('click', '.role-can-add', () => {
     $('#add-role-popup').css("display", "block");
+    $('#role-add-input').val('').change();
   });
 
 
