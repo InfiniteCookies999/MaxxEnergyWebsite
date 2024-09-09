@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <!-- Import common links -->
+  <import value="/common-links"></import>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" type="text/css" href="styles/cart.style.css">
+
+    <script src="js/cart.code.js"></script>
+</head>
+<body>
+
+ <!-- Header -->
+  <import value="/header"></import>
+
+<div class="container cart-container">
+    <div class="cart-header text-center mb-4">
+        <h1>Your Shopping Cart</h1>
+    </div>
+
+
+    <!-- Hoverable rows table from bootstrap: https://getbootstrap.com/docs/4.0/content/tables/ -->
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Product Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Total</th>
+                <th scope="col">Tax (5%)</th>
+                <th scope="col">Total w/Tax</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody id="cart-items">
+            <!-- Cart items will be dynamically loaded here -->
+        </tbody>
+    </table>
+
+    <div id="total-price" class="text-right font-weight-bold"></div>
+    <div class="text-right">
+        <a href="/store" class="btn btn-primary mt-3 margin-bottom">Continue Shopping</a>
+    </div>
+</div>
+<!-- Footer -->
+<import value="/footer"></import>
+
+</body>
+</html>
