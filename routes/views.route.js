@@ -251,7 +251,7 @@ router.get('/admin/user-management', controller(async (req, res) => {
   });
 }));
 
-// About Us route
+// security route
 router.get('/security', controller(async (req, res) => {
   let baseUrl = '';
   if (config.REROUTE_PATH) {
@@ -262,5 +262,16 @@ router.get('/security', controller(async (req, res) => {
     preloadImage: baseUrl + '/images/security.jpeg'
   });
 }));
+
+// store route
+router.get('/store', controller(async (req, res) => {
+  res.render('store');  
+}));
+
+// cart route
+router.get('/cart', controller(async (req, res) => {
+  res.render('cart');  
+}));
+
 
 module.exports = router;

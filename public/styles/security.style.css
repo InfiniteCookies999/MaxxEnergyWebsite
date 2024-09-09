@@ -1,0 +1,74 @@
+.list-group-item a {
+  text-decoration: none !important;  
+  color: #4A9AF5; 
+}
+.list-group-item a:hover {
+  color: #70aef5;
+}
+.mission-h {
+  font-size: 32px;
+}
+
+.mission-column, .hero-section, .liability-disclaimer {
+  background-color: rgb(74, 154, 245);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.mission-column {
+  height: 200px;
+}
+
+.d-section {
+  font-size: 18px;
+  width: 70%;
+}
+
+.hero-section {
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+}
+
+.mask {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.liability-disclaimer {
+  padding: 20px;
+  background-color: rgb(231, 231, 231); 
+  color: #333; 
+}
+
+/* PDF Button Width */
+.pdf-button {
+  width: 200px;
+}
+
+/* Media Queries */
+
+/* Tablets */
+@media (min-width: 767px) and (max-width: 1330px) {
+  .mission-h {
+    font-size: 30px;
+  }
+  .d-section {
+    width: 90%;
+    font-size: 16px;
+  }
+}
+
+/* Smartphones */
+@media (max-width: 767px) {
+  .mission-h {
+    font-size: 28px;
+  }
+  .d-section {
+    width: 90%;
+    font-size: 16px;
+  }
+}
