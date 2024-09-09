@@ -43,7 +43,7 @@
                     </button>
                 </div>
                 <div class="edit-icons d-flex align-items-center mx-2">
-                    <i class='bx bxs-shield-plus role-can-add'></i>
+                    <i class='bx bxs-shield-plus'></i>
                     <i class='ml-1 bx bx-trash'></i>
                 </div>
                 <input id="email-search-input"
@@ -66,15 +66,41 @@
 
             <div id="add-role-popup" class="confirm-popup-background">
                 <div class="confirm-popup">
-                    <h5>Add roles to Maddie Rugh</h5>
+                    <h5>Add roles</h5>
+
+
+
                     <div id="current-sel-roles">
-                        <h6>Current Roles</h6>
-                        <ul>
-                            <!-- <li class="added-role">
-                                <span>Admin</span>
-                                <span class="remove-role-x">X</span>
-                            </li> -->
-                        </ul>
+                        <table class="table table-bordered ">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Maddie Rugh</th>
+                                    <th scope="col">John Eggbert</th>
+                                </tr>
+                            </thead>
+                            <tbody id="added-roles-group">
+                                <tr id="admin-added-group">
+                                    <td></td>
+                                    <td class="added-role">
+                                        <span value="admin">Admin</span>
+                                        <span class="remove-role-x">X</span>
+                                    </td>
+                                </tr>
+                                <tr id="member-added-group">
+                                    <td class="added-role">
+                                        <span value="member">Member</span>
+                                        <span class="remove-role-x">X</span>
+                                    </td>
+                                    <td class="added-role">
+                                        <span value="member">Member</span>
+                                        <span class="remove-role-x">X</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        
+                        
                         <div class="add-role-dropdown-group">
                             <select id="role-add-input" class="form-control">
                                 <option value="" disabled selected>Select Role</option>
@@ -85,6 +111,9 @@
                         </div>
                         <button id="finished-add-role-btn" class="btn blue-btn">Finished</button>
                     </div>
+
+
+
                 </div>
             </div>
 

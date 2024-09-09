@@ -284,13 +284,17 @@ router.get('/user/users',
   });
 }));
 
+function validateUserIds(fieldName) {
+  return body(fieldName).notEmpty().withMessage("userIds cannot be empty")
+  .isArray({ min: 1 }).withMessage("Expected an array")
+  .bail()
+  .custom((arr) => {
+    return arr.every(e => Number.isInteger(e));
+  }).withMessage("All elements must be integers");
+}
+
 router.delete('/user',
-  body('userIds').notEmpty().withMessage("userIds cannot be empty")
-    .isArray({ min: 1 }).withMessage("Expected an array")
-    .bail()
-    .custom((arr) => {
-      return arr.every(e => Number.isInteger(e));
-    }).withMessage("All elements must be integers"),
+  validateUserIds('userIds'),
   validateBody,
 
   validateLoggedIn,
@@ -305,6 +309,24 @@ router.delete('/user',
     for (const userId of userIds) {
       await UserService.deleteUser(userId);
     }
+
+    res.send();
+}));
+
+router.put('/user/add-role',
+  validateUserIds('userIds'),
+  body('role').isIn(UserRoleRepository.rolls()),
+
+  validateLoggedIn,
+  controller(async (req, res) => {
+
+    if (!(await UserService.userSessionHasRole(req.session, UserRoleRepository.adminRole()))) {
+      throw new HttpError("Only admins can access", 401);
+    }
+
+    // TODO: Well here we would want to go ahead and actually add the role to the server!
+    console.log("Adding role: " + req.body.role + " for: ");
+    console.log(req.body.userIds);
 
     res.send();
 }));

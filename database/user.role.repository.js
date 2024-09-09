@@ -6,6 +6,10 @@ class UserRoleRepository {
     return 'admin';
   }
 
+  rolls() {
+    return [ this.adminRole() ];
+  }
+
   async initialize() {
     const conn = await getDBConnection();
 

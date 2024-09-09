@@ -118,3 +118,18 @@ function createTable(partialUrl, createNewElementsCB, onDeleteCB, onCheckedCB) {
     $('#delete-popup').css("display", "block");
   });
 }
+
+function getIds() {
+  let ids = [];
+  $('.better-checkbox input').each(function() {
+    
+    const checkbox = $(this);
+    if (checkbox.is(":checked")) {
+      const htmlId = checkbox.attr('id');
+      const strId = htmlId.substring(htmlId.lastIndexOf('-') + 1);
+      ids.push(parseInt(strId));
+    }
+  });
+  
+  return ids;
+}

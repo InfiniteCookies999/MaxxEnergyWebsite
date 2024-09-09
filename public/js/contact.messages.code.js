@@ -19,19 +19,11 @@ $(document).ready(() => {
   },
   (finishedCB) => {
 
-    let messageIds = [];
-    $('.better-checkbox input').each(function() {
-      $('#load-animation').css("display", "block");
-      $('#popup-confirm-btn').css("display", "none");
-      
-      const checkbox = $(this);
-      if (checkbox.is(":checked")) {
-        const id = checkbox.attr('id');
-        const messageId = id.substring(id.lastIndexOf('-') + 1);
-        messageIds.push(parseInt(messageId));
-      }
-    });
+    $('#load-animation').css("display", "block");
+    $('#popup-confirm-btn').css("display", "none");
 
+    const messageIds = getIds();
+    
     const baseUrl = $('[base-url]').attr('base-url');
 
     $.ajax({
