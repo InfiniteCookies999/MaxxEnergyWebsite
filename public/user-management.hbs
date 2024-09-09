@@ -6,10 +6,11 @@
     <title>User Management</title>
 
     <div base-url=""></div>
-    <div admin-id="{{adminId}}"></div>
+    <div id="admin-id-store" admin-id="{{adminId}}"></div>
     <import value="/common-links"></import>
     <import value="form-links"></import>
     <link rel="stylesheet" href="/styles/admin.tables.style.css">
+    <link rel="stylesheet" href="/styles/user.management.style.css">
     <script src="/js/admin.tables.js"></script>
     <script src="/js/user.management.code.js"></script>
 
@@ -20,6 +21,7 @@
     <div class="container">
         <div id="messages-container">
 
+            <h1 style="margin-bottom: 1rem;">User Management</h1>
             <div class="d-flex pagination-container">
                 <!-- Pagination Controls -->
                 <div class="pagination-controls">
@@ -40,8 +42,9 @@
                         <span aria-hidden="true">Next &raquo;</span>
                     </button>
                 </div>
-                <div class="d-flex align-items-center mx-2">
-                    <i class='bx bx-trash'></i>
+                <div class="edit-icons d-flex align-items-center mx-2">
+                    <i class='bx bxs-shield-plus'></i>
+                    <i class='ml-1 bx bx-trash'></i>
                 </div>
                 <input id="email-search-input"
                        type="text"
@@ -49,7 +52,7 @@
                        placeholder="susan@gmail.com">
             </div>
 
-            <div class="confirm-popup-background">
+            <div id="delete-popup" class="confirm-popup-background">
                 <div class="confirm-popup">
                     <img src="/images/warning-circle.png" width="150" height="150">
                     <h5>Are you sure you want to delete?</h5>
@@ -61,7 +64,34 @@
                 </div>
             </div>
 
-            <table class="table table-striped">
+            <div id="add-role-popup" class="confirm-popup-background">
+                <div class="confirm-popup">
+                    <h5>Add roles</h5>
+
+                    <div id="current-sel-roles">
+                        <table class="table table-bordered ">
+                            <thead>
+                                <tr id="add-roles-user-names">
+                                </tr>
+                            </thead>
+                            <tbody id="added-roles-group">
+                            </tbody>
+                        </table>
+                        <div class="add-role-dropdown-group">
+                            <select id="role-add-input" class="form-control">
+                                <option value="" disabled selected>Select Role</option>
+                                <option value="admin">Admin</option>
+                                <option value="member">Member</option>
+                            </select>
+                            <button id="add-role-btn" class="btn blue-btn">Add</button>
+                        </div>
+                        <button id="finished-add-role-btn" class="btn blue-btn">Finished</button>
+                    </div>
+
+                </div>
+            </div>
+
+            <table id="db-table" class="table table-striped">
                 <thead>
                     <tr>
                         <th scope="col">Sel</th>
@@ -74,7 +104,7 @@
                 </thead>
                 <tbody>
                     {{#each initialialUsers}}
-                        <tr>
+                        <tr user-id="{{id}}" user-roles="{{roles}}">
                             {{#ifEquals id ../adminId}}
                                 <td></td>
                             {{else}}
@@ -86,7 +116,7 @@
                                 </td>
                             {{/ifEquals}}
                             <td scope="row">{{id}}</td>
-                            <td>{{firstName}} {{lastName}}</td>
+                            <td class="user-name">{{firstName}} {{lastName}}</td>
                             <td>{{email}}</td>
                             <td>{{phone}}</td>
                             <td>{{addressLine1}} {{addressLine2}} {{county}} {{state}}, {{zipCode}}</td>

@@ -214,6 +214,14 @@ class UserService {
   async getUserById(userId) {
     return await UserRepository.getUserById(userId);
   }
+
+  async addRoleIfNotExistByUserId(userId, roleName) {
+    await UserRoleRepository.saveUserRoleIfNotExists(new UserRole(null, userId, roleName))
+  }
+
+  async removeRoleFromUserById(userId, roleName) {
+    await UserRoleRepository.deleteRoleByUserIdAndRoleName(userId, roleName);
+  }
 }
 
 module.exports = new UserService();
