@@ -68,39 +68,15 @@
                 <div class="confirm-popup">
                     <h5>Add roles</h5>
 
-
-
                     <div id="current-sel-roles">
                         <table class="table table-bordered ">
                             <thead>
-                                <tr>
-                                    <th scope="col">Maddie Rugh</th>
-                                    <th scope="col">John Eggbert</th>
+                                <tr id="add-roles-user-names">
                                 </tr>
                             </thead>
                             <tbody id="added-roles-group">
-                                <tr id="admin-added-group">
-                                    <td></td>
-                                    <td class="added-role">
-                                        <span value="admin">Admin</span>
-                                        <span class="remove-role-x">X</span>
-                                    </td>
-                                </tr>
-                                <tr id="member-added-group">
-                                    <td class="added-role">
-                                        <span value="member">Member</span>
-                                        <span class="remove-role-x">X</span>
-                                    </td>
-                                    <td class="added-role">
-                                        <span value="member">Member</span>
-                                        <span class="remove-role-x">X</span>
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
-
-                        
-                        
                         <div class="add-role-dropdown-group">
                             <select id="role-add-input" class="form-control">
                                 <option value="" disabled selected>Select Role</option>
@@ -112,12 +88,10 @@
                         <button id="finished-add-role-btn" class="btn blue-btn">Finished</button>
                     </div>
 
-
-
                 </div>
             </div>
 
-            <table class="table table-striped">
+            <table id="db-table" class="table table-striped">
                 <thead>
                     <tr>
                         <th scope="col">Sel</th>
@@ -130,7 +104,7 @@
                 </thead>
                 <tbody>
                     {{#each initialialUsers}}
-                        <tr>
+                        <tr user-roles="{{roles}}">
                             {{#ifEquals id ../adminId}}
                                 <td></td>
                             {{else}}
@@ -142,7 +116,7 @@
                                 </td>
                             {{/ifEquals}}
                             <td scope="row">{{id}}</td>
-                            <td>{{firstName}} {{lastName}}</td>
+                            <td class="user-name">{{firstName}} {{lastName}}</td>
                             <td>{{email}}</td>
                             <td>{{phone}}</td>
                             <td>{{addressLine1}} {{addressLine2}} {{county}} {{state}}, {{zipCode}}</td>

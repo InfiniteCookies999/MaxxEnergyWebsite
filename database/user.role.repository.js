@@ -6,8 +6,12 @@ class UserRoleRepository {
     return 'admin';
   }
 
+  memberRole() {
+    return 'member';
+  }
+
   rolls() {
-    return [ this.adminRole() ];
+    return [ this.adminRole(), this.memberRole() ];
   }
 
   async initialize() {
@@ -23,12 +27,16 @@ class UserRoleRepository {
       )`);
   }
 
-  async saveUserRole(userRole) {
+  async saveUserRoleIfNotExists(userRole) {
     const conn = await getDBConnection();
 
-    delete userRole.id;
-    await conn.execute(`INSERT INTO UserRole (userId, roleName) VALUES (?, ?)`,
-      Object.values(userRole));
+    await conn.execute(`INSERT INTO UserRole (userId, roleName) 
+      SELECT ?, ?
+      WHERE NOT EXISTS (
+          SELECT 1 FROM UserRole WHERE userId=? AND roleName=?
+      );
+      `,
+      [ userRole.userId, userRole.roleName, userRole.userId, userRole.roleName ]);
   }
 
   async hasUserRole(userId, roleName) {
@@ -38,6 +46,15 @@ class UserRoleRepository {
       [userId, roleName]);
     
     return results.length !== 0;
+  }
+
+  async getRolesForUserId(userId) {
+    const conn = await getDBConnection();
+
+    const [ results ] = await conn.execute("SELECT * FROM UserRole WHERE userId=?",
+      [userId]);
+
+    return results;
   }
 }
 

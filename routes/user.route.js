@@ -278,6 +278,13 @@ router.get('/user/users',
   const users = await UserRepository.getPageOfUsers(page, pageSize, emailSearch);
   const total = await UserRepository.totalUsers(emailSearch);
 
+  for (const user of users) {
+    const roles = (await UserRoleRepository.getRolesForUserId(user.id))
+      .map((role) => role.roleName)
+      .join();
+    user.roles = roles;
+  }
+
   res.json({
     users,
     totalPages: Math.ceil(total / pageSize)
@@ -313,7 +320,7 @@ router.delete('/user',
     res.send();
 }));
 
-router.put('/user/add-role',
+router.put('/user/add-roles',
   validateUserIds('userIds'),
   body('role').isIn(UserRoleRepository.rolls()),
 
@@ -324,9 +331,13 @@ router.put('/user/add-role',
       throw new HttpError("Only admins can access", 401);
     }
 
-    // TODO: Well here we would want to go ahead and actually add the role to the server!
-    console.log("Adding role: " + req.body.role + " for: ");
-    console.log(req.body.userIds);
+    console.log("adding role: ", req.body.role);
+    console.log("for users: ", req.body.userIds);
+
+    for (const userId of req.body.userIds) {
+      console.log(`adding role ${req.body.role} to userId ${userId}`);
+      await UserService.addRoleIfNotExistByUserId(userId, req.body.role);
+    }
 
     res.send();
 }));

@@ -30,6 +30,7 @@
 
 .remove-role-x {
   float: right;
+  margin-left: 1rem;
   color: rgb(209, 34, 34);
   font-weight: bold;
 }

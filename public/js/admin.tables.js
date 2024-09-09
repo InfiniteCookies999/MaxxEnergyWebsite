@@ -1,11 +1,15 @@
+function disableTrashcan(onCheckedCB) {
+  const trash = $('.bx-trash');
+  trash.css("color", "gray");
+  trash.removeClass('trash-can-delete');
+  onCheckedCB(false);
+}
 
-function add_checkbox_behavior(onCheckedCB) {
-  $('.better-checkbox input').change(() => {
+function addCheckboxBehavior(onCheckedCB) {
+  $('.better-checkbox input').change(function() {
+    disableTrashcan(onCheckedCB);
+    
     const trash = $('.bx-trash');
-    trash.css("color", "gray");
-    trash.removeClass('trash-can-delete');
-    onCheckedCB(false);
-
     $('.better-checkbox input').each(function() {
       if ($(this).is(":checked")) {
         trash.css("color", "rgb(163, 24, 24)");
@@ -26,10 +30,11 @@ function finishPageChange(newPage, res, createNewElementsCB, onCheckedCB) {
   $('#email-search-input, #page-number-input').prop('readonly', false);
 
   $('#total-page-span').text("of " + res.totalPages);
-  const tableBody = $('.table tbody');
+  const tableBody = $('#db-table tbody');
   tableBody.empty(); // Remove all existing table entries!
+  disableTrashcan(onCheckedCB);
   createNewElementsCB(tableBody, res);
-  add_checkbox_behavior(onCheckedCB);
+  addCheckboxBehavior(onCheckedCB);
 }
 
 function makePageRequest(page, partialUrl, createNewElementsCB, onCheckedCB) {
@@ -88,7 +93,7 @@ function createTable(partialUrl, createNewElementsCB, onDeleteCB, onCheckedCB) {
     makePageRequest(page, partialUrl, createNewElementsCB, onCheckedCB);
   });
 
-  add_checkbox_behavior(onCheckedCB);
+  addCheckboxBehavior(onCheckedCB);
 
   $('#popup-confirm-btn').click(() => {
     $('#load-animation').css("display", "block");
