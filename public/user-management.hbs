@@ -6,6 +6,7 @@
     <title>User Management</title>
 
     <div base-url=""></div>
+    <div admin-id="{{adminId}}"></div>
     <import value="/common-links"></import>
     <import value="form-links"></import>
     <link rel="stylesheet" href="/styles/admin.tables.style.css">
@@ -52,6 +53,11 @@
                 <div class="confirm-popup">
                     <img src="/images/warning-circle.png" width="150" height="150">
                     <h5>Are you sure you want to delete?</h5>
+                    <div class="btn-popup-group">
+                        <canvas id="load-animation" width="30" height="30" style="display: none;"></canvas>
+                        <button id="popup-confirm-btn" class="btn btn-primary">Confirm</button>
+                        <button id="popup-cancel-btn" class="btn">Cancel</button>
+                    </div>
                 </div>
             </div>
 
@@ -69,12 +75,16 @@
                 <tbody>
                     {{#each initialialUsers}}
                         <tr>
-                            <td>
-                                <div class="form-group smaller-text better-checkbox">
-                                    <input id="sel-check-{{id}}" type="checkbox" autocomplete="off" class="styled-checkbox">
-                                    <label class="form-check-label" for="sel-check-{{id}}"></label>
-                                </div>
-                            </td>
+                            {{#ifEquals id ../adminId}}
+                                <td></td>
+                            {{else}}
+                                <td>
+                                    <div class="form-group smaller-text better-checkbox">
+                                        <input id="sel-check-{{../id}}" type="checkbox" autocomplete="off" class="styled-checkbox">
+                                        <label class="form-check-label" for="sel-check-{{../id}}"></label>
+                                    </div>
+                                </td>
+                            {{/ifEquals}}
                             <td scope="row">{{id}}</td>
                             <td>{{firstName}} {{lastName}}</td>
                             <td>{{email}}</td>

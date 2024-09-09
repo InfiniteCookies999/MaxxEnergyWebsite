@@ -1,4 +1,23 @@
 
+function add_checkbox_behavior() {
+  $('.better-checkbox input').change(() => {
+    const trash = $('.bx-trash');
+    trash.css("color", "gray");
+    trash.removeClass('trash-can-delete');
+    
+    $('.better-checkbox input').each(function() {
+      if ($(this).is(":checked")) {
+        trash.css("color", "rgb(163, 24, 24)");
+        trash.addClass('trash-can-delete');
+      }
+    });
+
+    $('.trash-can-delete').click(() => {
+      $('.confirm-popup-background').css("display", "block");
+    });
+  });
+}
+
 function finishPageChange(newPage, res, createNewElementsCB) {
   $("#page-number-input").val(newPage);
   
@@ -10,6 +29,7 @@ function finishPageChange(newPage, res, createNewElementsCB) {
   const tableBody = $('.table tbody');
   tableBody.empty(); // Remove all existing table entries!
   createNewElementsCB(tableBody, res);
+  add_checkbox_behavior();
 }
 
 function makePageRequest(page, partialUrl, createNewElementsCB) {
@@ -37,8 +57,10 @@ function makePageRequest(page, partialUrl, createNewElementsCB) {
   });
 }
 
-function createTable(partialUrl, createNewElementsCB) {
+function createTable(partialUrl, createNewElementsCB, onDeleteCB) {
   preventInvalidNonNumber($("#page-number-input"));
+
+  createLoadAnimation(document.getElementById("load-animation"));
 
   $('#next-page-btn').click(() => {
     const page = parseInt($("#page-number-input").val()) + 1;
@@ -66,21 +88,29 @@ function createTable(partialUrl, createNewElementsCB) {
     makePageRequest(page, partialUrl, createNewElementsCB);
   });
 
-  $('.better-checkbox input').change(() => {
+  add_checkbox_behavior();
+
+  $('#popup-confirm-btn').click(() => {
+    $('#load-animation').css("display", "block");
+    $('#popup-confirm-btn').css("display", "none");
+    $('#popup-cancel-btn').prop('disabled', true);
     const trash = $('.bx-trash');
     trash.css("color", "gray");
     trash.removeClass('trash-can-delete');
-    
-    $('.better-checkbox input').each(function() {
-      if ($(this).is(":checked")) {
-        trash.css("color", "rgb(163, 24, 24)");
-        trash.addClass('trash-can-delete');
-      }
-    });
 
-    $('.trash-can-delete').click(() => {
-      console.log("going to show the popup?");
-      $('.confirm-popup-background').css("display", "block");
+    onDeleteCB(() => {
+      $('#load-animation').css("display", "none");
+      $('#popup-confirm-btn').css("display", "block");
+      $('#popup-cancel-btn').prop('disabled', false);
+      $('.confirm-popup-background').css("display", "none");
+
+      // Reload current page with changes
+      const page = parseInt($("#page-number-input").val());
+      makePageRequest(page, partialUrl, createNewElementsCB);
     });
+  });
+
+  $('#popup-cancel-btn').click(() => {
+    $('.confirm-popup-background').css("display", "none");
   });
 }
