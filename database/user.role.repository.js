@@ -39,6 +39,14 @@ class UserRoleRepository {
       [ userRole.userId, userRole.roleName, userRole.userId, userRole.roleName ]);
   }
 
+  async deleteRoleByUserIdAndRoleName(userId, roleName) {
+    const conn = await getDBConnection();
+
+    await conn.query(`DELETE FROM UserRole WHERE userId=? AND roleName=?`,
+      [userId, roleName]);
+
+  }
+
   async hasUserRole(userId, roleName) {
     const conn = await getDBConnection();
 

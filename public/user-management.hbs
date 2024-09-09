@@ -6,7 +6,7 @@
     <title>User Management</title>
 
     <div base-url=""></div>
-    <div admin-id="{{adminId}}"></div>
+    <div id="admin-id-store" admin-id="{{adminId}}"></div>
     <import value="/common-links"></import>
     <import value="form-links"></import>
     <link rel="stylesheet" href="/styles/admin.tables.style.css">
@@ -104,7 +104,7 @@
                 </thead>
                 <tbody>
                     {{#each initialialUsers}}
-                        <tr user-roles="{{roles}}">
+                        <tr user-id="{{id}}" user-roles="{{roles}}">
                             {{#ifEquals id ../adminId}}
                                 <td></td>
                             {{else}}

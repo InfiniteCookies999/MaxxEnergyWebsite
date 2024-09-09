@@ -12,10 +12,11 @@ function getOrCreateRoleGroup(role) {
   return roleGroup;
 }
 
-function addToRoleGroup(group, role) {
+function addToRoleGroup(group, role, userId) {
+
   group.append(`
-    <td class="added-role">
-      <span value="${role}">${role.charAt(0).toUpperCase() + role.slice(1)}</span>
+    <td user-role="${role}" user-id=${userId} class="added-role">
+      <span>${role.charAt(0).toUpperCase() + role.slice(1)}</span>
       <span class="remove-role-x">X</span>
     </td>
     `);
@@ -23,15 +24,20 @@ function addToRoleGroup(group, role) {
 
 $(document).ready(() => {
   createTable('/user/users', (tableBody, res) => {
+    const ourId = parseInt($('#admin-id-store').attr('admin-id'));
     for (const user of res.users) {
       tableBody.append(`
-        <tr user-roles="${user.roles}">
+        <tr user-id="${user.id}" user-roles="${user.roles}">
+          ${ourId == user.id ? `<td></td>` :
+            `
             <td>
                 <div class="form-group smaller-text better-checkbox">
                   <input id="sel-check-${user.id}" type="checkbox" autocomplete="off" class="styled-checkbox">
                   <label class="form-check-label" for="sel-check-${user.id}"></label>
                 </div>
             </td>
+            `
+          }
             <td scope="row">${user.id}</td>
             <td class="user-name">${user.firstName} ${user.lastName}</td>
             <td>${user.email}</td>
@@ -79,14 +85,13 @@ $(document).ready(() => {
   $(document).on('click', '.role-can-add', () => {
     $('#add-role-popup').css("display", "block");
 
-    console.log("clicked on role can add?");
-    
     $('#role-add-input').val('').change();
     const roleNamesGroup = $('#add-roles-user-names');
     roleNamesGroup.empty();
 
     $('#added-roles-group').empty();
 
+    let checkedUserCount = 0;
     $('.better-checkbox input').each(function() {
       
       const checkbox = $(this);
@@ -101,7 +106,15 @@ $(document).ready(() => {
           // Going through each role and adding the entry to the table.
           for (const role of roles) {
             const roleGroup = getOrCreateRoleGroup(role);
-            addToRoleGroup(roleGroup, role);
+            if (checkedUserCount > 0 && roleGroup.children('td').length === 0) {
+              // First insertion into the table which means
+              // we got to add padding for any of the user
+              // users that came before this one.
+              for (let i = 0; i < checkedUserCount; ++i) {
+                roleGroup.append(`<td class="added-role"></td>`);
+              }
+            }
+            addToRoleGroup(roleGroup, role, userRow.attr('user-id'));
           }
 
           // Going through all existing role groups and if the user does
@@ -114,6 +127,8 @@ $(document).ready(() => {
               roleGroup.append(`<td class="added-role"></td>`);
             }
           });
+
+          ++checkedUserCount;
       }
     });
 
@@ -121,13 +136,43 @@ $(document).ready(() => {
 
   $(document).on('click', '.remove-role-x', function() {
     const trGroup = $(this).closest('tr');
-    $(this).parent().empty();
+    const row = $(this).parent();
+    const userId = row.attr('user-id');
+    const role = row.attr('user-role');
+    
+    row.empty();
     const needsRowRemoval = trGroup.children('td').filter(function() {
       return $(this).children().length != 0
     }).length == 0;
     if (needsRowRemoval) {
       trGroup.remove();
     }
+
+    const userDBTableRow = $('#db-table tbody tr').filter(function() {
+      return $(this).attr('user-id') === userId;
+    });
+    const currentRoles = userDBTableRow.attr('user-roles');
+    const newRoles = currentRoles
+                      .split(',')
+                      .filter(r => r.trim() !== '')
+                      .filter(r => r !== role) // Filter out current role being removed.
+                      .join();
+    userDBTableRow.attr('user-roles', newRoles);
+
+    const baseUrl = $('[base-url]').attr('base-url');
+
+    $.ajax({
+      type: 'DELETE',
+      url: baseUrl + '/api/user/remove-role',
+      contentType: 'application/json; charset=utf-8',
+      data: JSON.stringify({
+        userId: userId,
+        role: role
+      }),
+      error: (res) => {
+        processServerErrorResponse(res);
+      }
+    });
   });
 
   $('#finished-add-role-btn').click(() => {
@@ -147,8 +192,30 @@ $(document).ready(() => {
     // Clear the group entirely since we will add all of them back.
     roleGroup.empty();
     for (const userId of userIds) {
-      addToRoleGroup(roleGroup, role);
+      addToRoleGroup(roleGroup, role, userId);
     }
+    // Updating the database table to indicate that the users now have
+    // this new role.
+    
+    // First we filter for all the user rows of the current users we
+    // are updating.
+    const userDBTableRows = $('#db-table tbody tr').filter(function() {
+      return userIds.includes(parseInt($(this).attr('user-id')));
+    });
+    console.log("userDBTableRows: ", userDBTableRows);
+    // Next we go and update the list if needed for each user row.
+    userDBTableRows.each(function() {
+      const userRow = $(this);
+      const currentRoles = userRow.attr('user-roles');
+      const newRoles = currentRoles
+                        .split(',')
+                        .filter(r => r.trim() !== '');
+      // If the roles do no include the new role we got to add it.
+      if (!newRoles.includes(role)) {
+        newRoles.push(role);
+      }  
+      userRow.attr('user-roles', newRoles.join());
+    });
 
     const baseUrl = $('[base-url]').attr('base-url');
 

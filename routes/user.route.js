@@ -331,13 +331,25 @@ router.put('/user/add-roles',
       throw new HttpError("Only admins can access", 401);
     }
 
-    console.log("adding role: ", req.body.role);
-    console.log("for users: ", req.body.userIds);
-
     for (const userId of req.body.userIds) {
-      console.log(`adding role ${req.body.role} to userId ${userId}`);
       await UserService.addRoleIfNotExistByUserId(userId, req.body.role);
     }
+
+    res.send();
+}));
+
+router.delete('/user/remove-role',
+  body('userId').isInt().withMessage("Must be an integer for id"),
+  body('role').isIn(UserRoleRepository.rolls()),
+
+  validateLoggedIn,
+  controller(async (req, res) => {
+
+    if (!(await UserService.userSessionHasRole(req.session, UserRoleRepository.adminRole()))) {
+      throw new HttpError("Only admins can access", 401);
+    }
+
+    await UserService.removeRoleFromUserById(req.body.userId, req.body.role);
 
     res.send();
 }));
