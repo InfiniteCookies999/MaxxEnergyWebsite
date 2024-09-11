@@ -37,6 +37,7 @@ router.post('/contact/submit',
 router.get('/contact/messages',
   query('page').notEmpty().withMessage("The page cannot be empty"),
   query('email').optional(),
+  query('name').optional(),
   validateBody,
 
   validateLoggedIn,
@@ -48,10 +49,23 @@ router.get('/contact/messages',
 
     const page = req.query.page;
     const emailSearch = req.query.email || '';
+    const nameSearch = req.query.name || '';
+    
+    const nameParts = nameSearch.trim().split(" ");
+    const firstName = nameParts[0]?.trim() || '';
+    const lastName = nameParts[1]?.trim() || '';
 
     const pageSize = 12;
-    const messages = await ContactRepository.getPageOfContactMessages(page, pageSize, emailSearch);
-    const total = await ContactRepository.totalContactMessages(emailSearch);
+    let messages = await ContactRepository.getPageOfContactMessages(page, pageSize,
+      emailSearch, firstName, lastName);
+    // Also search for if the only provide last name.
+    if (firstName !== '' && lastName === '') {
+      const messages2 = await ContactRepository.getPageOfContactMessages(page, pageSize,
+        emailSearch, '', firstName);
+      messages = messages.concat(messages2);
+    }
+    
+    const total = await ContactRepository.totalContactMessages(emailSearch, firstName, lastName);
 
     res.json({
       messages,

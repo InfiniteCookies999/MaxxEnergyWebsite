@@ -44,5 +44,17 @@ $(document).ready(() => {
   },
   () => {
      
+  },
+  (searchInput, searchField) => {
+
+    switch (searchField) {
+    case 'email':
+      searchInput.attr('placeholder', 'susan@gmail.com');
+      break;
+    case 'name':
+      preventInvalidName(searchInput);
+      searchInput.attr('placeholder', 'Susan Smith');
+      break;
+    }
   });
 });

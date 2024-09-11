@@ -268,6 +268,7 @@ router.get('/user/users',
   query('state').optional(),
   query('county').optional(),
 
+  validateBody,
   validateLoggedIn,
   controller(async (req, res) => {
 
@@ -287,13 +288,17 @@ router.get('/user/users',
   const lastName = nameParts[1]?.trim() || '';
 
   const pageSize = 12;
-  const users1 = await UserRepository.getPageOfUsers(page, pageSize,
+  let users = await UserRepository.getPageOfUsers(page, pageSize,
     emailSearch, firstName, lastName, phoneSearch, stateSearch, countySearch);
-  // Also search for if the only insert last name.
-  const users2 = await UserRepository.getPageOfUsers(page, pageSize,
+  // Also search for if the only provide last name.
+  if (firstName !== '' && lastName === '') {
+    const users1 = await UserRepository.getPageOfUsers(page, pageSize,
       emailSearch, '', firstName, phoneSearch, stateSearch, countySearch);
-  const users = users1.concat(users2);
-  const total = await UserRepository.totalUsers(emailSearch);
+    users = users.concat(users1);
+  }
+  
+  const total = await UserRepository.totalUsers(emailSearch, firstName, lastName,
+    phoneSearch, stateSearch, countySearch);
   
   for (const user of users) {
     const roles = (await UserRoleRepository.getRolesForUserId(user.id))

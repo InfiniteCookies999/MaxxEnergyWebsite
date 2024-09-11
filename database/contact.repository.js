@@ -48,25 +48,63 @@ class ContactRepository {
     });
   }
 
-  async getPageOfContactMessages(pageNumber, pageSize, emailSearch) {
+  getSearchFieldsWhereClause(emailSearch, firstNameSearch, lastNameSearch) {
+    
+    const checkValue = (searchValue) => {
+      return searchValue !== undefined && searchValue !== '';
+    };
+
+    let clause = '';
+    
+    let searchValues = [];
+    if (checkValue(emailSearch) || checkValue(firstNameSearch) || checkValue(lastNameSearch)) {
+          clause += "WHERE ";
+    }
+
+    let alreadyHasSearch = false;
+    const addSearch = (searchValue, filedName) => {
+      if (checkValue(searchValue)) {
+        if (alreadyHasSearch) {
+          clause += 'AND ';
+        }
+        clause += `${filedName} LIKE ? `;
+        searchValues.push(`%${searchValue}%`);
+        alreadyHasSearch = true;
+      }
+    };
+
+    addSearch(emailSearch, 'email');
+    addSearch(firstNameSearch, 'firstName');
+    addSearch(lastNameSearch, 'lastName');
+
+    return [ clause, searchValues ];
+  }
+
+  async getPageOfContactMessages(pageNumber, pageSize,
+                                 emailSearch, firstNameSearch, lastNameSearch) {
     const conn = await getDBConnection();
     
+    let [ whereClause, searchValues ] = this.getSearchFieldsWhereClause(
+      emailSearch, firstNameSearch, lastNameSearch);
     
-    const [ messages ] = await conn.query(`SELECT * FROM ContactMessage
-      WHERE email LIKE ?
-      ORDER BY id ASC
-      LIMIT ? OFFSET ?
-      `,
-      [ `%${emailSearch}%`, pageSize, pageNumber * pageSize ]);
+    let sql = `SELECT * FROM ContactMessage ${whereClause}
+               ORDER BY id ASC
+               LIMIT ? OFFSET ?`;
+    
+    const [ messages ] = await conn.query(sql,
+      [ ...searchValues, pageSize, pageNumber * pageSize ]);
 
     return messages;
   }
 
-  async totalContactMessages(emailSearch) {
+  async totalContactMessages(emailSearch, firstNameSearch, lastNameSearch) {
     const conn = await getDBConnection();
 
-    const [result] = await conn.query(`SELECT COUNT(*) AS total FROM ContactMessage
-      WHERE email LIKE ?`, [ `%${emailSearch}%` ]);
+    let [ whereClause, searchValues ] = this.getSearchFieldsWhereClause(
+      emailSearch, firstNameSearch, lastNameSearch);
+    
+    let sql = `SELECT COUNT(*) AS total FROM ContactMessage ${whereClause}`;
+    const [result] = await conn.query(sql, searchValues);
 
     return result[0].total;
   }
