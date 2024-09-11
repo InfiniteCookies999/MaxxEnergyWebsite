@@ -261,8 +261,12 @@ router.get('/user/check-password-reset-token/:token',
 
 router.get('/user/users',
   query('page').notEmpty().withMessage("The page cannot be empty"),
+
   query('email').optional(),
-  validateBody,
+  query('name').optional(),
+  query('phone').optional(),
+  query('state').optional(),
+  query('county').optional(),
 
   validateLoggedIn,
   controller(async (req, res) => {
@@ -273,9 +277,18 @@ router.get('/user/users',
 
   const page = req.query.page;
   const emailSearch = req.query.email || '';
+  const nameSearch = req.query.name || '';
+  const phoneSearch = req.query.phone || '';
+  const stateSearch = req.query.state || '';
+  const countySearch = req.query.county || '';
+
+  const nameParts = nameSearch.trim().split(" ");
+  const firstName = nameParts[0]?.trim() || '';
+  const lastName = nameParts[1]?.trim() || '';
 
   const pageSize = 12;
-  const users = await UserRepository.getPageOfUsers(page, pageSize, emailSearch);
+  const users = await UserRepository.getPageOfUsers(page, pageSize,
+    emailSearch, firstName, lastName, phoneSearch, stateSearch, countySearch);
   const total = await UserRepository.totalUsers(emailSearch);
 
   for (const user of users) {

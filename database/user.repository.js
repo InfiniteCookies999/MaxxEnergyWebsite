@@ -194,25 +194,72 @@ class UserRepository {
     return user;
   }
 
-  async getPageOfUsers(pageNumber, pageSize, emailSearch) {
+  getSearchFieldsWhereClause(emailSearch, firstNameSearch, lastNameSearch,
+                             phoneSearch, stateSearch, countySearch) {
+    
+    const checkValue = (searchValue) => {
+      return searchValue !== undefined && searchValue !== '';
+    };
+
+    let clause = '';
+    
+    let searchValues = [];
+    if (checkValue(emailSearch) || checkValue(firstNameSearch) || checkValue(lastNameSearch) ||
+        checkValue(phoneSearch) || checkValue(stateSearch) || checkValue(countySearch)) {
+          clause += "WHERE ";
+    }
+
+    let alreadyHasSearch = false;
+    const addSearch = (searchValue, filedName) => {
+      if (checkValue(searchValue)) {
+        if (alreadyHasSearch) {
+          clause += 'AND ';
+        }
+        clause += `${filedName} LIKE ? `;
+        searchValues.push(`%${searchValue}%`);
+        alreadyHasSearch = true;
+      }
+    };
+
+    addSearch(emailSearch, 'email');
+    addSearch(firstNameSearch, 'firstName');
+    addSearch(lastNameSearch, 'lastName');
+    addSearch(phoneSearch, 'phone');
+    addSearch(stateSearch, 'state');
+    addSearch(countySearch, 'county');
+
+    return [ clause, searchValues ];
+  }
+
+  async getPageOfUsers(pageNumber, pageSize,
+                       emailSearch, firstNameSearch, lastNameSearch,
+                       phoneSearch, stateSearch, countySearch) {
     const conn = await getDBConnection();
     
+    let [ whereClause, searchValues ] = this.getSearchFieldsWhereClause(
+      emailSearch, firstNameSearch, lastNameSearch,
+      phoneSearch, stateSearch, countySearch);
     
-    const [ users ] = await conn.query(`SELECT * FROM user
-      WHERE email LIKE ?
-      ORDER BY id ASC
-      LIMIT ? OFFSET ?
-      `,
-      [ `%${emailSearch}%`, pageSize, pageNumber * pageSize ]);
+    let sql = `SELECT * FROM user ${whereClause}
+               ORDER BY id ASC
+               LIMIT ? OFFSET ?`;
+    
+    const [ users ] = await conn.query(sql,
+      [ ...searchValues, pageSize, pageNumber * pageSize ]);
 
     return users;
   }
 
-  async totalUsers(emailSearch) {
+  async totalUsers(emailSearch, firstNameSearch, lastNameSearch,
+                   phoneSearch, stateSearch, countySearch) {
     const conn = await getDBConnection();
 
-    const [result] = await conn.query(`SELECT COUNT(*) AS total FROM user
-      WHERE email LIKE ?`, [ `%${emailSearch}%` ]);
+    let [ whereClause, searchValues ] = this.getSearchFieldsWhereClause(
+      emailSearch, firstNameSearch, lastNameSearch,
+      phoneSearch, stateSearch, countySearch);
+    
+    let sql = `SELECT COUNT(*) AS total FROM user ${whereClause}`;
+    const [result] = await conn.query(sql, searchValues);
 
     return result[0].total;
   }

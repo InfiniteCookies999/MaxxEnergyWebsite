@@ -103,3 +103,8 @@ ul {
 .confirm-popup img {
   color: red;
 }
+
+#search-dropdown {
+  width: fit-content;
+  display: inline-block;
+}

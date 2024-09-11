@@ -46,7 +46,15 @@
                     <i class='bx bxs-shield-plus'></i>
                     <i class='ml-1 bx bx-trash'></i>
                 </div>
-                <input id="email-search-input"
+                <select id="search-dropdown" class="form-control">
+                    <option value="" disabled>Search By</option>
+                    <option value="email" selected>Email</option>
+                    <option value="name">Name</option>
+                    <option value="phone">Phone</option>
+                    <option value="state">State</option>
+                    <option value="county">County</option>
+                </select>
+                <input id="search-input"
                        type="text"
                        class="form-control mx-2"
                        placeholder="susan@gmail.com">

@@ -27,7 +27,7 @@ function finishPageChange(newPage, res, createNewElementsCB, onCheckedCB) {
   
   $('#prev-page-btn').prop('disabled', newPage === 1);
   $('#next-page-btn').prop('disabled', newPage === res.totalPages);
-  $('#email-search-input, #page-number-input').prop('readonly', false);
+  $('#search-input, #page-number-input').prop('readonly', false);
 
   $('#total-page-span').text("of " + res.totalPages);
   const tableBody = $('#db-table tbody');
@@ -43,16 +43,17 @@ function makePageRequest(page, partialUrl, createNewElementsCB, onCheckedCB) {
   }
 
   $('#next-page-btn, #prev-page-btn').prop('disabled', true);
-  $('#email-search-input, #page-number-input').prop('readonly', true);
+  $('#search-input, #page-number-input').prop('readonly', true);
+  const searchField = $('#search-dropdown').val();
 
   const baseUrl = $('[base-url]').attr('base-url');
 
-  const searchEmail = $('#email-search-input').val();
+  const searchValue = $('#search-input').val();
 
   $.ajax({
     type: 'GET',
     // -1 because it is zero indexed.
-    url: `${baseUrl}/api${partialUrl}?page=${page - 1}&email=${encodeURIComponent(searchEmail)}`, 
+    url: `${baseUrl}/api${partialUrl}?page=${page - 1}&${searchField}=${encodeURIComponent(searchValue)}`, 
     success: (res) => {
       finishPageChange(page, res, createNewElementsCB, onCheckedCB);
     },
@@ -88,7 +89,7 @@ function createTable(partialUrl, createNewElementsCB, onDeleteCB, onCheckedCB) {
     makePageRequest(page, partialUrl, createNewElementsCB, onCheckedCB);
   });
 
-  $('#email-search-input').on('input', () => {
+  $('#search-input').on('input', () => {
     const page = parseInt($("#page-number-input").val());
     makePageRequest(page, partialUrl, createNewElementsCB, onCheckedCB);
   });
@@ -121,6 +122,30 @@ function createTable(partialUrl, createNewElementsCB, onDeleteCB, onCheckedCB) {
 
   $(document).on('click', '.trash-can-delete', () => {
     $('#delete-popup').css("display", "block");
+  });
+
+  $('#search-dropdown').change(() => {
+    const searchField = $('#search-dropdown').val();
+    const searchInput = $('#search-input');
+    
+    switch (searchField) {
+    case 'email':
+      searchInput.attr('placeholder', 'susan@gmail.com');
+      break;
+    case 'name':
+      searchInput.attr('placeholder', 'Susan Smith');
+      break;
+    case 'phone':
+      searchInput.attr('placeholder', '7777777777');
+      break;
+    case 'state':
+      searchInput.attr('placeholder', 'VA');
+      break;
+    case 'county':
+      searchInput.attr('placeholder', 'Portsmouth');
+      break;
+    }
+  
   });
 }
 
