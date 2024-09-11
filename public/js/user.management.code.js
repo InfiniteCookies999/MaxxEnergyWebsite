@@ -22,6 +22,7 @@ function addToRoleGroup(group, role, userId) {
     `);
 }
 
+// TODO: Fix issue with phone input field not updating its value quick enough to be a meaningful phone number.
 $(document).ready(() => {
   createTable('/user/users', (tableBody, res) => {
     const ourId = parseInt($('#admin-id-store').attr('admin-id'));
@@ -80,6 +81,55 @@ $(document).ready(() => {
       roleAddBtn.css("color", "gray");
       roleAddBtn.removeClass("role-can-add");
     }
+  },
+  (searchInput, searchField) => {
+
+    const replaceWithTextInput = () => {
+      if (!searchInput.is('input')) {
+        $('#select-search-input-container').replaceWith(`
+          <input id="search-input"
+                 type="text"
+                 class="form-control mx-2">
+          `);
+          searchInput = $('#search-input');
+      }
+    };
+
+    const replaceWithStateSelect = () => {
+      let replaceInput = searchInput;
+      if (!replaceInput.is('input')) {
+        replaceInput = $('#select-search-input-container');
+      }
+
+      replaceInput.replaceWith(`
+          <div id='select-search-input-container' class="select-with-search">
+              <select id="search-input" data-live-search="true" class="selectpicker">
+              </select>
+          </div>
+        `);
+        searchInput = $('#search-input');
+        setStates(searchInput);
+    };
+
+    switch (searchField) {
+      case 'email':
+        replaceWithTextInput();
+        searchInput.attr('placeholder', 'susan@gmail.com');
+        break;
+      case 'name':
+        replaceWithTextInput();
+        preventInvalidName(searchInput);
+        searchInput.attr('placeholder', 'Susan Smith');
+        break;
+      case 'phone':
+        replaceWithTextInput();
+        preventInvalidPhoneInput(searchInput);
+        searchInput.attr('placeholder', '7777777777');
+        break;
+      case 'state':
+        replaceWithStateSelect();
+        break;
+      }
   });
 
   $(document).on('click', '.role-can-add', () => {

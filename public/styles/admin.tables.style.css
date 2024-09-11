@@ -108,3 +108,7 @@ ul {
   width: fit-content;
   display: inline-block;
 }
+
+body {
+  background-color: white !important;
+}

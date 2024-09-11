@@ -44,10 +44,10 @@ function makePageRequest(page, partialUrl, createNewElementsCB, onCheckedCB) {
 
   $('#next-page-btn, #prev-page-btn').prop('disabled', true);
   $('#search-input, #page-number-input').prop('readonly', true);
-  const searchField = $('#search-dropdown').val();
 
   const baseUrl = $('[base-url]').attr('base-url');
 
+  const searchField = $('#search-dropdown').val();
   const searchValue = $('#search-input').val();
 
   $.ajax({
@@ -63,7 +63,7 @@ function makePageRequest(page, partialUrl, createNewElementsCB, onCheckedCB) {
   });
 }
 
-function createTable(partialUrl, createNewElementsCB, onDeleteCB, onCheckedCB) {
+function createTable(partialUrl, createNewElementsCB, onDeleteCB, onCheckedCB, onSearchTypeChange) {
   preventInvalidNonNumber($("#page-number-input"));
 
   createLoadAnimation(document.getElementById("load-animation"));
@@ -85,11 +85,6 @@ function createTable(partialUrl, createNewElementsCB, onDeleteCB, onCheckedCB) {
     }
   })
   .blur(() => {
-    const page = parseInt($("#page-number-input").val());
-    makePageRequest(page, partialUrl, createNewElementsCB, onCheckedCB);
-  });
-
-  $('#search-input').on('input', () => {
     const page = parseInt($("#page-number-input").val());
     makePageRequest(page, partialUrl, createNewElementsCB, onCheckedCB);
   });
@@ -124,28 +119,35 @@ function createTable(partialUrl, createNewElementsCB, onDeleteCB, onCheckedCB) {
     $('#delete-popup').css("display", "block");
   });
 
+  const onSearchInputChange = () => {
+    const page = parseInt($("#page-number-input").val());
+    makePageRequest(page, partialUrl, createNewElementsCB, onCheckedCB);
+  };
+
+  $('#search-input').on('input', onSearchInputChange);
+
   $('#search-dropdown').change(() => {
     const searchField = $('#search-dropdown').val();
-    const searchInput = $('#search-input');
+    let searchInput = $('#search-input');
     
-    switch (searchField) {
-    case 'email':
-      searchInput.attr('placeholder', 'susan@gmail.com');
-      break;
-    case 'name':
-      searchInput.attr('placeholder', 'Susan Smith');
-      break;
-    case 'phone':
-      searchInput.attr('placeholder', '7777777777');
-      break;
-    case 'state':
-      searchInput.attr('placeholder', 'VA');
-      break;
-    case 'county':
-      searchInput.attr('placeholder', 'Portsmouth');
-      break;
+    searchInput.off();
+    onSearchTypeChange(searchInput, searchField);
+    
+    // Have to reobtain because the input type might have changed.
+    searchInput = $('#search-input');
+
+    if (searchInput.is('input')) {
+      searchInput.val("");
+      searchInput.on('input', onSearchInputChange);
+    } else if (searchInput.is('select')) {
+      searchInput.on('change', () => {
+        const page = parseInt($("#page-number-input").val());
+        makePageRequest(page, partialUrl, createNewElementsCB, onCheckedCB);
+      });
     }
-  
+    
+    onSearchInputChange();
+
   });
 }
 

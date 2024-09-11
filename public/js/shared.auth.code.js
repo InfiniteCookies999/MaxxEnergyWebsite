@@ -196,6 +196,7 @@ function preventInvalidName(input) {
     }
   }));
 }
+
 function processServerErrorResponse(res, errorContainer) {
   const badRes = res.status >= 400 && res.status <= 499 && res.status !== 400;
   if (badRes && errorContainer) {

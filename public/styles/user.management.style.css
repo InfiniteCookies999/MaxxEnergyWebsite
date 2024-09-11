@@ -67,3 +67,11 @@
 .blue-btn:hover {
   filter: brightness(0.85);
 }
+
+.select-with-search button {
+  transform: translateY(0) !important; 
+}
+
+.select-with-search {
+  margin-left: 0.5rem;
+}
