@@ -297,8 +297,13 @@ router.get('/user/users',
     users = users.concat(users1);
   }
   
-  const total = await UserRepository.totalUsers(emailSearch, firstName, lastName,
+  let total = await UserRepository.totalUsers(emailSearch, firstName, lastName,
     phoneSearch, stateSearch, countySearch);
+  if (firstName !== '' && lastName === '') {
+    const total1 = await UserRepository.totalUsers(emailSearch, '', firstName,
+      phoneSearch, stateSearch, countySearch);
+    total += total1;
+  }
   
   for (const user of users) {
     const roles = (await UserRoleRepository.getRolesForUserId(user.id))

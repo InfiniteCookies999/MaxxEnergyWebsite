@@ -65,7 +65,11 @@ router.get('/contact/messages',
       messages = messages.concat(messages2);
     }
     
-    const total = await ContactRepository.totalContactMessages(emailSearch, firstName, lastName);
+    let total = await ContactRepository.totalContactMessages(emailSearch, firstName, lastName);
+    if (firstName !== '' && lastName === '') {
+      const total1 = await ContactRepository.totalContactMessages(emailSearch, '', firstName);
+      total += total1;
+    }
 
     res.json({
       messages,
