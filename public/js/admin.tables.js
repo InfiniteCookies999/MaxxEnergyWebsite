@@ -9,6 +9,7 @@ function addCheckboxBehavior(onCheckedCB) {
   $('.better-checkbox input').change(function() {
     disableTrashcan(onCheckedCB);
     
+    let allChecked = true;
     const trash = $('.bx-trash');
     $('.better-checkbox input').each(function() {
       if ($(this).is(":checked")) {
@@ -17,8 +18,23 @@ function addCheckboxBehavior(onCheckedCB) {
         if (onCheckedCB) {
           onCheckedCB(true);
         }
+      } else {
+        allChecked = false;
       }
     });
+
+    const selDesel = $('#sel-desel');
+    if (allChecked) {
+      selDesel.removeClass('can-sel-all');
+      selDesel.addClass('can-desel-all');
+      selDesel.removeClass('bxs-select-multiple');
+      selDesel.addClass('bxs-x-square');
+    } else {
+      selDesel.addClass('can-sel-all');
+      selDesel.removeClass('can-desel-all');
+      selDesel.addClass('bxs-select-multiple');
+      selDesel.removeClass('bxs-x-square');
+    }
   });
 }
 
@@ -149,6 +165,16 @@ function createTable(partialUrl, createNewElementsCB, onDeleteCB, onCheckedCB, o
     onSearchInputChange();
 
   });
+
+  function selOrDel(tof) {
+    $('.better-checkbox input').each(function() {
+      $(this).prop('checked', tof).trigger('change');
+    });
+  }
+
+  $(document).on('click', '.can-sel-all', () => selOrDel(true));
+  $(document).on('click', '.can-desel-all', () => selOrDel(false));
+  
 }
 
 function getIds() {

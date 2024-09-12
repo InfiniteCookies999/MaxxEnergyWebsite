@@ -34,7 +34,6 @@ function addToRoleGroup(group, role, userId) {
     `);
 }
 
-// TODO: Fix issue with phone input field not updating its value quick enough to be a meaningful phone number.
 $(document).ready(() => {
   createTable('/user/users', (tableBody, res) => {
     const ourId = parseInt($('#admin-id-store').attr('admin-id'));
@@ -55,7 +54,7 @@ $(document).ready(() => {
             <td class="user-name">${user.firstName} ${user.lastName}</td>
             <td>${user.email}</td>
             <td>${user.phone}</td>
-            <td>${user.addressLine1} ${user.addressLine2} ${user.county} ${user.state}, ${user.zipCode}</td>
+            <td>${user.addressLine1} ${user.addressLine2 || ''} ${user.county} ${user.state}, ${user.zipCode}</td>
             <td class="role-col-list">
               ${user.roles.map((role) => `
                 <div class="role-col-role">
