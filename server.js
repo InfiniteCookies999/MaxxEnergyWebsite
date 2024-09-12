@@ -7,7 +7,8 @@ const {
   ContactRepository,
   EmailVerifyRepository,
   PasswordResetRepository,
-  UserRoleRepository
+  UserRoleRepository,
+  AuditLogRepository
 } = require('./database');
 const { EmailService } = require('./services');
 
@@ -141,6 +142,7 @@ async function mockDatabase() {
   await EmailVerifyRepository.initialize();
   await PasswordResetRepository.initialize();
   await UserRoleRepository.initialize();
+  await AuditLogRepository.initialize();
 
   await EmailService.initialize();
 

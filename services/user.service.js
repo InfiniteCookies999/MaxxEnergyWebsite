@@ -4,7 +4,8 @@ const {
   UserRepository,
   User,
   UserRoleRepository,
-  UserRole
+  UserRole,
+  AuditLogRepository
 } = require('../database');
 const FileService = require('./file.service');
 const EmailVerifyService = require('./email.verify.service');
@@ -31,6 +32,7 @@ class UserService {
       dto.state, dto.county, dto.addressLine1, dto.addressLine2 || null,
       dto.zipCode, hashedPassword, new Date(), null, false
     ));
+    await AuditLogRepository.saveCreatedAuditLog(user.id, 'User account created');
 
     await EmailVerifyService.sendVerificationEmail(user, serverAddress);
 
