@@ -49,6 +49,8 @@
                     <option value="" disabled>Search By</option>
                     <option value="email" selected>Email</option>
                     <option value="name">Name</option>
+                    <option value="phone">Phone</option>
+                    <option value="messageText">Message Text</option>
                     <option value="id">Id</option>
                 </select>
                 <input id="search-input"
@@ -76,6 +78,7 @@
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
                         <th scope="col">Email</th>
+                        <th scope="col">Phone</th>
                         <th scope="col">Message</th>
                     </tr>
                 </thead>
@@ -91,6 +94,7 @@
                             <td scope="row">{{id}}</td>
                             <td>{{firstName}} {{lastName}}</td>
                             <td>{{email}}</td>
+                            <td>{{phone}}</td>
                             <td>{{message}}</td>
                         </tr>
                     {{else}}

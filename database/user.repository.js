@@ -195,7 +195,8 @@ class UserRepository {
   }
 
   getSearchFieldsWhereClause(emailSearch, firstNameSearch, lastNameSearch,
-                             phoneSearch, stateSearch, countySearch, idSearch) {
+                             phoneSearch, stateSearch, countySearch, idSearch, 
+                             zipcodeSearch, fullAddressSearch) {
     
     const checkValue = (searchValue) => {
       return searchValue !== undefined && searchValue !== '';
@@ -206,7 +207,7 @@ class UserRepository {
     let searchValues = [];
     if (checkValue(emailSearch) || checkValue(firstNameSearch) || checkValue(lastNameSearch) ||
         checkValue(phoneSearch) || checkValue(stateSearch) || checkValue(countySearch) ||
-        checkValue(idSearch)) {
+        checkValue(idSearch) || checkValue(zipcodeSearch) || checkValue(fullAddressSearch)) {
           clause += "WHERE ";
     }
 
@@ -229,18 +230,40 @@ class UserRepository {
     addSearch(stateSearch, 'state');
     addSearch(countySearch, 'county');
     addSearch(idSearch, 'id');
+    addSearch(zipcodeSearch, 'zipCode');
+    if (checkValue(fullAddressSearch)) {
+      if (alreadyHasSearch) {
+        clause += 'AND ';
+      }
+      clause += `CONCAT(addressLine1,
+                        ' ',
+                        IF(addressLine2 IS NOT NULL AND addressLine2 != '',
+                           CONCAT(addressLine2, ' '),
+                           ''),
+                        REPLACE(county, '-', ' '),
+                        ' ',
+                        state,
+                        ', ',
+                        zipCode)
+                    LIKE ?`;
+      clause += " ";
+      searchValues.push(`%${fullAddressSearch}%`);
+      alreadyHasSearch = true;
+    }
 
     return [ clause, searchValues ];
   }
 
   async getPageOfUsers(pageNumber, pageSize,
                        emailSearch, firstNameSearch, lastNameSearch,
-                       phoneSearch, stateSearch, countySearch, idSearch) {
+                       phoneSearch, stateSearch, countySearch, idSearch,
+                       zipcodeSearch, fullAddressSearch) {
     const conn = await getDBConnection();
     
     let [ whereClause, searchValues ] = this.getSearchFieldsWhereClause(
       emailSearch, firstNameSearch, lastNameSearch,
-      phoneSearch, stateSearch, countySearch, idSearch);
+      phoneSearch, stateSearch, countySearch, idSearch, zipcodeSearch,
+      fullAddressSearch);
     
     let sql = `SELECT * FROM user ${whereClause}
                ORDER BY id ASC
@@ -253,12 +276,14 @@ class UserRepository {
   }
 
   async totalUsers(emailSearch, firstNameSearch, lastNameSearch,
-                   phoneSearch, stateSearch, countySearch, idSearch) {
+                   phoneSearch, stateSearch, countySearch, idSearch,
+                   zipcodeSearch, fullAddressSearch) {
     const conn = await getDBConnection();
 
     let [ whereClause, searchValues ] = this.getSearchFieldsWhereClause(
       emailSearch, firstNameSearch, lastNameSearch,
-      phoneSearch, stateSearch, countySearch, idSearch);
+      phoneSearch, stateSearch, countySearch, idSearch, zipcodeSearch,
+      fullAddressSearch);
     
     let sql = `SELECT COUNT(*) AS total FROM user ${whereClause}`;
     const [result] = await conn.query(sql, searchValues);

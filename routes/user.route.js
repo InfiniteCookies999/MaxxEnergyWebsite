@@ -267,6 +267,8 @@ router.get('/user/users',
   query('state').optional(),
   query('county').optional(),
   query('id').optional(),
+  query('zipcode').optional(),
+  query('fullAddress').optional(),
   validateBody,
 
   validateLoggedIn,
@@ -283,6 +285,8 @@ router.get('/user/users',
   const stateSearch = req.query.state || '';
   const countySearch = (req.query.county || '').replaceAll(/\s+/g, "-");
   const idSearch = req.query.id || '';
+  const zipcodeSearch = req.query.zipcode || '';
+  const fullAddressSearch = (req.query.fullAddress || '').replaceAll(/\s+/g, " ");
 
   const nameParts = nameSearch.trim().split(" ");
   const firstName = nameParts[0]?.trim() || '';
@@ -290,19 +294,21 @@ router.get('/user/users',
 
   const pageSize = 12;
   let users = await UserRepository.getPageOfUsers(page, pageSize,
-    emailSearch, firstName, lastName, phoneSearch, stateSearch, countySearch, idSearch);
+    emailSearch, firstName, lastName, phoneSearch, stateSearch,
+    countySearch, idSearch, zipcodeSearch, fullAddressSearch);
   // Also search for if the only provide last name.
   if (firstName !== '' && lastName === '') {
     const users1 = await UserRepository.getPageOfUsers(page, pageSize,
-      emailSearch, '', firstName, phoneSearch, stateSearch, countySearch, idSearch);
+      emailSearch, '', firstName, phoneSearch, stateSearch,
+      countySearch, idSearch, zipcodeSearch, fullAddressSearch);
     users = users.concat(users1);
   }
   
   let total = await UserRepository.totalUsers(emailSearch, firstName, lastName,
-    phoneSearch, stateSearch, countySearch, idSearch);
+    phoneSearch, stateSearch, countySearch, idSearch, zipcodeSearch, fullAddressSearch);
   if (firstName !== '' && lastName === '') {
     const total1 = await UserRepository.totalUsers(emailSearch, '', firstName,
-      phoneSearch, stateSearch, countySearch, idSearch);
+      phoneSearch, stateSearch, countySearch, idSearch, zipcodeSearch, fullAddressSearch);
     total += total1;
   }
   

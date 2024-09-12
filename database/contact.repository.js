@@ -48,7 +48,8 @@ class ContactRepository {
     });
   }
 
-  getSearchFieldsWhereClause(emailSearch, firstNameSearch, lastNameSearch, idSearch) {
+  getSearchFieldsWhereClause(emailSearch, firstNameSearch, lastNameSearch,
+                             idSearch, messageTextSearch, phoneSearch) {
     
     const checkValue = (searchValue) => {
       return searchValue !== undefined && searchValue !== '';
@@ -58,7 +59,8 @@ class ContactRepository {
     
     let searchValues = [];
     if (checkValue(emailSearch) || checkValue(firstNameSearch) ||
-        checkValue(lastNameSearch) || checkValue(idSearch)) {
+        checkValue(lastNameSearch) || checkValue(idSearch) ||
+        checkValue(messageTextSearch) || checkValue(phoneSearch)) {
           clause += "WHERE ";
     }
 
@@ -78,16 +80,19 @@ class ContactRepository {
     addSearch(firstNameSearch, 'firstName');
     addSearch(lastNameSearch, 'lastName');
     addSearch(idSearch, 'id');
+    addSearch(messageTextSearch, "message");
+    addSearch(phoneSearch, "phone");
 
     return [ clause, searchValues ];
   }
 
   async getPageOfContactMessages(pageNumber, pageSize,
-                                 emailSearch, firstNameSearch, lastNameSearch, idSearch) {
+                                 emailSearch, firstNameSearch, lastNameSearch,
+                                 idSearch, messageTextSearch, phoneSearch) {
     const conn = await getDBConnection();
     
     let [ whereClause, searchValues ] = this.getSearchFieldsWhereClause(
-      emailSearch, firstNameSearch, lastNameSearch, idSearch);
+      emailSearch, firstNameSearch, lastNameSearch, idSearch, messageTextSearch, phoneSearch);
     
     let sql = `SELECT * FROM ContactMessage ${whereClause}
                ORDER BY id ASC
@@ -99,11 +104,12 @@ class ContactRepository {
     return messages;
   }
 
-  async totalContactMessages(emailSearch, firstNameSearch, lastNameSearch, idSearch) {
+  async totalContactMessages(emailSearch, firstNameSearch, lastNameSearch,
+                             idSearch, messageTextSearch, phoneSearch) {
     const conn = await getDBConnection();
 
     let [ whereClause, searchValues ] = this.getSearchFieldsWhereClause(
-      emailSearch, firstNameSearch, lastNameSearch, idSearch);
+      emailSearch, firstNameSearch, lastNameSearch, idSearch, messageTextSearch, phoneSearch);
     
     let sql = `SELECT COUNT(*) AS total FROM ContactMessage ${whereClause}`;
     const [result] = await conn.query(sql, searchValues);

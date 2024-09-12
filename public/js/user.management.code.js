@@ -158,6 +158,16 @@ $(document).ready(() => {
         preventInvalidNonNumber(searchInput);
         searchInput.attr('placeholder', '25');  
         break;
+      case 'zipcode':
+        replaceWithTextInput();
+        preventInvalidNonNumber(searchInput);
+        searchInput.attr('placeholder', '67890');
+        searchInput.attr('maxlength', '5');
+        break;
+      case 'fullAddress':
+        replaceWithTextInput();
+        searchInput.attr('placeholder', '123 Elm St Fairfax County VA, 23456');
+        break;
       }
   });
 

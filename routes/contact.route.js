@@ -39,6 +39,8 @@ router.get('/contact/messages',
   query('email').optional(),
   query('name').optional(),
   query('id').optional(),
+  query("messageText").optional(),
+  query('phone').optional(),
   validateBody,
 
   validateLoggedIn,
@@ -52,6 +54,8 @@ router.get('/contact/messages',
     const emailSearch = req.query.email || '';
     const nameSearch = req.query.name || '';
     const idSearch = req.query.id || '';
+    const messageTextSearch = req.query.messageText || '';
+    const phoneSearch = req.query.phone || '';
     
     const nameParts = nameSearch.trim().split(" ");
     const firstName = nameParts[0]?.trim() || '';
@@ -59,19 +63,19 @@ router.get('/contact/messages',
 
     const pageSize = 12;
     let messages = await ContactRepository.getPageOfContactMessages(page, pageSize,
-      emailSearch, firstName, lastName, idSearch);
+      emailSearch, firstName, lastName, idSearch, messageTextSearch, phoneSearch);
     // Also search for if the only provide last name.
     if (firstName !== '' && lastName === '') {
       const messages2 = await ContactRepository.getPageOfContactMessages(page, pageSize,
-        emailSearch, '', firstName, idSearch);
+        emailSearch, '', firstName, idSearch, messageTextSearch, phoneSearch);
       messages = messages.concat(messages2);
     }
     
     let total = await ContactRepository.totalContactMessages(
-      emailSearch, firstName, lastName, idSearch);
+      emailSearch, firstName, lastName, idSearch, messageTextSearch, phoneSearch);
     if (firstName !== '' && lastName === '') {
       const total1 = await ContactRepository.totalContactMessages(
-        emailSearch, '', firstName, idSearch);
+        emailSearch, '', firstName, idSearch, messageTextSearch, phoneSearch);
       total += total1;
     }
 
