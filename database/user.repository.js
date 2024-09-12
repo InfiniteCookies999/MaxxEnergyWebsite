@@ -195,7 +195,7 @@ class UserRepository {
   }
 
   getSearchFieldsWhereClause(emailSearch, firstNameSearch, lastNameSearch,
-                             phoneSearch, stateSearch, countySearch) {
+                             phoneSearch, stateSearch, countySearch, idSearch) {
     
     const checkValue = (searchValue) => {
       return searchValue !== undefined && searchValue !== '';
@@ -205,7 +205,8 @@ class UserRepository {
     
     let searchValues = [];
     if (checkValue(emailSearch) || checkValue(firstNameSearch) || checkValue(lastNameSearch) ||
-        checkValue(phoneSearch) || checkValue(stateSearch) || checkValue(countySearch)) {
+        checkValue(phoneSearch) || checkValue(stateSearch) || checkValue(countySearch) ||
+        checkValue(idSearch)) {
           clause += "WHERE ";
     }
 
@@ -227,18 +228,19 @@ class UserRepository {
     addSearch(phoneSearch, 'phone');
     addSearch(stateSearch, 'state');
     addSearch(countySearch, 'county');
+    addSearch(idSearch, 'id');
 
     return [ clause, searchValues ];
   }
 
   async getPageOfUsers(pageNumber, pageSize,
                        emailSearch, firstNameSearch, lastNameSearch,
-                       phoneSearch, stateSearch, countySearch) {
+                       phoneSearch, stateSearch, countySearch, idSearch) {
     const conn = await getDBConnection();
     
     let [ whereClause, searchValues ] = this.getSearchFieldsWhereClause(
       emailSearch, firstNameSearch, lastNameSearch,
-      phoneSearch, stateSearch, countySearch);
+      phoneSearch, stateSearch, countySearch, idSearch);
     
     let sql = `SELECT * FROM user ${whereClause}
                ORDER BY id ASC
@@ -251,12 +253,12 @@ class UserRepository {
   }
 
   async totalUsers(emailSearch, firstNameSearch, lastNameSearch,
-                   phoneSearch, stateSearch, countySearch) {
+                   phoneSearch, stateSearch, countySearch, idSearch) {
     const conn = await getDBConnection();
 
     let [ whereClause, searchValues ] = this.getSearchFieldsWhereClause(
       emailSearch, firstNameSearch, lastNameSearch,
-      phoneSearch, stateSearch, countySearch);
+      phoneSearch, stateSearch, countySearch, idSearch);
     
     let sql = `SELECT COUNT(*) AS total FROM user ${whereClause}`;
     const [result] = await conn.query(sql, searchValues);

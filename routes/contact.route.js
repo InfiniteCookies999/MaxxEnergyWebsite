@@ -38,6 +38,7 @@ router.get('/contact/messages',
   query('page').notEmpty().withMessage("The page cannot be empty"),
   query('email').optional(),
   query('name').optional(),
+  query('id').optional(),
   validateBody,
 
   validateLoggedIn,
@@ -50,6 +51,7 @@ router.get('/contact/messages',
     const page = req.query.page;
     const emailSearch = req.query.email || '';
     const nameSearch = req.query.name || '';
+    const idSearch = req.query.id || '';
     
     const nameParts = nameSearch.trim().split(" ");
     const firstName = nameParts[0]?.trim() || '';
@@ -57,17 +59,19 @@ router.get('/contact/messages',
 
     const pageSize = 12;
     let messages = await ContactRepository.getPageOfContactMessages(page, pageSize,
-      emailSearch, firstName, lastName);
+      emailSearch, firstName, lastName, idSearch);
     // Also search for if the only provide last name.
     if (firstName !== '' && lastName === '') {
       const messages2 = await ContactRepository.getPageOfContactMessages(page, pageSize,
-        emailSearch, '', firstName);
+        emailSearch, '', firstName, idSearch);
       messages = messages.concat(messages2);
     }
     
-    let total = await ContactRepository.totalContactMessages(emailSearch, firstName, lastName);
+    let total = await ContactRepository.totalContactMessages(
+      emailSearch, firstName, lastName, idSearch);
     if (firstName !== '' && lastName === '') {
-      const total1 = await ContactRepository.totalContactMessages(emailSearch, '', firstName);
+      const total1 = await ContactRepository.totalContactMessages(
+        emailSearch, '', firstName, idSearch);
       total += total1;
     }
 

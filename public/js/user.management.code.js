@@ -149,6 +149,15 @@ $(document).ready(() => {
       case 'state':
         replaceWithStateSelect();
         break;
+      case 'county':
+        replaceWithTextInput();
+        searchInput.attr('placeholder', 'Fairfax County');
+        break;
+      case 'id':
+        replaceWithTextInput();
+        preventInvalidNonNumber(searchInput);
+        searchInput.attr('placeholder', '25');  
+        break;
       }
   });
 

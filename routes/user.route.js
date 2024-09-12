@@ -261,14 +261,14 @@ router.get('/user/check-password-reset-token/:token',
 
 router.get('/user/users',
   query('page').notEmpty().withMessage("The page cannot be empty"),
-
   query('email').optional(),
   query('name').optional(),
   query('phone').optional(),
   query('state').optional(),
   query('county').optional(),
-
+  query('id').optional(),
   validateBody,
+
   validateLoggedIn,
   controller(async (req, res) => {
 
@@ -281,7 +281,8 @@ router.get('/user/users',
   const nameSearch = req.query.name || '';
   const phoneSearch = req.query.phone || '';
   const stateSearch = req.query.state || '';
-  const countySearch = req.query.county || '';
+  const countySearch = (req.query.county || '').replaceAll(/\s+/g, "-");
+  const idSearch = req.query.id || '';
 
   const nameParts = nameSearch.trim().split(" ");
   const firstName = nameParts[0]?.trim() || '';
@@ -289,19 +290,19 @@ router.get('/user/users',
 
   const pageSize = 12;
   let users = await UserRepository.getPageOfUsers(page, pageSize,
-    emailSearch, firstName, lastName, phoneSearch, stateSearch, countySearch);
+    emailSearch, firstName, lastName, phoneSearch, stateSearch, countySearch, idSearch);
   // Also search for if the only provide last name.
   if (firstName !== '' && lastName === '') {
     const users1 = await UserRepository.getPageOfUsers(page, pageSize,
-      emailSearch, '', firstName, phoneSearch, stateSearch, countySearch);
+      emailSearch, '', firstName, phoneSearch, stateSearch, countySearch, idSearch);
     users = users.concat(users1);
   }
   
   let total = await UserRepository.totalUsers(emailSearch, firstName, lastName,
-    phoneSearch, stateSearch, countySearch);
+    phoneSearch, stateSearch, countySearch, idSearch);
   if (firstName !== '' && lastName === '') {
     const total1 = await UserRepository.totalUsers(emailSearch, '', firstName,
-      phoneSearch, stateSearch, countySearch);
+      phoneSearch, stateSearch, countySearch, idSearch);
     total += total1;
   }
   

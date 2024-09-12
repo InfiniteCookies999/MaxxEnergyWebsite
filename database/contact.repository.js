@@ -48,7 +48,7 @@ class ContactRepository {
     });
   }
 
-  getSearchFieldsWhereClause(emailSearch, firstNameSearch, lastNameSearch) {
+  getSearchFieldsWhereClause(emailSearch, firstNameSearch, lastNameSearch, idSearch) {
     
     const checkValue = (searchValue) => {
       return searchValue !== undefined && searchValue !== '';
@@ -57,7 +57,8 @@ class ContactRepository {
     let clause = '';
     
     let searchValues = [];
-    if (checkValue(emailSearch) || checkValue(firstNameSearch) || checkValue(lastNameSearch)) {
+    if (checkValue(emailSearch) || checkValue(firstNameSearch) ||
+        checkValue(lastNameSearch) || checkValue(idSearch)) {
           clause += "WHERE ";
     }
 
@@ -76,16 +77,17 @@ class ContactRepository {
     addSearch(emailSearch, 'email');
     addSearch(firstNameSearch, 'firstName');
     addSearch(lastNameSearch, 'lastName');
+    addSearch(idSearch, 'id');
 
     return [ clause, searchValues ];
   }
 
   async getPageOfContactMessages(pageNumber, pageSize,
-                                 emailSearch, firstNameSearch, lastNameSearch) {
+                                 emailSearch, firstNameSearch, lastNameSearch, idSearch) {
     const conn = await getDBConnection();
     
     let [ whereClause, searchValues ] = this.getSearchFieldsWhereClause(
-      emailSearch, firstNameSearch, lastNameSearch);
+      emailSearch, firstNameSearch, lastNameSearch, idSearch);
     
     let sql = `SELECT * FROM ContactMessage ${whereClause}
                ORDER BY id ASC
@@ -97,11 +99,11 @@ class ContactRepository {
     return messages;
   }
 
-  async totalContactMessages(emailSearch, firstNameSearch, lastNameSearch) {
+  async totalContactMessages(emailSearch, firstNameSearch, lastNameSearch, idSearch) {
     const conn = await getDBConnection();
 
     let [ whereClause, searchValues ] = this.getSearchFieldsWhereClause(
-      emailSearch, firstNameSearch, lastNameSearch);
+      emailSearch, firstNameSearch, lastNameSearch, idSearch);
     
     let sql = `SELECT COUNT(*) AS total FROM ContactMessage ${whereClause}`;
     const [result] = await conn.query(sql, searchValues);

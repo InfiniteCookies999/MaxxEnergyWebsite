@@ -46,7 +46,6 @@ $(document).ready(() => {
      
   },
   (searchInput, searchField) => {
-
     switch (searchField) {
     case 'email':
       searchInput.attr('placeholder', 'susan@gmail.com');
@@ -54,6 +53,10 @@ $(document).ready(() => {
     case 'name':
       preventInvalidName(searchInput);
       searchInput.attr('placeholder', 'Susan Smith');
+      break;
+    case 'id':
+      preventInvalidNonNumber(searchInput);
+      searchInput.attr('placeholder', '25');  
       break;
     }
   });
