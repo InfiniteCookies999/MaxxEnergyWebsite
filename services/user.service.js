@@ -59,6 +59,7 @@ class UserService {
     if (!(await bcrypt.compare(password, hashedPassword))) {
       throw new HttpError(invalidMessage, 401);
     }
+    await AuditLogRepository.saveFunctionAuditLog(user.id, 'User logged into account');
 
     // The user provided correct credentials. Creating a user session.
     session.user = {
@@ -112,6 +113,8 @@ class UserService {
     userId = this.getUserIdForUpdate(userId, session);
 
     await UserRepository.updateUsersPhone(userId, phone);
+    
+    await AuditLogRepository.saveUpdatedAuditLog(userId, 'Updated phone number');
   }
 
   async updateAddress(userId, state, county, addressLine1, addressLine2, zipCode, session) {
@@ -119,6 +122,8 @@ class UserService {
 
     await UserRepository.updateUsersAddress(
       userId, state, county, addressLine1, addressLine2, zipCode);
+    
+    await AuditLogRepository.saveUpdatedAuditLog(userId, 'Updated address');
   }
 
   async updatePassword(userId, oldPassword, newPassword, session) {
@@ -133,6 +138,8 @@ class UserService {
     
     const newHashedPassword = await bcrypt.hash(newPassword, HASH_STRENGTH);
     await UserRepository.updatePassword(userId, newHashedPassword);
+
+    await AuditLogRepository.saveUpdatedAuditLog(userId, 'Updated password');
   }
 
   async updateProfilePic(userId, file, session) {
@@ -146,6 +153,8 @@ class UserService {
       .moveFileWithRandomName(userId, file, 'public/upload/profilepics', oldFile);
   
     await UserRepository.updateProfilePic(userId, profilePicFile);
+
+    await AuditLogRepository.saveUpdatedAuditLog(userId, 'Updated profile picture');
   }
 
   async verifyEmail(token, session) {
@@ -169,6 +178,7 @@ class UserService {
     const user = await this.getUser(session);
 
     await EmailVerifyService.sendVerificationEmail(user, serverAddress);
+
   }
 
   async sendPasswordReset(email, serverAddress) {
@@ -191,6 +201,7 @@ class UserService {
     const newHashedPassword = await bcrypt.hash(newPassword, HASH_STRENGTH);
     await UserRepository.updatePassword(passwordReset.userId, newHashedPassword);
     
+    await AuditLogRepository.saveUpdatedAuditLog(userId, 'Reset password');
   }
 
   async getUser(session) {
@@ -218,10 +229,12 @@ class UserService {
   }
 
   async addRoleIfNotExistByUserId(userId, roleName) {
+    await AuditLogRepository.saveUpdatedAuditLog(userId, `Added role ${roleName}`);
     await UserRoleRepository.saveUserRoleIfNotExists(new UserRole(null, userId, roleName))
   }
 
   async removeRoleFromUserById(userId, roleName) {
+    await AuditLogRepository.saveUpdatedAuditLog(userId, `Removed role ${roleName}`);
     await UserRoleRepository.deleteRoleByUserIdAndRoleName(userId, roleName);
   }
 }

@@ -39,7 +39,7 @@ class AuditLogRepository {
   }
 
   async saveFunctionAuditLog(userId, description) {
-    await this.saveFunctionAuditLog(userId, 'function', description);
+    await this.saveAuditLog(userId, 'function', description);
   }
 }
 
