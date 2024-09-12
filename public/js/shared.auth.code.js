@@ -124,7 +124,7 @@ function preventInvalidPhoneInput(input) {
   }));
 
   // Insert - into the phone number.
-  input.keyup((event) => {
+  input.on('input', (event) => {
     const input = event.target;
     const value = input.value;
 

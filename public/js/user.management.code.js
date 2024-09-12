@@ -130,6 +130,7 @@ $(document).ready(() => {
         setStates(searchInput);
     };
 
+    searchInput.attr('max-length', '');
     switch (searchField) {
       case 'email':
         replaceWithTextInput();
@@ -144,6 +145,7 @@ $(document).ready(() => {
         replaceWithTextInput();
         preventInvalidPhoneInput(searchInput);
         searchInput.attr('placeholder', '7777777777');
+        searchInput.attr('maxlength', '12');
         break;
       case 'state':
         replaceWithStateSelect();
