@@ -306,10 +306,12 @@ router.get('/user/users',
   }
   
   for (const user of users) {
-    const roles = (await UserRoleRepository.getRolesForUserId(user.id))
+    const roles = await UserRoleRepository.getRolesForUserId(user.id);
+    const rolesJoined = roles
       .map((role) => role.roleName)
       .join();
     user.roles = roles;
+    user.rolesJoined = rolesJoined;
   }
 
   res.json({

@@ -1,4 +1,16 @@
 
+function updateRoleCol(userDBTableRow, newRoles) {
+  const roleColList = userDBTableRow.children('.role-col-list');
+  roleColList.empty();
+  for (const newRole of newRoles) {
+    roleColList.append(`
+      <div class="role-col-role">
+          <span>${newRole}</span>
+      </div>
+      `);
+  }
+}
+
 function getOrCreateRoleGroup(role) {
   const roleGroup = $(`#${role}-added-group`);
   if (roleGroup.length == 0) {
@@ -28,7 +40,7 @@ $(document).ready(() => {
     const ourId = parseInt($('#admin-id-store').attr('admin-id'));
     for (const user of res.users) {
       tableBody.append(`
-        <tr user-id="${user.id}" user-roles="${user.roles}">
+        <tr user-id="${user.id}" user-roles="${user.rolesJoined}">
           ${ourId == user.id ? `<td></td>` :
             `
             <td>
@@ -44,6 +56,13 @@ $(document).ready(() => {
             <td>${user.email}</td>
             <td>${user.phone}</td>
             <td>${user.addressLine1} ${user.addressLine2} ${user.county} ${user.state}, ${user.zipCode}</td>
+            <td class="role-col-list">
+              ${user.roles.map((role) => `
+                <div class="role-col-role">
+                  <span>${role.roleName}</span>
+                </div>
+              `)}
+            </td>
         </tr>`);
     }
   },
@@ -132,6 +151,8 @@ $(document).ready(() => {
       }
   });
 
+  // Functionality for adding existing roles of user to the role add
+  // popup.
   $(document).on('click', '.role-can-add', () => {
     $('#add-role-popup').css("display", "block");
 
@@ -184,6 +205,7 @@ $(document).ready(() => {
 
   });
 
+  // Functionality for removing a roll from a specific user.
   $(document).on('click', '.remove-role-x', function() {
     const trGroup = $(this).closest('tr');
     const row = $(this).parent();
@@ -205,9 +227,11 @@ $(document).ready(() => {
     const newRoles = currentRoles
                       .split(',')
                       .filter(r => r.trim() !== '')
-                      .filter(r => r !== role) // Filter out current role being removed.
-                      .join();
-    userDBTableRow.attr('user-roles', newRoles);
+                      .filter(r => r !== role); // Filter out current role being removed.
+    userDBTableRow.attr('user-roles', newRoles.join());
+
+    // Changing the roles that are displayed for the given user in the main table.
+    updateRoleCol(userDBTableRow, newRoles);
 
     const baseUrl = $('[base-url]').attr('base-url');
 
@@ -252,7 +276,7 @@ $(document).ready(() => {
     const userDBTableRows = $('#db-table tbody tr').filter(function() {
       return userIds.includes(parseInt($(this).attr('user-id')));
     });
-    console.log("userDBTableRows: ", userDBTableRows);
+    
     // Next we go and update the list if needed for each user row.
     userDBTableRows.each(function() {
       const userRow = $(this);
@@ -265,6 +289,7 @@ $(document).ready(() => {
         newRoles.push(role);
       }  
       userRow.attr('user-roles', newRoles.join());
+      updateRoleCol(userRow, newRoles);
     });
 
     const baseUrl = $('[base-url]').attr('base-url');
