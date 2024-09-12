@@ -312,6 +312,7 @@ router.get('/user/users',
       .join();
     user.roles = roles;
     user.rolesJoined = rolesJoined;
+    user.county = user.county.replaceAll("-", " ");
   }
 
   res.json({
