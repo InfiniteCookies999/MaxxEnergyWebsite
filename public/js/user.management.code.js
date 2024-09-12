@@ -61,7 +61,7 @@ $(document).ready(() => {
                 <div class="role-col-role">
                   <span>${role.roleName}</span>
                 </div>
-              `)}
+              `).join('')}
             </td>
         </tr>`);
     }
