@@ -117,10 +117,14 @@ router.get('/about-us', controller(async (req, res) => {
   });
 }));
 
-// Route for rendering the header
+// header route
 router.get('/header', controller(async (req, res) => {
-  // Render the header view with login status
-  res.render('header', { isLoggedIn : req.session.user !== undefined });
+  let isLoggedIn = false; 
+
+  if (req.session.user) {
+    isLoggedIn = true; 
+  }
+  res.render('header', { isLoggedIn: isLoggedIn });
 }));
 
 // Verify Email route
