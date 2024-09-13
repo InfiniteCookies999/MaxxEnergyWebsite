@@ -7,34 +7,31 @@ const {
   ContactRepository,
   EmailVerifyRepository,
   PasswordResetRepository,
-  UserRoleRepository
+  UserRoleRepository,
+  StoreRepository  // Import StoreRepository
 } = require('./database');
 const { EmailService } = require('./services');
 
 async function mockDatabase() {
-
   const conn = await getDBConnection();
 
   const messageSelection = [
-    { firstName: "Susan", lastName: "Smith",    email: "susan@gmail.com"        , phone: "452-522-7321" },
-    { firstName: "John" , lastName: "Doe",      email: "john.doe@gmail.com"     , phone: "123-456-7890" },
-    { firstName: "Jane" , lastName: "Doe",      email: "jane.doe@gmail.com"     , phone: "234-567-8901" },
-    { firstName: "Alice", lastName: "Johnson",  email: "alice.johnson@gmail.com", phone: "345-678-9012" },
-    { firstName: "Bob"  , lastName: "Williams", email: "bob.williams@gmail.com" , phone: "456-789-0123" },
+    { firstName: "Susan", lastName: "Smith", email: "susan@gmail.com", phone: "452-522-7321" },
+    { firstName: "John", lastName: "Doe", email: "john.doe@gmail.com", phone: "123-456-7890" },
+    { firstName: "Jane", lastName: "Doe", email: "jane.doe@gmail.com", phone: "234-567-8901" },
+    { firstName: "Alice", lastName: "Johnson", email: "alice.johnson@gmail.com", phone: "345-678-9012" },
+    { firstName: "Bob", lastName: "Williams", email: "bob.williams@gmail.com", phone: "456-789-0123" },
   ];
-  
-  const [messageResults] = await conn.query(`SELECT * FROM ContactMessage WHERE email=?`,
-    [ messageSelection[0].email ]
-  );
+
+  const [messageResults] = await conn.query(`SELECT * FROM ContactMessage WHERE email=?`, [messageSelection[0].email]);
   if (messageResults.length === 0) {
-    //
     const bulkMessages = [];
     for (let i = 0; i <= 100; i++) {
       messageSelection.forEach(row => {
         bulkMessages.push([
           row.firstName, row.lastName, row.email, row.phone,
           `This is a mocked contact message to demonstrate that this works.
-         This is the ${i} mocked message!`
+           This is the ${i} mocked message!`
         ]);
       });
     }
@@ -47,10 +44,10 @@ async function mockDatabase() {
   }
 
   const userSelection = [
-    { 
-      firstName: "Susan", 
-      lastName: "Smith",    
-      email: "susan@gmail.com", 
+    {
+      firstName: "Susan",
+      lastName: "Smith",
+      email: "susan@gmail.com",
       phone: "452-522-7321",
       state: "VA",
       county: "Fairfax-County",
@@ -70,7 +67,7 @@ async function mockDatabase() {
       password: await bcrypt.hash("securepassword2", 10)
     },
     {
-      firstName: "Jane" ,
+      firstName: "Jane",
       lastName: "Doe",
       email: "jane.doe@gmail.com",
       phone: "234-567-8901",
@@ -80,7 +77,7 @@ async function mockDatabase() {
       zipCode: "34567",
       password: await bcrypt.hash("securepassword3", 10)
     },
-    { 
+    {
       firstName: "Alice",
       lastName: "Johnson",
       email: "alice.johnson@gmail.com",
@@ -91,10 +88,10 @@ async function mockDatabase() {
       zipCode: "45678",
       password: await bcrypt.hash("securepassword4", 10)
     },
-    { 
-      firstName: "Bob", 
-      lastName: "Williams", 
-      email: "bob.williams@gmail.com", 
+    {
+      firstName: "Bob",
+      lastName: "Williams",
+      email: "bob.williams@gmail.com",
       phone: "456-789-0123",
       state: "IL",
       county: "Cook-County",
@@ -104,9 +101,7 @@ async function mockDatabase() {
     },
   ];
 
-  const [userResults] = await conn.query(`SELECT * FROM user WHERE email=?`,
-    [ userSelection[0].email ]
-  );
+  const [userResults] = await conn.query(`SELECT * FROM user WHERE email=?`, [userSelection[0].email]);
   if (userResults.length === 0) {
     const bulkUsers = [];
     for (let i = 0; i <= 50; i++) {
@@ -141,6 +136,7 @@ async function mockDatabase() {
   await EmailVerifyRepository.initialize();
   await PasswordResetRepository.initialize();
   await UserRoleRepository.initialize();
+  await StoreRepository.initialize();  // Initialize StoreRepository
 
   await EmailService.initialize();
 

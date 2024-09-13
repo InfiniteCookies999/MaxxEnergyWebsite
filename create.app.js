@@ -9,7 +9,8 @@ const {
   userRouter,
   staticRouter,
   viewsRouter,
-  contactRouter
+  contactRouter,
+  storeRouter,  // Import the store router
 } = require('./routes');
 const { errorHandler, reroute, replaceImports } = require('./middleware');
 
@@ -26,7 +27,7 @@ function createApp() {
     fs.mkdirSync('./public/upload');
   }
   if (!fs.existsSync("./public/upload/profilepics")) {
-    fs.mkdirSync("./public/upload/profilepics")
+    fs.mkdirSync("./public/upload/profilepics");
   }
 
   // Using sessions to keep track of information while the user is logged in.
@@ -34,7 +35,7 @@ function createApp() {
     resave: false,
     secret: config.SESSION_SECRET_KEY,
     saveUninitialized: true,
-    cookie: { maxAge: 60000 * 1440 /* One day */  },
+    cookie: { maxAge: 60000 * 1440 /* One day */ },
   }));
 
   app.use((req, _, next) => {
@@ -52,6 +53,7 @@ function createApp() {
     }
     next();
   });
+
   app.use(replaceImports);
   app.use(reroute);
 
@@ -83,7 +85,8 @@ function createApp() {
 
   // Routers
   app.use('/api/', userRouter);
-  app.use('/api/', contactRouter); // Add the contact router
+  app.use('/api/contact', contactRouter);  // Use the contact router
+  app.use('/api/store', storeRouter);  // Use the store router
   app.use(viewsRouter);
   app.use(staticRouter);
 

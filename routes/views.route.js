@@ -134,7 +134,7 @@ router.get('/about-us', controller(async (req, res) => {
   });
 }));
 
-// Route for rendering the header
+// header route
 router.get('/header', controller(async (req, res) => {
   // Render the header view with login status
   let isAdmin = false;

@@ -8,6 +8,7 @@ const PassswordReset = require('./password.reset.model');
 const { ContactRepository, ContactMessage } = require('./contact.repository');
 const UserRole = require('./user.role.model');
 const UserRoleRepository = require('./user.role.repository');
+const StoreRepository = require('./store.repository');  // Import the StoreRepository
 
 module.exports = {
   getDBConnection,
@@ -20,5 +21,6 @@ module.exports = {
   ContactRepository,
   ContactMessage,
   UserRole,
-  UserRoleRepository
-}
+  UserRoleRepository,
+  StoreRepository  // Export the StoreRepository
+};
