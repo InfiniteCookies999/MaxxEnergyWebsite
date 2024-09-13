@@ -13,6 +13,7 @@ $(document).ready(() => {
             <td scope="row">${message.id}</td>
             <td>${message.firstName} ${message.lastName}</td>
             <td>${message.email}</td>
+            <td>${message.phone}</td>
             <td>${message.message}</td>
         </tr>`);
     }
@@ -44,5 +45,28 @@ $(document).ready(() => {
   },
   () => {
      
+  },
+  (searchInput, searchField) => {
+    switch (searchField) {
+    case 'email':
+      searchInput.attr('placeholder', 'susan@gmail.com');
+      break;
+    case 'name':
+      preventInvalidName(searchInput);
+      searchInput.attr('placeholder', 'Susan Smith');
+      break;
+    case 'id':
+      preventInvalidNonNumber(searchInput);
+      searchInput.attr('placeholder', '25');  
+      break;
+    case 'messageText':
+      searchInput.attr('placeholder', 'Could I get help');
+      break;
+    case 'phone':
+      preventInvalidPhoneInput(searchInput);
+      searchInput.attr('placeholder', '7777777777');
+      searchInput.attr('maxlength', '12');
+      break;
+    }
   });
 });

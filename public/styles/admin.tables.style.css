@@ -103,3 +103,30 @@ ul {
 .confirm-popup img {
   color: red;
 }
+
+#search-dropdown {
+  width: fit-content;
+  display: inline-block;
+}
+
+body {
+  background-color: white !important;
+}
+
+.can-sel-all {
+  color: var(--site-orange-color) !important;
+}
+
+.can-sel-all:hover {
+  filter: brightness(0.85);
+  cursor: pointer;
+}
+
+.can-desel-all {
+  color: black !important;
+}
+
+.can-desel-all:hover {
+  color: rgb(73, 73, 73) !important;
+  cursor: pointer;
+}

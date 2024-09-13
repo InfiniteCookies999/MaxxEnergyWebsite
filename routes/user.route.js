@@ -262,6 +262,13 @@ router.get('/user/check-password-reset-token/:token',
 router.get('/user/users',
   query('page').notEmpty().withMessage("The page cannot be empty"),
   query('email').optional(),
+  query('name').optional(),
+  query('phone').optional(),
+  query('state').optional(),
+  query('county').optional(),
+  query('id').optional(),
+  query('zipcode').optional(),
+  query('fullAddress').optional(),
   validateBody,
 
   validateLoggedIn,
@@ -273,16 +280,46 @@ router.get('/user/users',
 
   const page = req.query.page;
   const emailSearch = req.query.email || '';
+  const nameSearch = req.query.name || '';
+  const phoneSearch = req.query.phone || '';
+  const stateSearch = req.query.state || '';
+  const countySearch = (req.query.county || '').replaceAll(/\s+/g, "-");
+  const idSearch = req.query.id || '';
+  const zipcodeSearch = req.query.zipcode || '';
+  const fullAddressSearch = (req.query.fullAddress || '').replaceAll(/\s+/g, " ");
+
+  const nameParts = nameSearch.trim().split(" ");
+  const firstName = nameParts[0]?.trim() || '';
+  const lastName = nameParts[1]?.trim() || '';
 
   const pageSize = 12;
-  const users = await UserRepository.getPageOfUsers(page, pageSize, emailSearch);
-  const total = await UserRepository.totalUsers(emailSearch);
-
+  let users = await UserRepository.getPageOfUsers(page, pageSize,
+    emailSearch, firstName, lastName, phoneSearch, stateSearch,
+    countySearch, idSearch, zipcodeSearch, fullAddressSearch);
+  // Also search for if the only provide last name.
+  if (firstName !== '' && lastName === '') {
+    const users1 = await UserRepository.getPageOfUsers(page, pageSize,
+      emailSearch, '', firstName, phoneSearch, stateSearch,
+      countySearch, idSearch, zipcodeSearch, fullAddressSearch);
+    users = users.concat(users1);
+  }
+  
+  let total = await UserRepository.totalUsers(emailSearch, firstName, lastName,
+    phoneSearch, stateSearch, countySearch, idSearch, zipcodeSearch, fullAddressSearch);
+  if (firstName !== '' && lastName === '') {
+    const total1 = await UserRepository.totalUsers(emailSearch, '', firstName,
+      phoneSearch, stateSearch, countySearch, idSearch, zipcodeSearch, fullAddressSearch);
+    total += total1;
+  }
+  
   for (const user of users) {
-    const roles = (await UserRoleRepository.getRolesForUserId(user.id))
+    const roles = await UserRoleRepository.getRolesForUserId(user.id);
+    const rolesJoined = roles
       .map((role) => role.roleName)
       .join();
     user.roles = roles;
+    user.rolesJoined = rolesJoined;
+    user.county = user.county.replaceAll("-", " ");
   }
 
   res.json({

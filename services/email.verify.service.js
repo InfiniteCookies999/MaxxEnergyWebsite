@@ -1,6 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
 const EmailService = require('./email.service');
-const { EmailVerifyRepository, EmailVerify } = require('../database');
+const { EmailVerifyRepository, EmailVerify, AuditLogRepository } = require('../database');
 const { HttpError } = require('../middleware');
 
 class EmailVerifyService {
@@ -11,6 +11,7 @@ class EmailVerifyService {
     await EmailVerifyRepository.saveEmailVerify(new EmailVerify(
       null, user.id, verifyKey, null
     ));
+    await AuditLogRepository.saveFunctionAuditLog(user.id, 'Sent verification email');
 
     EmailService.sendHbs({
       to: user.email,
@@ -36,6 +37,7 @@ class EmailVerifyService {
     }
 
     await EmailVerifyRepository.deleteAllVerifyEntriesByUserId(emailVerify.userId);
+    await AuditLogRepository.saveFunctionAuditLog(emailVerify.userId, 'Email verified!');
 
     return emailVerify.userId;
   }
@@ -47,6 +49,7 @@ class EmailVerifyService {
 
     // Send a new verification with the new email!
     this.sendVerificationEmail(user, serverAddress);
+    await AuditLogRepository.saveUpdatedAuditLog(user.id, 'Email changed');
   }
 }
 

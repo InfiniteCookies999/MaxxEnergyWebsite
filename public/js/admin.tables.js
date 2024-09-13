@@ -9,6 +9,7 @@ function addCheckboxBehavior(onCheckedCB) {
   $('.better-checkbox input').change(function() {
     disableTrashcan(onCheckedCB);
     
+    let allChecked = true;
     const trash = $('.bx-trash');
     $('.better-checkbox input').each(function() {
       if ($(this).is(":checked")) {
@@ -17,8 +18,23 @@ function addCheckboxBehavior(onCheckedCB) {
         if (onCheckedCB) {
           onCheckedCB(true);
         }
+      } else {
+        allChecked = false;
       }
     });
+
+    const selDesel = $('#sel-desel');
+    if (allChecked) {
+      selDesel.removeClass('can-sel-all');
+      selDesel.addClass('can-desel-all');
+      selDesel.removeClass('bxs-select-multiple');
+      selDesel.addClass('bxs-x-square');
+    } else {
+      selDesel.addClass('can-sel-all');
+      selDesel.removeClass('can-desel-all');
+      selDesel.addClass('bxs-select-multiple');
+      selDesel.removeClass('bxs-x-square');
+    }
   });
 }
 
@@ -27,7 +43,7 @@ function finishPageChange(newPage, res, createNewElementsCB, onCheckedCB) {
   
   $('#prev-page-btn').prop('disabled', newPage === 1);
   $('#next-page-btn').prop('disabled', newPage === res.totalPages);
-  $('#email-search-input, #page-number-input').prop('readonly', false);
+  $('#search-input, #page-number-input').prop('readonly', false);
 
   $('#total-page-span').text("of " + res.totalPages);
   const tableBody = $('#db-table tbody');
@@ -43,16 +59,17 @@ function makePageRequest(page, partialUrl, createNewElementsCB, onCheckedCB) {
   }
 
   $('#next-page-btn, #prev-page-btn').prop('disabled', true);
-  $('#email-search-input, #page-number-input').prop('readonly', true);
+  $('#search-input, #page-number-input').prop('readonly', true);
 
   const baseUrl = $('[base-url]').attr('base-url');
 
-  const searchEmail = $('#email-search-input').val();
+  const searchField = $('#search-dropdown').val();
+  const searchValue = $('#search-input').val();
 
   $.ajax({
     type: 'GET',
     // -1 because it is zero indexed.
-    url: `${baseUrl}/api${partialUrl}?page=${page - 1}&email=${encodeURIComponent(searchEmail)}`, 
+    url: `${baseUrl}/api${partialUrl}?page=${page - 1}&${searchField}=${encodeURIComponent(searchValue)}`, 
     success: (res) => {
       finishPageChange(page, res, createNewElementsCB, onCheckedCB);
     },
@@ -62,7 +79,7 @@ function makePageRequest(page, partialUrl, createNewElementsCB, onCheckedCB) {
   });
 }
 
-function createTable(partialUrl, createNewElementsCB, onDeleteCB, onCheckedCB) {
+function createTable(partialUrl, createNewElementsCB, onDeleteCB, onCheckedCB, onSearchTypeChange) {
   preventInvalidNonNumber($("#page-number-input"));
 
   createLoadAnimation(document.getElementById("load-animation"));
@@ -84,11 +101,6 @@ function createTable(partialUrl, createNewElementsCB, onDeleteCB, onCheckedCB) {
     }
   })
   .blur(() => {
-    const page = parseInt($("#page-number-input").val());
-    makePageRequest(page, partialUrl, createNewElementsCB, onCheckedCB);
-  });
-
-  $('#email-search-input').on('input', () => {
     const page = parseInt($("#page-number-input").val());
     makePageRequest(page, partialUrl, createNewElementsCB, onCheckedCB);
   });
@@ -122,6 +134,47 @@ function createTable(partialUrl, createNewElementsCB, onDeleteCB, onCheckedCB) {
   $(document).on('click', '.trash-can-delete', () => {
     $('#delete-popup').css("display", "block");
   });
+
+  const onSearchInputChange = () => {
+    const page = parseInt($("#page-number-input").val());
+    makePageRequest(page, partialUrl, createNewElementsCB, onCheckedCB);
+  };
+
+  $('#search-input').on('input', onSearchInputChange);
+
+  $('#search-dropdown').change(() => {
+    const searchField = $('#search-dropdown').val();
+    let searchInput = $('#search-input');
+    
+    searchInput.off();
+    onSearchTypeChange(searchInput, searchField);
+    
+    // Have to reobtain because the input type might have changed.
+    searchInput = $('#search-input');
+
+    if (searchInput.is('input')) {
+      searchInput.val("");
+      searchInput.on('input', onSearchInputChange);
+    } else if (searchInput.is('select')) {
+      searchInput.on('change', () => {
+        const page = parseInt($("#page-number-input").val());
+        makePageRequest(page, partialUrl, createNewElementsCB, onCheckedCB);
+      });
+    }
+    
+    onSearchInputChange();
+
+  });
+
+  function selOrDel(tof) {
+    $('.better-checkbox input').each(function() {
+      $(this).prop('checked', tof).trigger('change');
+    });
+  }
+
+  $(document).on('click', '.can-sel-all', () => selOrDel(true));
+  $(document).on('click', '.can-desel-all', () => selOrDel(false));
+  
 }
 
 function getIds() {

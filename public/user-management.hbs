@@ -8,6 +8,7 @@
     <div base-url=""></div>
     <div id="admin-id-store" admin-id="{{adminId}}"></div>
     <import value="/common-links"></import>
+    <link rel="stylesheet" href="/styles/shared.auth.style.css">
     <import value="form-links"></import>
     <link rel="stylesheet" href="/styles/admin.tables.style.css">
     <link rel="stylesheet" href="/styles/user.management.style.css">
@@ -43,10 +44,22 @@
                     </button>
                 </div>
                 <div class="edit-icons d-flex align-items-center mx-2">
+                    <i id="sel-desel" class='bx bxs-select-multiple can-sel-all'></i>
                     <i class='bx bxs-shield-plus'></i>
                     <i class='ml-1 bx bx-trash'></i>
                 </div>
-                <input id="email-search-input"
+                <select id="search-dropdown" class="form-control">
+                    <option value="" disabled>Search By</option>
+                    <option value="email" selected>Email</option>
+                    <option value="name">Name</option>
+                    <option value="phone">Phone</option>
+                    <option value="state">State</option>
+                    <option value="county">County</option>
+                    <option value="zipcode">Zip Code</option>
+                    <option value="fullAddress">Full Address</option>
+                    <option value="id">Id</option>
+                </select>
+                <input id="search-input"
                        type="text"
                        class="form-control mx-2"
                        placeholder="susan@gmail.com">
@@ -100,11 +113,12 @@
                         <th scope="col">Email</th>
                         <th scope="col">Phone</th>
                         <th scope="col">Address</th>
+                        <th scope="col">Roles</th>
                     </tr>
                 </thead>
                 <tbody>
                     {{#each initialialUsers}}
-                        <tr user-id="{{id}}" user-roles="{{roles}}">
+                        <tr user-id="{{id}}" user-roles="{{rolesJoined}}">
                             {{#ifEquals id ../adminId}}
                                 <td></td>
                             {{else}}
@@ -120,6 +134,13 @@
                             <td>{{email}}</td>
                             <td>{{phone}}</td>
                             <td>{{addressLine1}} {{addressLine2}} {{county}} {{state}}, {{zipCode}}</td>
+                            <td class="role-col-list">
+                                {{#each roles}}
+                                    <div class="role-col-role">
+                                        <span>{{roleName}}</span>
+                                    </div>
+                                {{/each}}
+                            </td>
                         </tr>
                     {{else}}
                         <tr>

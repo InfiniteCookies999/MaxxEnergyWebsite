@@ -84,8 +84,7 @@ function setCounties(dropdown, key, userCounty) {
   dropdown.selectpicker('val', selectedCounty);
 }
 
-function addStatesAndCounties(stateDropdown, countyDropdown, userState, userCounty) {
-  
+function setStates(stateDropdown, userState) {
   let selectedAbbreviation = "VA"; // Default to Virginia.
   stateDropdown.selectpicker();
   for (const state of STATES) {
@@ -102,6 +101,13 @@ function addStatesAndCounties(stateDropdown, countyDropdown, userState, userCoun
   stateDropdown.selectpicker("refresh");
   
   stateDropdown.selectpicker('val', selectedAbbreviation);
+
+  return selectedAbbreviation;
+}
+
+function addStatesAndCounties(stateDropdown, countyDropdown, userState, userCounty) {
+  
+  const selectedAbbreviation = setStates(stateDropdown, userState);
   
   setCounties(countyDropdown, selectedAbbreviation, userCounty);
 }

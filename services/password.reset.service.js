@@ -1,5 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
-const { PasswordResetRepository } = require('../database');
+const { PasswordResetRepository, AuditLogRepository } = require('../database');
 const PasswordReset = require('../database/password.reset.model');
 const EmailService = require('./email.service');
 const { HttpError } = require('../middleware');
@@ -12,6 +12,7 @@ class PasswordResetService {
     await PasswordResetRepository.savePasswordReset(new PasswordReset(
       null, user.id, resetKey, null
     ));
+    await AuditLogRepository.saveFunctionAuditLog(user.id, "Password reset sent");
 
     EmailService.sendHbs({
       to: user.email,

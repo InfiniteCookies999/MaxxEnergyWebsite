@@ -124,7 +124,7 @@ function preventInvalidPhoneInput(input) {
   }));
 
   // Insert - into the phone number.
-  input.keyup((event) => {
+  input.on('input', (event) => {
     const input = event.target;
     const value = input.value;
 
@@ -196,6 +196,7 @@ function preventInvalidName(input) {
     }
   }));
 }
+
 function processServerErrorResponse(res, errorContainer) {
   const badRes = res.status >= 400 && res.status <= 499 && res.status !== 400;
   if (badRes && errorContainer) {
