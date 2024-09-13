@@ -41,6 +41,17 @@ class AuditLogRepository {
   async saveFunctionAuditLog(userId, description) {
     await this.saveAuditLog(userId, 'function', description);
   }
+
+  async getAuditLogsForUserId(userId) {
+    const conn = await getDBConnection();
+
+    const [ results ] = await conn.execute(`
+      SELECT * FROM AuditLog WHERE userId=?
+      ORDER BY date DESC`,
+      [userId]);
+
+    return results;
+  }
 }
 
 module.exports = new AuditLogRepository();

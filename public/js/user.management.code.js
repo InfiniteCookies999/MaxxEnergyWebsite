@@ -39,7 +39,7 @@ $(document).ready(() => {
     const ourId = parseInt($('#admin-id-store').attr('admin-id'));
     for (const user of res.users) {
       tableBody.append(`
-        <tr user-id="${user.id}" user-roles="${user.rolesJoined}">
+        <tr user-id="${user.id}" user-roles="${user.rolesJoined}" audit-logs='${user.auditLogs}'>
           ${ourId == user.id ? `<td></td>` :
             `
             <td>
@@ -61,6 +61,9 @@ $(document).ready(() => {
                   <span>${role.roleName}</span>
                 </div>
               `).join('')}
+            </td>
+            <td class="audit-log-col">
+                <i class='bx bx-food-menu'></i>
             </td>
         </tr>`);
     }
@@ -327,5 +330,42 @@ $(document).ready(() => {
       }
     });
 
+  });
+
+  $('#finished-audit-log-btn').click(() => {
+    document.body.style.overflow = 'auto';
+    $('#audit-log-popup').hide();
+  });
+
+  $(document).on('click', '.audit-log-col', function() {
+    document.body.style.overflow = 'hidden';
+
+    const userRow = $(this).closest('tr');
+    let auditLogs = userRow.attr("audit-logs");
+    auditLogs = auditLogs === '' ? '' : JSON.parse(auditLogs);
+    $('#audit-log-popup').show();
+    
+    $('#audit-log-popup table tbody').empty();
+
+    const logTable = $('#audit-log-popup table tbody');
+    const dateOptions = {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false, // 24-hour format
+    };
+    for (const auditLog of auditLogs) {
+      const formattedDate = new Date(auditLog.date).toLocaleDateString('en-US', dateOptions);
+      logTable.append(`
+          <tr>
+              <td>${formattedDate}</td>
+              <td>${auditLog.action}</td>
+              <td>${auditLog.description}</td>
+          </tr>
+        `);
+    }
   });
 });
