@@ -278,19 +278,30 @@ router.get('/user/users',
   const users = await UserRepository.getPageOfUsers(page, pageSize, emailSearch);
   const total = await UserRepository.totalUsers(emailSearch);
 
+  for (const user of users) {
+    const roles = (await UserRoleRepository.getRolesForUserId(user.id))
+      .map((role) => role.roleName)
+      .join();
+    user.roles = roles;
+  }
+
   res.json({
     users,
     totalPages: Math.ceil(total / pageSize)
   });
 }));
 
+function validateUserIds(fieldName) {
+  return body(fieldName).notEmpty().withMessage("userIds cannot be empty")
+  .isArray({ min: 1 }).withMessage("Expected an array")
+  .bail()
+  .custom((arr) => {
+    return arr.every(e => Number.isInteger(e));
+  }).withMessage("All elements must be integers");
+}
+
 router.delete('/user',
-  body('userIds').notEmpty().withMessage("userIds cannot be empty")
-    .isArray({ min: 1 }).withMessage("Expected an array")
-    .bail()
-    .custom((arr) => {
-      return arr.every(e => Number.isInteger(e));
-    }).withMessage("All elements must be integers"),
+  validateUserIds('userIds'),
   validateBody,
 
   validateLoggedIn,
@@ -305,6 +316,40 @@ router.delete('/user',
     for (const userId of userIds) {
       await UserService.deleteUser(userId);
     }
+
+    res.send();
+}));
+
+router.put('/user/add-roles',
+  validateUserIds('userIds'),
+  body('role').isIn(UserRoleRepository.rolls()),
+
+  validateLoggedIn,
+  controller(async (req, res) => {
+
+    if (!(await UserService.userSessionHasRole(req.session, UserRoleRepository.adminRole()))) {
+      throw new HttpError("Only admins can access", 401);
+    }
+
+    for (const userId of req.body.userIds) {
+      await UserService.addRoleIfNotExistByUserId(userId, req.body.role);
+    }
+
+    res.send();
+}));
+
+router.delete('/user/remove-role',
+  body('userId').isInt().withMessage("Must be an integer for id"),
+  body('role').isIn(UserRoleRepository.rolls()),
+
+  validateLoggedIn,
+  controller(async (req, res) => {
+
+    if (!(await UserService.userSessionHasRole(req.session, UserRoleRepository.adminRole()))) {
+      throw new HttpError("Only admins can access", 401);
+    }
+
+    await UserService.removeRoleFromUserById(req.body.userId, req.body.role);
 
     res.send();
 }));

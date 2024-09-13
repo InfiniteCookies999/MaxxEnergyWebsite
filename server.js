@@ -72,7 +72,7 @@ async function mockDatabase() {
       email: "jane.doe@gmail.com",
       phone: "234-567-8901",
       state: "LA",
-      county: "Orleans-County",
+      county: "Orleans-Parish",
       addressLine1: "789 Oak Dr",
       zipCode: "34567",
       password: await bcrypt.hash("securepassword3", 10)

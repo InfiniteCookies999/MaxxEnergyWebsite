@@ -5,6 +5,11 @@
         <img src="/images/maxx-logo.png" alt="Maxx Energy Logo" class="brand-logo">
       </a>
       <ul class="menu-list">
+        {{#if isAdmin}}
+          <li class="menu-item"></li>
+            <a href="/admin" class="header-link menu-link">Administration</a>
+          </li>
+        {{/if}}
         <li class="menu-item">
           <a href="/about-us" class="header-link menu-link">About Us</a>
         </li>

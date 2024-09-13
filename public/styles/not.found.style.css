@@ -1,0 +1,35 @@
+
+#not-found-container {
+  background-color: rgb(231, 231, 231);
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  margin-bottom: 30rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.inner-container {
+  margin-top: 15rem;
+}
+
+.failed-route-text {
+  font-size: 1.5rem;
+  color: rgb(78, 78, 78);
+}
+
+.home-btn {
+  display: inline-block;
+  color: white;
+  padding: 0.8rem;
+  background-color: var(--site-blue-color);
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+.home-btn:hover {
+  color: white;
+  cursor: pointer;
+  filter: brightness(0.85);
+  text-decoration: none;
+}

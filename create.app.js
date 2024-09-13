@@ -9,13 +9,8 @@ const {
   userRouter,
   staticRouter,
   viewsRouter,
-<<<<<<< HEAD
   contactRouter,
   storeRouter,  // Import the store router
-  adminRouter
-=======
-  contactRouter
->>>>>>> 7ac3192ced5ae2c94f2a6e54014f5e2443420db8
 } = require('./routes');
 const { errorHandler, reroute, replaceImports } = require('./middleware');
 
@@ -90,12 +85,8 @@ function createApp() {
 
   // Routers
   app.use('/api/', userRouter);
-<<<<<<< HEAD
   app.use('/api/contact', contactRouter);  // Use the contact router
   app.use('/api/store', storeRouter);  // Use the store router
-=======
-  app.use('/api/', contactRouter); // Add the contact router
->>>>>>> 7ac3192ced5ae2c94f2a6e54014f5e2443420db8
   app.use(viewsRouter);
   app.use(staticRouter);
 

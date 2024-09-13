@@ -1,0 +1,47 @@
+.admin-container {
+  margin-top: 12rem;
+  margin-bottom: 10rem;
+}
+
+.section {
+  border: 1px solid rgb(173, 173, 173);
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.row {
+  margin-bottom: 2rem;
+}
+
+.section i {
+  font-size: 3rem;
+  background-color: rgb(245, 245, 245);
+  border-radius: 10px;
+  padding: 0.3rem;
+}
+
+.section-desc {
+  color: gray;
+}
+
+.analytic {
+  border: 1px solid rgb(173, 173, 173);
+}
+
+.link-section:hover {
+  cursor: pointer;
+  background-color: rgb(245, 245, 245);
+  box-shadow: 1px 1px 5px rgba(0.5, 0.5, 0.5, 0.2);
+}
+
+.analytics-section .col-4 {
+  padding: 0 1rem 0 0rem !important;
+}
+
+#first-analytic {
+  padding: 0 1rem 0 1rem !important;
+}
+
+.analytic h5 {
+  color: rgb(97, 97, 97);
+}

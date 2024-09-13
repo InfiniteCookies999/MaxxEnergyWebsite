@@ -19,6 +19,7 @@
     <div class="container">
         <div id="messages-container">
 
+            <h1 style="margin-bottom: 1rem;">Contact Messages</h1>
             <div class="d-flex pagination-container">
                 <!-- Pagination Controls -->
                 <div class="pagination-controls">
@@ -48,7 +49,7 @@
                        placeholder="susan@gmail.com">
             </div>
 
-            <div class="confirm-popup-background">
+            <div id="delete-popup" class="confirm-popup-background">
                 <div class="confirm-popup">
                     <img src="/images/warning-circle.png" width="150" height="150">
                     <h5>Are you sure you want to delete?</h5>
@@ -60,7 +61,7 @@
                 </div>
             </div>
 
-            <table class="table table-striped">
+            <table id="db-table" class="table table-striped">
                 <thead>
                     <tr>
                         <th scope="col">Sel</th>
