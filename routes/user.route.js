@@ -9,7 +9,7 @@ const {
 } = require('../middleware'); 
 const { body, query } = require('express-validator');
 const COUNTIES = require('./counties');
-const { UserRepository, UserRoleRepository } = require('../database');
+const { UserRepository, UserRoleRepository, AuditLogRepository } = require('../database');
 const { UserService, PasswordResetService } = require('../services');
 
 const NAME_PATTERN = /^[a-zA-Z0-9]+$/;
@@ -319,7 +319,10 @@ router.get('/user/users',
       .join();
     user.roles = roles;
     user.rolesJoined = rolesJoined;
+    
     user.county = user.county.replaceAll("-", " ");
+
+    user.auditLogs = JSON.stringify(await AuditLogRepository.getAuditLogsForUserId(user.id));
   }
 
   res.json({

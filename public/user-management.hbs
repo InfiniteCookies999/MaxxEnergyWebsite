@@ -77,6 +77,26 @@
                 </div>
             </div>
 
+            <div id="audit-log-popup" class="confirm-popup-background">
+                <div class="confirm-popup">
+                    <h1>Audit Logs</h1>
+                    <div class="audit-log-scroll-area">
+                        <table class="table table-striped table-bordered" style="background-color: white;">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Time</th>
+                                    <th scope="col">Event Type</th>
+                                    <th scope="col">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button id="finished-audit-log-btn" class="btn blue-btn">Finished</button>
+                </div>
+            </div>
+
             <div id="add-role-popup" class="confirm-popup-background">
                 <div class="confirm-popup">
                     <h5>Add roles</h5>
@@ -114,11 +134,12 @@
                         <th scope="col">Phone</th>
                         <th scope="col">Address</th>
                         <th scope="col">Roles</th>
+                        <th scope="col">Audit Logs</th>
                     </tr>
                 </thead>
                 <tbody>
                     {{#each initialialUsers}}
-                        <tr user-id="{{id}}" user-roles="{{rolesJoined}}">
+                        <tr user-id="{{id}}" user-roles="{{rolesJoined}}" audit-logs='{{auditLogs}}'>
                             {{#ifEquals id ../adminId}}
                                 <td></td>
                             {{else}}
@@ -140,6 +161,9 @@
                                         <span>{{roleName}}</span>
                                     </div>
                                 {{/each}}
+                            </td>
+                            <td class="audit-log-col">
+                                <i class='bx bx-food-menu'></i>
                             </td>
                         </tr>
                     {{else}}
