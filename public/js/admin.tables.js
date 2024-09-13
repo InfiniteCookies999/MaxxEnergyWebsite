@@ -136,8 +136,10 @@ function createTable(partialUrl, createNewElementsCB, onDeleteCB, onCheckedCB, o
   });
 
   const onSearchInputChange = () => {
-    const page = parseInt($("#page-number-input").val());
-    makePageRequest(page, partialUrl, createNewElementsCB, onCheckedCB);
+    // Use first page because it is possible that due to the number of
+    // pages being decreased it can show incorrect information and confuse
+    // the user.
+    makePageRequest(1, partialUrl, createNewElementsCB, onCheckedCB);
   };
 
   $('#search-input').on('input', onSearchInputChange);
