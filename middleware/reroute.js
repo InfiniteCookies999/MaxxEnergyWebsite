@@ -24,6 +24,8 @@ function replaceRoutes(body) {
 }
 
 function reroute(req, res, next) {
+  req.originalUrl = req.url;
+
   // Removing the config route since the rest of the application does
   // not care about this routing information.
   if (config.REROUTE_PATH) {
@@ -35,11 +37,6 @@ function reroute(req, res, next) {
   
   if (!req.url.startsWith('/')) {
     req.url = '/' + req.url;
-  }
-
-  if (req.url.endsWith('/') && req.url !== '/') {
-    res.status(404).send("404 Not found");
-    return;
   }
 
   if (req.method === 'GET') {

@@ -1,35 +1,45 @@
 const express = require('express');
-const { ContactRepository, ContactMessage, UserRoleRepository } = require('../database');
-const { validateLoggedIn, HttpError, controller } = require('../middleware');
+const { ContactRepository, UserRoleRepository } = require('../database');
+const { validateLoggedIn, HttpError, controller, validateBody } = require('../middleware');
 const { UserService } = require('../services');
-const { query } = require('express-validator');
+const { query, body } = require('express-validator');
+const { ContactService } = require('../services');
+
+const PHONE_PATTERN = /^(\d{3})\-(\d{3})\-(\d{4})$/;
 
 const router = express.Router();
 
+function validateName(name) {
+  return body(name).notEmpty().withMessage("name cannot be empty")
+    .isLength({ min: 1, max: ContactRepository.maxNameLength() });
+}
+
 // Route to handle contact form submissions
-router.post('/submit', async (req, res) => {
-  try {
-    const { firstName, lastName, email, phone, message } = req.body;
+router.post('/contact/submit',
+  validateName('firstName'),
+  validateName('lastName'),
+  body('email').isEmail().withMessage("Expected valid email address"),
+  body('phone').notEmpty().withMessage("Phone cannot be empty")
+    .matches(PHONE_PATTERN).withMessage("Expected valid phone number"),
+  body('message').notEmpty().withMessage("Message cannot be empty")
+    .isLength({ min: 1, max: ContactRepository.maxMessageLength() }),
 
-    // Create a new ContactMessage object
-    const contactMessage = new ContactMessage(null, firstName, lastName, email, phone, message);
+  validateBody,
+  
+  controller(async (req, res) => {
 
-    // Insert the contact message into the database
-    await ContactRepository.insertContactMessage(contactMessage);
+  await ContactService.saveContactMessage(req.body);
 
-    // Send a success response back to the client
-    res.status(200).json({ status: 'success', message: 'Message saved successfully!' });
-  } catch (error) {
-    console.error('Error saving contact message:', error);
-    res.status(500).json({ status: 'error', message: 'There was an error saving your message. Please try again later.' });
-  }
-});
+  // Send a success response back to the client
+  res.status(200).json({ status: 'success', message: 'Message saved successfully!' });
+}));
 
-router.get('/messages',
+router.get('/contact/messages',
   query('page').notEmpty().withMessage("The page cannot be empty"),
   query('email').optional(),
-  validateLoggedIn,
+  validateBody,
 
+  validateLoggedIn,
   controller(async (req, res) => {
     
     if (!(await UserService.userSessionHasRole(req.session, UserRoleRepository.adminRole()))) {
@@ -47,6 +57,31 @@ router.get('/messages',
       messages,
       totalPages: Math.ceil(total / pageSize)
     });
+}));
+
+router.delete('/contact',
+  body('messageIds').notEmpty().withMessage("messageIds cannot be empty")
+    .isArray({ min: 1 }).withMessage("Expected an array")
+    .bail()
+    .custom((arr) => {
+      return arr.every(e => Number.isInteger(e));
+    }).withMessage("All elements must be integers"),    
+  validateBody,
+
+  validateLoggedIn,
+  controller(async (req, res) => {
+    
+    if (!(await UserService.userSessionHasRole(req.session, UserRoleRepository.adminRole()))) {
+      throw new HttpError("Only admins can access", 401);
+    }
+
+    const messageIds = req.body.messageIds;
+
+    for (const messageId of messageIds) {
+      await ContactService.deleteContactMessage(messageId);
+    }
+
+    res.send();
 }));
 
 module.exports = router;

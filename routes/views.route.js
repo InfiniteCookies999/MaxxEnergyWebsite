@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const { controller } = require('../middleware'); 
 const { UserService, FileService } = require('../services');
-const { UserRepository } = require('../database');
+const { UserRepository, UserRoleRepository, ContactRepository } = require('../database');
 const config = require('../config');
 
 const router = express.Router();
@@ -25,6 +25,13 @@ router.get(['/', '/index', '/home', '/main'], controller(async (req, res) => {
 
   res.render('index', {
     preloadImage1: baseUrl + '/images/homepage1.jpg'
+  });
+}));
+
+router.get('/contact', controller(async (_, res) => {
+  res.render('contact', {
+    maxNameLength: ContactRepository.maxNameLength(),
+    maxMessageLength: ContactRepository.maxMessageLength()
   });
 }));
 
@@ -129,8 +136,7 @@ router.get('/header', controller(async (req, res) => {
 
 // Verify Email route
 router.get('/verify-email/:token', controller(async (req, res) => {
-  const isLoggedIn = req.session.user !== undefined;
-
+  
   let isValid = true;
   let userId = 0;
   let userIdMatches = true;
@@ -251,7 +257,8 @@ router.get('/admin/user-management', controller(async (req, res) => {
 
   res.render('user-management', {
     totalPages: userInfo.totalPages,
-    initialialUsers: userInfo.users
+    initialialUsers: userInfo.users,
+    adminId: req.session.user.id
   });
 }));
 
@@ -277,5 +284,12 @@ router.get('/cart', controller(async (req, res) => {
   res.render('cart');  
 }));
 
+router.get('/not-found', controller(async (req, res) => {
+  const reqUrl = req.originalUrl || '';
+
+  res.render("not-found", {
+    reqUrl: reqUrl
+  });
+}));
 
 module.exports = router;

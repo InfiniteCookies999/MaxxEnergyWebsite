@@ -16,5 +16,38 @@ $(document).ready(() => {
             <td>${message.message}</td>
         </tr>`);
     }
+  },
+  (finishedCB) => {
+
+    let messageIds = [];
+    $('.better-checkbox input').each(function() {
+      $('#load-animation').css("display", "block");
+      $('#popup-confirm-btn').css("display", "none");
+      
+      const checkbox = $(this);
+      if (checkbox.is(":checked")) {
+        const id = checkbox.attr('id');
+        const messageId = id.substring(id.lastIndexOf('-') + 1);
+        messageIds.push(parseInt(messageId));
+      }
+    });
+
+    const baseUrl = $('[base-url]').attr('base-url');
+
+    $.ajax({
+      type: 'DELETE',
+      url: baseUrl + '/api/contact',
+      contentType: 'application/json; charset=utf-8',
+      data: JSON.stringify({ messageIds: messageIds }),
+      success: () => {
+        finishedCB();
+      },
+      error: (res) => {
+        processServerErrorResponse(res);
+      },
+      complete: () => {
+        finishedCB();
+      }
+    });
   });
 });
