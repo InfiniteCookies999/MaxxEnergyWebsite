@@ -134,7 +134,7 @@ router.get('/about-us', controller(async (req, res) => {
   });
 }));
 
-// Route for rendering the header
+// header route
 router.get('/header', controller(async (req, res) => {
   // Render the header view with login status
   let isAdmin = false;
@@ -268,7 +268,7 @@ router.get('/admin/user-management', controller(async (req, res) => {
   });
 }));
 
-// About Us route
+// security route
 router.get('/security', controller(async (req, res) => {
   let baseUrl = '';
   if (config.REROUTE_PATH) {
@@ -278,6 +278,16 @@ router.get('/security', controller(async (req, res) => {
   res.render('security', {
     preloadImage: baseUrl + '/images/security.jpeg'
   });
+}));
+
+// store route
+router.get('/store', controller(async (req, res) => {
+  res.render('store');  
+}));
+
+// cart route
+router.get('/cart', controller(async (req, res) => {
+  res.render('cart');  
 }));
 
 router.get('/not-found', controller(async (req, res) => {

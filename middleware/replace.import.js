@@ -51,7 +51,7 @@ async function replaceImports(req, res, next) {
   res.send = function (body) {
     // Making sure we only change HTML files!
     if (body && body.trimStart().startsWith("<!DOCTYPE html>")) {
-      const cookies = req.headers.cookie || ''; // Extract cookies from request headers
+      const cookies = req.headers.cookie || ''; 
       replace(body, req.serverAddress, cookies)
         .then(newBody => {
           osend.call(this, newBody);

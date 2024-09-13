@@ -1,0 +1,36 @@
+.card-img-top {
+  width: 100%;
+  height: 400px; 
+  object-fit: contain; 
+}
+.margin-bottom{
+  margin-bottom: 200px;
+}
+.margin-top{
+  margin-top: 250px;
+}
+.card {
+  transition: transform 0.5s ease; 
+}
+.card:hover {
+  transform: scale(1.03); 
+}
+.shopping-cart {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 auto;
+  text-decoration: none;
+  color: inherit;
+  width: 170px;
+  margin-top: 30px;
+  color: green;
+  margin-bottom: 100px;
+}
+
+.shopping-cart-icon {
+  font-size: 36px;
+  margin-bottom: 5px;
+}
+
