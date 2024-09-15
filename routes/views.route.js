@@ -112,7 +112,7 @@ router.get('/register', controller(async (req, res) => {
 // Logout route
 router.get('/logout', controller(async (req, res) => {
   if (req.session.user) {
-    req.session.destroy();  // Destroy session properly
+    await UserService.logout(req.session);
   }
   res.redirect(`/${getReroute()}`);
 }));
