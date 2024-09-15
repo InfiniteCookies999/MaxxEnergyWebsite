@@ -9,7 +9,7 @@ const {
   PasswordResetRepository,
   UserRoleRepository,
   AuditLogRepository,
-  StoreRepository  // Import StoreRepository
+  StoreRepository,  
 } = require('./database');
 const { EmailService } = require('./services');
 
@@ -138,7 +138,7 @@ async function mockDatabase() {
   await PasswordResetRepository.initialize();
   await UserRoleRepository.initialize();
   await AuditLogRepository.initialize();
-  await StoreRepository.initialize();  // Initialize StoreRepository
+  await StoreRepository.initialize();  
 
   await EmailService.initialize();
 
