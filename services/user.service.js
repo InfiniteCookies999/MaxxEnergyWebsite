@@ -237,6 +237,11 @@ class UserService {
     await AuditLogRepository.saveUpdatedAuditLog(userId, `Removed role ${roleName}`);
     await UserRoleRepository.deleteRoleByUserIdAndRoleName(userId, roleName);
   }
+
+  async logout(session) {
+    await AuditLogRepository.saveFunctionAuditLog(session.user.id, "User logged out of account");
+    session.destroy();  // Destroy session properly
+  }
 }
 
 module.exports = new UserService();

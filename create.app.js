@@ -87,6 +87,7 @@ function createApp() {
   app.use('/api/', userRouter);
   app.use('/api/contact', contactRouter);
   app.use('/api/store', storeRouter);  
+
   app.use(viewsRouter);
   app.use(staticRouter);
 
