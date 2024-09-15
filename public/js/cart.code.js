@@ -56,10 +56,15 @@ function loadCartItems() {
 function generateQuantityOptions(selectedQuantity) {
   let options = '';
   for (let i = 1; i <= 10; i++) {
-    options += `<option value="${i}" ${i === selectedQuantity ? 'selected' : ''}>${i}</option>`;
+    if (i === selectedQuantity) {
+      options += `<option value="${i}" selected>${i}</option>`;
+    } else {
+      options += `<option value="${i}">${i}</option>`;
+    }
   }
   return options;
 }
+
 
 function updateQuantity(itemID, newQuantity) {
   let cart = JSON.parse(localStorage.getItem('cart')) || [];

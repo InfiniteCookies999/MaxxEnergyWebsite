@@ -10,7 +10,7 @@ const {
   staticRouter,
   viewsRouter,
   contactRouter,
-  storeRouter,  // Import the store router
+  storeRouter,  
 } = require('./routes');
 const { errorHandler, reroute, replaceImports } = require('./middleware');
 
@@ -85,8 +85,9 @@ function createApp() {
 
   // Routers
   app.use('/api/', userRouter);
-  app.use('/api/', contactRouter);  // Use the contact router
-  app.use('/api/store', storeRouter);  // Use the store router
+  app.use('/api/contact', contactRouter);
+  app.use('/api/store', storeRouter);  
+
   app.use(viewsRouter);
   app.use(staticRouter);
 
