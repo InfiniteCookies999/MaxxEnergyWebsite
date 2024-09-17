@@ -90,7 +90,7 @@ $(document).ready(() => {
   },
   (enable) => {
     const roleAddBtn = $('.bxs-shield-plus');
-    const passResetBtn = $('.bx-lock-open-alt');
+    const passResetBtn = $('#password-reset-btn');
     if (enable) {
       roleAddBtn.css("color", "var(--site-blue-color)");
       roleAddBtn.addClass('role-can-add');
