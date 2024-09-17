@@ -84,6 +84,7 @@ function createApp() {
   app.set('views', 'public');
 
   // Routers
+  // 
   app.use('/api/', userRouter);
   app.use('/api/contact', contactRouter);
   app.use('/api/store', storeRouter);  
