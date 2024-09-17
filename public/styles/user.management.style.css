@@ -1,4 +1,4 @@
-.role-can-add:hover {
+.role-can-add:hover, .can-pass-reset:hover {
   cursor: pointer;
   color: blue !important;
 }
