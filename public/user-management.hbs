@@ -47,6 +47,7 @@
                     <i id="sel-desel" class='bx bxs-select-multiple can-sel-all'></i>
                     <i class='bx bxs-shield-plus'></i>
                     <i class='ml-1 bx bx-trash'></i>
+                    <i id="password-reset-btn" class='bx bx-lock-open-alt'></i>
                 </div>
                 <select id="search-dropdown" class="form-control">
                     <option value="" disabled>Search By</option>
@@ -124,6 +125,18 @@
                 </div>
             </div>
 
+            <div id="pass-reset-popup" class="confirm-popup-background">
+                <div class="confirm-popup">
+                    <i class="bx bx-lock-open-alt lock-large-img"></i>
+                    <h5>Initiate password resets?</h5>
+                    <div class="btn-popup-group">
+                        <canvas id="load-animation2" width="30" height="30" style="display: none;"></canvas>
+                        <button id="popup-confirm-btn2" class="btn btn-primary">Confirm</button>
+                        <button id="popup-cancel-btn2" class="btn">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
             <table id="db-table" class="table table-striped">
                 <thead>
                     <tr>
@@ -139,17 +152,13 @@
                 </thead>
                 <tbody>
                     {{#each initialialUsers}}
-                        <tr user-id="{{id}}" user-roles="{{rolesJoined}}" audit-logs='{{auditLogs}}'>
-                            {{#ifEquals id ../adminId}}
-                                <td></td>
-                            {{else}}
-                                <td>
-                                    <div class="form-group smaller-text better-checkbox">
-                                        <input id="sel-check-{{../id}}" type="checkbox" autocomplete="off" class="styled-checkbox">
-                                        <label class="form-check-label" for="sel-check-{{../id}}"></label>
-                                    </div>
-                                </td>
-                            {{/ifEquals}}
+                        <tr user-id="{{id}}" user-roles="{{rolesJoined}}" audit-logs='{{auditLogs}}' user-email="{{email}}">
+                            <td>
+                                <div class="form-group smaller-text better-checkbox">
+                                    <input id="sel-check-{{id}}" type="checkbox" autocomplete="off" class="styled-checkbox">
+                                    <label class="form-check-label" for="sel-check-{{id}}"></label>
+                                </div>
+                            </td>
                             <td scope="row">{{id}}</td>
                             <td class="user-name">{{firstName}} {{lastName}}</td>
                             <td>{{email}}</td>
