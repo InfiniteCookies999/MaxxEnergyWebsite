@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const { StoreRepository } = require('../database');
 
-// GET /api/store/items - Retrieve all store items
+// API endpoint: GET /api/store/items - Retrieve all store items
 router.get('/items', async (req, res) => {
   try {
     const items = await StoreRepository.getAllItems();
@@ -14,6 +14,6 @@ router.get('/items', async (req, res) => {
   }
 });
 
-//Maybe in the future I can implement POST: add new item, PUT: update an item, and DELETE: delete an item
+//Maybe in the future I can implement an Admin Page to update store items with POST: add new item, PUT: update an item, and DELETE: delete an item
 
 module.exports = router;

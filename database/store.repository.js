@@ -16,12 +16,12 @@ class StoreRepository {
 
     // Array of Objects for store
     const items = [
-      { id: '1', name: 'LED Light bulb', price: 1999, description: 'Long-lasting LED that saves energy and brightens up your space.', stock: 30, image: "store-images/led-light-bulb.jpg" },
-      { id: '2', name: 'Solar-Powered Charger', price: 6999, description: 'Charge your devices anywhere with solar power, perfect for on-the-go.', stock: 40, image: "store-images/solar-charger.jpg" },
-      { id: '3', name: 'Solar-Powered Fan', price: 3099, description: 'Enjoy a cool breeze powered by the sun, great for outdoors and emergencies.', stock: 50, image: "store-images/solar-fan.jpg" },
-      { id: '4', name: 'Reusable Smart Battery', price: 4999, description: 'Rechargeable battery for everyday use, eco-friendly and cost-effective.', stock: 45, image: "store-images/eco-battery.jpg" },
+      { id: '1', name: 'LED Light bulb', price: 1999, description: 'Long-lasting LED that saves energy and brightens up your space.', quantity: 30, image: "store-images/led-light-bulb.jpg" },
+      { id: '2', name: 'Solar-Powered Charger', price: 6999, description: 'Charge your devices anywhere with solar power, perfect for on-the-go.', quantity: 40, image: "store-images/solar-charger.jpg" },
+      { id: '3', name: 'Solar-Powered Fan', price: 3099, description: 'Enjoy a cool breeze powered by the sun, great for outdoors and emergencies.', quantity: 50, image: "store-images/solar-fan.jpg" },
+      { id: '4', name: 'Reusable Smart Battery', price: 4999, description: 'Rechargeable battery for everyday use, eco-friendly and cost-effective.', quantity: 45, image: "store-images/eco-battery.jpg" },
       { id: '5', name: 'Smart Plug', price: 1999, description: 'Control appliances remotely, save energy and reduce bills effortlessly.', quantity: 65, image: "store-images/smart-plug.jpg" },
-      { id: '6', name: 'Reusable Water Bottle', price: 1499, description: 'Durable, insulated bottle to keep drinks hot or cold, reusable and stylish.', stock: 48, image: "store-images/water-bottle.jpg" },
+      { id: '6', name: 'Reusable Water Bottle', price: 1499, description: 'Durable, insulated bottle to keep drinks hot or cold, reusable and stylish.', quantity: 48, image: "store-images/water-bottle.jpg" },
     ];
 
     // Using a regular for loop to check and insert items
