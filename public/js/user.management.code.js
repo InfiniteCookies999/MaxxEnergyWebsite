@@ -25,31 +25,26 @@ function getOrCreateRoleGroup(role) {
 }
 
 function addToRoleGroup(group, role, userId) {
-
+  const ourId = parseInt($('#admin-id-store').attr('admin-id'));
   group.append(`
     <td user-role="${role}" user-id=${userId} class="added-role">
       <span>${role.charAt(0).toUpperCase() + role.slice(1)}</span>
-      <span class="remove-role-x">X</span>
+      ${(parseInt(userId) === ourId && role === 'admin') ? '' : `<span class="remove-role-x">X</span>`}
     </td>
     `);
 }
 
 $(document).ready(() => {
   createTable('/user/users', (tableBody, res) => {
-    const ourId = parseInt($('#admin-id-store').attr('admin-id'));
     for (const user of res.users) {
       tableBody.append(`
-        <tr user-id="${user.id}" user-roles="${user.rolesJoined}" audit-logs='${user.auditLogs}'>
-          ${ourId == user.id ? `<td></td>` :
-            `
+        <tr user-id="${user.id}" user-roles="${user.rolesJoined}" audit-logs='${user.auditLogs}' user-email=${user.email}>
             <td>
                 <div class="form-group smaller-text better-checkbox">
                   <input id="sel-check-${user.id}" type="checkbox" autocomplete="off" class="styled-checkbox">
                   <label class="form-check-label" for="sel-check-${user.id}"></label>
                 </div>
             </td>
-            `
-          }
             <td scope="row">${user.id}</td>
             <td class="user-name">${user.firstName} ${user.lastName}</td>
             <td>${user.email}</td>
@@ -95,12 +90,17 @@ $(document).ready(() => {
   },
   (enable) => {
     const roleAddBtn = $('.bxs-shield-plus');
+    const passResetBtn = $('#password-reset-btn');
     if (enable) {
       roleAddBtn.css("color", "var(--site-blue-color)");
       roleAddBtn.addClass('role-can-add');
+      passResetBtn.css("color", "var(--site-blue-color)");
+      passResetBtn.addClass("can-pass-reset");
     } else {
       roleAddBtn.css("color", "gray");
       roleAddBtn.removeClass("role-can-add");
+      passResetBtn.css("color", "gray");
+      passResetBtn.removeClass("can-pass-reset");
     }
   },
   (searchInput, searchField) => {
@@ -367,5 +367,55 @@ $(document).ready(() => {
           </tr>
         `);
     }
+  });
+
+  // Password reset initiation.
+  createLoadAnimation(document.getElementById("load-animation2"));
+  
+  $('#popup-cancel-btn2').click(() => {
+    $('#pass-reset-popup').css("display", "none");
+  });
+
+  $(document).on('click', '.can-pass-reset', () => {
+    $('#pass-reset-popup').css("display", "block");
+  });
+
+  $('#popup-confirm-btn2').click(() => {
+    $('#load-animation2').css("display", "block");
+    $('#popup-confirm-btn2').css("display", "none");
+    $('#popup-cancel-btn2').prop('disabled', true);
+
+    const emails = [];
+    $('.better-checkbox input').each(function() {
+      
+      const checkbox = $(this);
+      if (checkbox.is(":checked")) {
+        const email = checkbox.closest("tr").attr('user-email');
+        emails.push(email);
+      }
+    });
+    
+    const baseUrl = $('[base-url]').attr('base-url');
+
+    const requests = [];
+    for (const email of emails) {
+      const request = $.ajax({
+        type: 'POST',
+        url: `${baseUrl}/api/user/request-password-reset`,
+        data: { email }
+      });
+      requests.push(request);
+    }
+    
+    $.when(...requests)
+      .done(() => {
+        $('#load-animation2').css("display", "none");
+        $('#popup-confirm-btn2').css("display", "block");
+        $('#popup-cancel-btn2').prop('disabled', false);
+        $('#pass-reset-popup').css("display", "none");
+      })
+      .fail((_, textStatus, errorThrown) => {
+        console.error('One or more requests failed', textStatus, errorThrown);
+      });
   });
 });

@@ -1,4 +1,4 @@
-.role-can-add:hover {
+.role-can-add:hover, .can-pass-reset:hover {
   cursor: pointer;
   color: blue !important;
 }
@@ -129,4 +129,9 @@
 
 #finished-audit-log-btn {
   margin-top: 1rem;
+}
+
+.lock-large-img {
+  font-size: 5rem;
+  color: var(--site-blue-color);
 }
