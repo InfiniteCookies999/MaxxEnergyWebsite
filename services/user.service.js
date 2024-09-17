@@ -80,6 +80,7 @@ class UserService {
     userId = this.getUserIdForUpdate(userId, session);
 
     await UserRepository.updateUsersName(userId, firstName, lastName);
+    await AuditLogRepository.saveUpdatedAuditLog(userId, 'Updated name');
   }
 
   async updateEmail(userId, email, session, serverAddress) {
