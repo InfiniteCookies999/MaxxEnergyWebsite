@@ -140,16 +140,12 @@
                 <tbody>
                     {{#each initialialUsers}}
                         <tr user-id="{{id}}" user-roles="{{rolesJoined}}" audit-logs='{{auditLogs}}'>
-                            {{#ifEquals id ../adminId}}
-                                <td></td>
-                            {{else}}
-                                <td>
-                                    <div class="form-group smaller-text better-checkbox">
-                                        <input id="sel-check-{{../id}}" type="checkbox" autocomplete="off" class="styled-checkbox">
-                                        <label class="form-check-label" for="sel-check-{{../id}}"></label>
-                                    </div>
-                                </td>
-                            {{/ifEquals}}
+                            <td>
+                                <div class="form-group smaller-text better-checkbox">
+                                    <input id="sel-check-{{id}}" type="checkbox" autocomplete="off" class="styled-checkbox">
+                                    <label class="form-check-label" for="sel-check-{{id}}"></label>
+                                </div>
+                            </td>
                             <td scope="row">{{id}}</td>
                             <td class="user-name">{{firstName}} {{lastName}}</td>
                             <td>{{email}}</td>

@@ -25,31 +25,26 @@ function getOrCreateRoleGroup(role) {
 }
 
 function addToRoleGroup(group, role, userId) {
-
+  const ourId = parseInt($('#admin-id-store').attr('admin-id'));
   group.append(`
     <td user-role="${role}" user-id=${userId} class="added-role">
       <span>${role.charAt(0).toUpperCase() + role.slice(1)}</span>
-      <span class="remove-role-x">X</span>
+      ${(parseInt(userId) === ourId && role === 'admin') ? '' : `<span class="remove-role-x">X</span>`}
     </td>
     `);
 }
 
 $(document).ready(() => {
   createTable('/user/users', (tableBody, res) => {
-    const ourId = parseInt($('#admin-id-store').attr('admin-id'));
     for (const user of res.users) {
       tableBody.append(`
         <tr user-id="${user.id}" user-roles="${user.rolesJoined}" audit-logs='${user.auditLogs}'>
-          ${ourId == user.id ? `<td></td>` :
-            `
             <td>
                 <div class="form-group smaller-text better-checkbox">
                   <input id="sel-check-${user.id}" type="checkbox" autocomplete="off" class="styled-checkbox">
                   <label class="form-check-label" for="sel-check-${user.id}"></label>
                 </div>
             </td>
-            `
-          }
             <td scope="row">${user.id}</td>
             <td class="user-name">${user.firstName} ${user.lastName}</td>
             <td>${user.email}</td>
