@@ -23,6 +23,14 @@
         <div id="messages-container">
 
             <h1 style="margin-bottom: 1rem;">User Management</h1>
+            
+            <div class="d-flex pagination-container">
+                <button class="send-email-btn btn" disabled="true">
+                    <i class='bx bx-envelope'></i>
+                    <span>Send Email</span>
+                </button>
+            </div>
+
             <div class="d-flex pagination-container">
                 <!-- Pagination Controls -->
                 <div class="pagination-controls">
@@ -133,6 +141,25 @@
                         <canvas id="load-animation2" width="30" height="30" style="display: none;"></canvas>
                         <button id="popup-confirm-btn2" class="btn btn-primary">Confirm</button>
                         <button id="popup-cancel-btn2" class="btn">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="send-email-popup" class="confirm-popup-background">
+                <div class="confirm-popup">
+                    <div class="send-email-header-text">
+                        <h5>Sending email</h5>
+                    </div>
+                    <div class="email-input-group">
+                        <input class="email-input form-control" type="text" placeholder="susan@gmail.com">
+                        </input>
+                        <input class="email-input form-control"
+                            placeholder="Subject"
+                        >
+                        <textarea class="form-control email-body-input" placeholder="body"
+                                  rows="12"
+                        ></textarea>
+                        <button class="btn send-off-emails" disabled="true">Send</button>
                     </div>
                 </div>
             </div>

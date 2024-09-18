@@ -95,16 +95,19 @@ $(document).ready(() => {
   (enable) => {
     const roleAddBtn = $('.bxs-shield-plus');
     const passResetBtn = $('#password-reset-btn');
+    const sendEmailBtn = $('.send-email-btn');
     if (enable) {
       roleAddBtn.css("color", "var(--site-blue-color)");
       roleAddBtn.addClass('role-can-add');
       passResetBtn.css("color", "var(--site-blue-color)");
       passResetBtn.addClass("can-pass-reset");
+      sendEmailBtn.prop("disabled", false);
     } else {
       roleAddBtn.css("color", "gray");
       roleAddBtn.removeClass("role-can-add");
       passResetBtn.css("color", "gray");
       passResetBtn.removeClass("can-pass-reset");
+      sendEmailBtn.prop("disabled", true);
     }
   },
   (searchInput, searchField) => {
@@ -421,5 +424,10 @@ $(document).ready(() => {
       .fail((_, textStatus, errorThrown) => {
         console.error('One or more requests failed', textStatus, errorThrown);
       });
+  });
+
+  // Sending emails.
+  $('.send-email-btn').click(() => {
+    $('#send-email-popup').show();
   });
 });

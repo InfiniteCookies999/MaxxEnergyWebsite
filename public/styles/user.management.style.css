@@ -144,3 +144,81 @@
   color: var(--site-blue-color);
   filter: brightness(0.90);
 }
+
+.send-email-btn {
+  margin-left: 1.2rem;
+  font-size: 1.2rem;
+  background-color: var(--site-blue-color);
+  color: white;
+}
+
+.send-email-btn .bx-envelope {
+  font-size: 1.4rem;
+  transform: translateY(0.2rem);
+}
+
+.send-email-btn:not(:disabled):hover {
+  filter: brightness(0.85);
+}
+
+.send-email-header-text {
+  background-color: rgb(228, 228, 228);
+  width: 100%;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  padding-top: 0.5rem;
+  padding-bottom: 0.1rem;
+}
+
+#send-email-popup .confirm-popup {
+  padding: 0 !important;
+  width: 30rem;
+  height: 30rem;
+}
+
+.email-input {
+  border-radius: 0 !important;
+  border: none;
+  border-bottom: 1px solid rgb(197, 197, 197);
+  box-shadow: none;
+}
+
+.email-input-group {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  width: 100%;
+}
+
+.email-body-input {
+  border-radius: 0 !important;
+  border: none;
+  border-bottom: 1px solid rgb(197, 197, 197);
+  height: 100%;
+  resize: none;
+}
+
+.email-body-input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.email-input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.send-off-emails {
+  margin-left: 1.2rem;
+  font-size: 1.2rem;
+  background-color: var(--site-blue-color);
+  color: white;
+  margin-top: 0.4rem;
+  display: block;
+  align-self: flex-start;
+  margin-left: 0.5rem;
+  margin-right: auto;
+}
+
+.send-off-emails:not(:disabled):hover {
+  filter: brightness(0.85);
+}
