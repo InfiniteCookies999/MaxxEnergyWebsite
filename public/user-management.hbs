@@ -147,6 +147,7 @@
                         <th scope="col">Phone</th>
                         <th scope="col">Address</th>
                         <th scope="col">Roles</th>
+                        <th scope="col">Email Verified</th>
                         <th scope="col">Audit Logs</th>
                     </tr>
                 </thead>
@@ -170,6 +171,13 @@
                                         <span>{{roleName}}</span>
                                     </div>
                                 {{/each}}
+                            </td>
+                            <td>
+                                {{#if emailVerified}}
+                                    <span class="email-verified-true">True</span>
+                                {{else}}
+                                    <span class="email-verified-false">False</span>
+                                {{/if}}
                             </td>
                             <td class="audit-log-col">
                                 <i class='bx bx-food-menu'></i>

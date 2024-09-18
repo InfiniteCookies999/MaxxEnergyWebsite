@@ -57,6 +57,10 @@ $(document).ready(() => {
                 </div>
               `).join('')}
             </td>
+            <td>
+              ${user.emailVerified ? `<span class="email-verified-true">True</span>`
+                                   : `<span class="email-verified-false">False</span>`}
+            </td>
             <td class="audit-log-col">
                 <i class='bx bx-food-menu'></i>
             </td>

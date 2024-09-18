@@ -135,3 +135,12 @@
   font-size: 5rem;
   color: var(--site-blue-color);
 }
+
+.email-verified-true, .email-verified-false {
+  font-size: 1.2rem;
+}
+
+.email-verified-true {
+  color: var(--site-blue-color);
+  filter: brightness(0.90);
+}
