@@ -202,21 +202,29 @@
   box-shadow: none;
 }
 
-.email-input:focus {
-  outline: none;
-  box-shadow: none;
+.email-input:focus, .is-invalid:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .send-off-emails {
   margin-left: 1.2rem;
-  font-size: 1.2rem;
   background-color: var(--site-blue-color);
   color: white;
+}
+
+#popup-cancel-btn3, .send-off-emails {
+  display: inline;
+  font-size: 1.2rem;
+}
+
+#email-send-or-cancel {
   margin-top: 0.4rem;
-  display: block;
-  align-self: flex-start;
+  display: block !important;
+  align-self: flex-start !important;
   margin-left: 0.5rem;
-  margin-right: auto;
+  margin-right: auto !important;
+  width: fit-content;
 }
 
 .send-off-emails:not(:disabled):hover {

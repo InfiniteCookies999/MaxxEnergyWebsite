@@ -427,7 +427,55 @@ $(document).ready(() => {
   });
 
   // Sending emails.
+  const areEmailsValid = () => {
+    const toEmails = $('#to-email-input').val()
+      .split(',')
+      .map(e => e.trim());
+    const areValid = toEmails.filter(e => !e.toLowerCase().match(EMAIL_PATTERN)).length === 0;
+    return areValid;
+  };
+  
   $('.send-email-btn').click(() => {
+    //#to-email-input
+    const toInput = $('#to-email-input');
+
+    const emails = [];
+    $('.better-checkbox input').each(function() {
+      
+      const checkbox = $(this);
+      if (checkbox.is(":checked")) {
+        const email = checkbox.closest("tr").attr('user-email');
+        emails.push(email);
+      }
+    });
+
+    toInput.val(emails.join(', '));
+
     $('#send-email-popup').show();
+  });
+
+  $('#email-subject-input, #to-email-input, #email-body').keyup(() => {
+    const sendOffBtn = $('.send-off-emails');
+    const emailSubject = $('#email-subject-input').val();
+    const toEmails = $('#to-email-input').val();
+    const emailBody = $('#email-body').val();
+    const emailsValid = areEmailsValid();
+    if (!emailsValid) {
+      $('#to-email-input').addClass('is-invalid');
+    } else {
+      $('#to-email-input').removeClass('is-invalid');
+    }
+
+    if (emailSubject === '' || toEmails === '' || emailBody === '' || !emailsValid) {
+      // cannot send
+      sendOffBtn.prop("disabled", true);
+    } else {
+      // can send!
+      sendOffBtn.prop("disabled", false);
+    }
+  });
+
+  $('#popup-cancel-btn3').click(() => {
+    $('#send-email-popup').hide();
   });
 });

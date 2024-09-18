@@ -151,15 +151,18 @@
                         <h5>Sending email</h5>
                     </div>
                     <div class="email-input-group">
-                        <input class="email-input form-control" type="text" placeholder="susan@gmail.com">
+                        <input id="to-email-input" class="email-input form-control" type="text" placeholder="susan@gmail.com">
                         </input>
-                        <input class="email-input form-control"
+                        <input id="email-subject-input" class="email-input form-control"
                             placeholder="Subject"
                         >
-                        <textarea class="form-control email-body-input" placeholder="body"
+                        <textarea id="email-body" class="form-control email-body-input" placeholder="body"
                                   rows="12"
                         ></textarea>
-                        <button class="btn send-off-emails" disabled="true">Send</button>
+                        <div id="email-send-or-cancel">
+                            <button class="btn send-off-emails" disabled="true">Send</button>
+                            <button id="popup-cancel-btn3" class="btn">Cancel</button>
+                        </div>
                     </div>
                 </div>
             </div>
