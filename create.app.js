@@ -10,7 +10,8 @@ const {
   staticRouter,
   viewsRouter,
   contactRouter,
-  storeRouter,  
+  storeRouter,
+  emailSendRouter
 } = require('./routes');
 const { errorHandler, reroute, replaceImports } = require('./middleware');
 
@@ -86,7 +87,8 @@ function createApp() {
   // Routers
   app.use('/api/', userRouter);
   app.use('/api/', contactRouter);
-  app.use('/api/store', storeRouter);  
+  app.use('/api/store', storeRouter);
+  app.use('/api/', emailSendRouter);  
 
   app.use(viewsRouter);
   app.use(staticRouter);

@@ -34,6 +34,19 @@ function addToRoleGroup(group, role, userId) {
     `);
 }
 
+function getEmails() {
+  const emails = [];
+  $('.better-checkbox input').each(function() {
+    
+    const checkbox = $(this);
+    if (checkbox.is(":checked")) {
+      const email = checkbox.closest("tr").attr('user-email');
+      emails.push(email);
+    }
+  });
+  return emails;
+}
+
 $(document).ready(() => {
   createTable('/user/users', (tableBody, res) => {
     for (const user of res.users) {
@@ -392,15 +405,7 @@ $(document).ready(() => {
     $('#popup-confirm-btn2').css("display", "none");
     $('#popup-cancel-btn2').prop('disabled', true);
 
-    const emails = [];
-    $('.better-checkbox input').each(function() {
-      
-      const checkbox = $(this);
-      if (checkbox.is(":checked")) {
-        const email = checkbox.closest("tr").attr('user-email');
-        emails.push(email);
-      }
-    });
+    const emails = getEmails();
     
     const baseUrl = $('[base-url]').attr('base-url');
 
@@ -427,6 +432,8 @@ $(document).ready(() => {
   });
 
   // Sending emails.
+  createLoadAnimation(document.getElementById("load-animation3"));
+
   const areEmailsValid = () => {
     const toEmails = $('#to-email-input').val()
       .split(',')
@@ -439,17 +446,11 @@ $(document).ready(() => {
     //#to-email-input
     const toInput = $('#to-email-input');
 
-    const emails = [];
-    $('.better-checkbox input').each(function() {
-      
-      const checkbox = $(this);
-      if (checkbox.is(":checked")) {
-        const email = checkbox.closest("tr").attr('user-email');
-        emails.push(email);
-      }
-    });
+    const emails = getEmails();
 
     toInput.val(emails.join(', '));
+    $('#email-subject-input').val("");
+    $('#email-body').val("");
 
     $('#send-email-popup').show();
   });
@@ -477,5 +478,37 @@ $(document).ready(() => {
 
   $('#popup-cancel-btn3').click(() => {
     $('#send-email-popup').hide();
+  });
+
+  $('.send-off-emails').click(() => {
+    const emailSubject = $('#email-subject-input').val();
+    const toEmails = $('#to-email-input').val().split(',').map(e => e.trim());
+    const emailBody = $('#email-body').val();
+
+    const baseUrl = $('[base-url]').attr('base-url');
+    
+    $('#load-animation3').css("display", "inline");
+    $('.send-off-emails').css("display", "none");
+    $('#popup-cancel-btn3').prop('disabled', true);
+
+    $.ajax({
+      type: 'POST',
+      url: baseUrl + '/api/send-email',
+      contentType: 'application/json; charset=utf-8',
+      data: JSON.stringify({
+        emails: toEmails,
+        subject: emailSubject,
+        body: emailBody
+      }),
+      success: () => {
+        $('#load-animation3').css("display", "none");
+        $('.send-off-emails').css("display", "inline");
+        $('#popup-cancel-btn3').prop('disabled', false);
+        $('#send-email-popup').hide();
+      },
+      error: (res) => {
+        processServerErrorResponse(res);
+      }
+    });
   });
 });

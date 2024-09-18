@@ -18,15 +18,18 @@ class EmailService {
       throw new Error("Must include EMAIL_PASSWORD in your .env file");
     }
 
-    this.transporter = nodemailer.createTransport({
+    const authOptions = {
       service: config.EMAIL_SERVICE,
       auth: {
         user: config.EMAIL_ADDRESS,
         pass: config.EMAIL_PASSWORD
       }
-    });
+    };
 
-    this.transporter.use('compile', hbs({
+    this.hbsTransporter = nodemailer.createTransport(authOptions);
+    this.transporter = nodemailer.createTransport(authOptions);
+
+    this.hbsTransporter.use('compile', hbs({
       viewEngine: {
         extName: '.hbs',
         defaultLayout: false,
@@ -43,6 +46,23 @@ class EmailService {
       subject: options.subject,
       template: options.hbsFile,
       context: options.context,
+      attachments: options.attachments
+    };
+
+    this.hbsTransporter.sendMail(sendOptions, (err, info) => {
+      if (err) {
+        throw new Error(`Error sending email: ${err.message}`);
+      }
+      console.log("email send: " + info.response);
+    });
+  }
+
+  send(options) {
+    const sendOptions = {
+      from: config.EMAIL_ADDRESS,
+      to: options.to,
+      subject: options.subject,
+      text: options.text,
       attachments: options.attachments
     };
 
