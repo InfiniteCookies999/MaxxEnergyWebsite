@@ -1,7 +1,7 @@
 const express = require('express');
 const { controller, validateLoggedIn, validateBody } = require('../middleware');
 const { UserService, EmailService } = require('../services');
-const { UserRoleRepository } = require('../database');
+const { UserRoleRepository, UserRepository } = require('../database');
 const { body } = require('express-validator');
 
 const EMAIL_PATTERN  = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -12,7 +12,7 @@ router.use(express.urlencoded({extended: false}));
 router.use(express.json());
 
 router.post('/send-email',
-  body('emails').notEmpty().withMessage("emails cannot be empty")
+  body('emails').optional().notEmpty().withMessage("emails cannot be empty")
     .custom((emails) => {
       if (!emails.every(email => typeof email === 'string' && EMAIL_PATTERN.test(email))) {
         return false;
@@ -23,6 +23,7 @@ router.post('/send-email',
     .isString().withMessage("subject must be a string"),
   body('body').notEmpty().withMessage("body cannot be empty")
     .isString().withMessage("body must be a string!"),
+  body('sendToAll').notEmpty().isBoolean(),
   
   validateBody,
   validateLoggedIn,
@@ -31,7 +32,14 @@ router.post('/send-email',
       throw new HttpError("Only admins can access", 401);
     }
     
-    for (const email of req.body.emails) {
+    let emails = [];
+    if (req.body.sendToAll) {
+      emails = await UserService.getAllEmails();
+    } else {
+      emails = req.body.emails;
+    }
+    
+    for (const email of emails) {
       EmailService.send({
         to: email,
         subject: req.body.subject,

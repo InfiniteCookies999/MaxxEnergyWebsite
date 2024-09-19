@@ -239,6 +239,10 @@ class UserService {
     await UserRoleRepository.deleteRoleByUserIdAndRoleName(userId, roleName);
   }
 
+  async getAllEmails() {
+    return await UserRepository.getAllEmails();
+  }
+
   async logout(session) {
     await AuditLogRepository.saveFunctionAuditLog(session.user.id, "User logged out of account");
     session.destroy();  // Destroy session properly

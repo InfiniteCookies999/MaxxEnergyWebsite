@@ -36,7 +36,7 @@ function addToRoleGroup(group, role, userId) {
 
 function getEmails() {
   const emails = [];
-  $('.better-checkbox input').each(function() {
+  $('.better-checkbox input:not(#send-to-all-checkbox)').each(function() {
     
     const checkbox = $(this);
     if (checkbox.is(":checked")) {
@@ -108,19 +108,16 @@ $(document).ready(() => {
   (enable) => {
     const roleAddBtn = $('.bxs-shield-plus');
     const passResetBtn = $('#password-reset-btn');
-    const sendEmailBtn = $('.send-email-btn');
     if (enable) {
       roleAddBtn.css("color", "var(--site-blue-color)");
       roleAddBtn.addClass('role-can-add');
       passResetBtn.css("color", "var(--site-blue-color)");
       passResetBtn.addClass("can-pass-reset");
-      sendEmailBtn.prop("disabled", false);
     } else {
       roleAddBtn.css("color", "gray");
       roleAddBtn.removeClass("role-can-add");
       passResetBtn.css("color", "gray");
       passResetBtn.removeClass("can-pass-reset");
-      sendEmailBtn.prop("disabled", true);
     }
   },
   (searchInput, searchField) => {
@@ -206,7 +203,7 @@ $(document).ready(() => {
     $('#added-roles-group').empty();
 
     let checkedUserCount = 0;
-    $('.better-checkbox input').each(function() {
+    $('.better-checkbox input:not(#send-to-all-checkbox)').each(function() {
       
       const checkbox = $(this);
       if (checkbox.is(":checked")) {
@@ -441,14 +438,43 @@ $(document).ready(() => {
     const areValid = toEmails.filter(e => !e.toLowerCase().match(EMAIL_PATTERN)).length === 0;
     return areValid;
   };
+
+  $(document).on('change', '.better-checkbox input', () =>{
+    let oneChecked = false;
+    $('.better-checkbox input').each(function() {
+      if ($(this).is(":checked")) {
+        oneChecked = true;
+      }
+    });
+    if (oneChecked) {
+      $('.send-email-btn').prop('disabled', false);
+    } else {
+      $('.send-email-btn').prop('disabled', true);
+    }
+  });
   
+  $('#send-to-all-checkbox').change(function() {
+    const sendEmailBtn = $('.send-email-btn');
+    if ($(this).is(":checked")) {
+      sendEmailBtn.prop("disabled", false);
+    } else {
+      sendEmailBtn.prop("disabled", true);
+    }
+  });
+
   $('.send-email-btn').click(() => {
-    //#to-email-input
     const toInput = $('#to-email-input');
 
-    const emails = getEmails();
+    if ($('#send-to-all-checkbox').is(":checked")) {
+      toInput.val("to all users");
+      toInput.prop('disabled', true);
+    } else {
+      const emails = getEmails();
 
-    toInput.val(emails.join(', '));
+      toInput.prop('disabled', false);
+      toInput.val(emails.join(', '));
+    }
+    
     $('#email-subject-input').val("");
     $('#email-body').val("");
 
@@ -456,18 +482,22 @@ $(document).ready(() => {
   });
 
   $('#email-subject-input, #to-email-input, #email-body').keyup(() => {
+    const toAllEmails = $('#send-to-all-checkbox').is(":checked");
+    
     const sendOffBtn = $('.send-off-emails');
     const emailSubject = $('#email-subject-input').val();
     const toEmails = $('#to-email-input').val();
     const emailBody = $('#email-body').val();
-    const emailsValid = areEmailsValid();
+    const emailsValid = toAllEmails ? true : areEmailsValid();
     if (!emailsValid) {
       $('#to-email-input').addClass('is-invalid');
     } else {
       $('#to-email-input').removeClass('is-invalid');
     }
 
-    if (emailSubject === '' || toEmails === '' || emailBody === '' || !emailsValid) {
+    
+    if (emailSubject === '' || toEmails === '' ||
+        emailBody === '' || !emailsValid) {
       // cannot send
       sendOffBtn.prop("disabled", true);
     } else {
@@ -482,7 +512,9 @@ $(document).ready(() => {
 
   $('.send-off-emails').click(() => {
     const emailSubject = $('#email-subject-input').val();
-    const toEmails = $('#to-email-input').val().split(',').map(e => e.trim());
+
+    let sendToAll = $('#send-to-all-checkbox').is(":checked");
+    const toEmails = !sendToAll ? $('#to-email-input').val().split(',').map(e => e.trim()) : null;
     const emailBody = $('#email-body').val();
 
     const baseUrl = $('[base-url]').attr('base-url');
@@ -496,7 +528,8 @@ $(document).ready(() => {
       url: baseUrl + '/api/send-email',
       contentType: 'application/json; charset=utf-8',
       data: JSON.stringify({
-        emails: toEmails,
+        ...(!sendToAll && { emails: toEmails }),
+        sendToAll: sendToAll,
         subject: emailSubject,
         body: emailBody
       }),
