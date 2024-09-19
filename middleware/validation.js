@@ -1,4 +1,4 @@
-const { validationResult } = require('express-validator');
+const { validationResult, body } = require('express-validator');
 const HttpError = require('./http.error');
 
 function validateBody(req, _, next) {
@@ -33,8 +33,19 @@ function validateFileExists(req, _, next) {
   }
 }
 
+function validateUserIds(fieldName) {
+  return body(fieldName).notEmpty().withMessage("userIds cannot be empty")
+    .isArray({ min: 1 }).withMessage("Expected an array")
+    .bail()
+    .custom((arr) => {
+      return arr.every(e => Number.isInteger(e));
+    }).withMessage("All elements must be integers");
+}
+
+
 module.exports = {
   validateBody,
   validateLoggedIn,
-  validateFileExists
+  validateFileExists,
+  validateUserIds
 }

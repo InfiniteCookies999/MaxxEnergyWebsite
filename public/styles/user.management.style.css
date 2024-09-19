@@ -146,10 +146,16 @@
 }
 
 .send-email-btn {
-  margin-left: 1.2rem;
+  margin-left: 1rem;
   font-size: 1.2rem;
   background-color: var(--site-blue-color);
   color: white;
+}
+
+.req-audit-logs-btn {
+  background-color: var(--site-blue-color);
+  color: white;
+  float: right;
 }
 
 .send-email-btn .bx-envelope {
@@ -229,4 +235,25 @@
 
 .send-off-emails:not(:disabled):hover {
   filter: brightness(0.85);
+}
+
+.audit-log-send-msg {
+  margin-right: 1rem;
+  width: 14rem;
+  height: 2.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background-color: rgb(243, 243, 243);
+  padding-left: 0.1rem;
+  padding-right: 0.1rem;
+  
+  border-radius: 5px;
+  font-size: 0.8rem;
+}
+
+.audit-log-group {
+  display: flex;
+  align-items: center;
+  align-content: center;
 }

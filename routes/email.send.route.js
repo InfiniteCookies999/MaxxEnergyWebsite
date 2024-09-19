@@ -1,7 +1,7 @@
 const express = require('express');
-const { controller, validateLoggedIn, validateBody } = require('../middleware');
+const { controller, validateLoggedIn, validateBody, validateUserIds } = require('../middleware');
 const { UserService, EmailService } = require('../services');
-const { UserRoleRepository, UserRepository } = require('../database');
+const { UserRoleRepository } = require('../database');
 const { body } = require('express-validator');
 
 const EMAIL_PATTERN  = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -46,6 +46,16 @@ router.post('/send-email',
         text: req.body.body
       });
     }
+
+    res.send();
+}));
+
+router.post("/send-audit-logs",
+  validateUserIds('userIds'),
+
+  controller(async (req, res) => {
+
+    console.log("sending audit logs to user ids: ", req.body.userIds);
 
     res.send();
 }));

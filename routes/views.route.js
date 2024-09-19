@@ -261,10 +261,13 @@ router.get('/admin/user-management', controller(async (req, res) => {
   });
   const userInfo = response.data;
 
+  const user = await UserService.getUserById(req.session.user.id);
+
   res.render('user-management', {
     totalPages: userInfo.totalPages,
     initialialUsers: userInfo.users,
-    adminId: req.session.user.id
+    adminId: user.id,
+    adminEmail: user.email
   });
 }));
 

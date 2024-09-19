@@ -108,6 +108,8 @@ $(document).ready(() => {
   (enable) => {
     const roleAddBtn = $('.bxs-shield-plus');
     const passResetBtn = $('#password-reset-btn');
+    const reqAuditLogsBtn = $('.req-audit-logs-btn');
+    reqAuditLogsBtn.prop('disabled', !enable);
     if (enable) {
       roleAddBtn.css("color", "var(--site-blue-color)");
       roleAddBtn.addClass('role-can-add');
@@ -544,4 +546,28 @@ $(document).ready(() => {
       }
     });
   });
+
+  // Requesting audit logs.
+  $('.req-audit-logs-btn').click(() => {
+
+    const ids = getIds();
+
+    const baseUrl = $('[base-url]').attr('base-url');
+
+    $.ajax({
+      type: 'POST',
+      url: baseUrl + '/api/send-audit-logs',
+      contentType: 'application/json; charset=utf-8',
+      data: JSON.stringify({
+        userIds: ids
+      }),
+      success: () => {
+        $('.audit-log-send-msg').show();
+      },
+      error: (res) => {
+        processServerErrorResponse(res);
+      }
+    });
+  });
+
 });
