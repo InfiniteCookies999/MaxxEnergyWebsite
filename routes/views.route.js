@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const { controller } = require('../middleware'); 
 const { UserService, FileService } = require('../services');
-const { UserRepository, UserRoleRepository, ContactRepository } = require('../database');
+const { UserRepository, UserRoleRepository, ContactRepository, AuditLogRepository } = require('../database');
 const config = require('../config');
 
 const router = express.Router();
