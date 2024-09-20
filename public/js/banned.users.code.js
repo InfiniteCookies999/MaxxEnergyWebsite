@@ -23,6 +23,13 @@ $(document).ready(() => {
      
   },
   (searchInput, searchField) => {
-    
+    switch (searchField) {
+    case 'email':
+      searchInput.attr('placeholder', 'susan@gmail.com');
+      break;
+    case 'ip':
+      searchInput.attr('placeholder', '13.563.24.884');
+      break;
+    }
   });
 });

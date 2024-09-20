@@ -141,10 +141,19 @@ async function mockDatabase() {
     bannedIps.push(ip);
   }
 
-  const [ipResults] = await conn.query(`SELECT * FROM BannedUser WHERE ip=?`, [bannedIps[0]]);
-  if (ipResults.length === 0) {
+  const bannedEmails = ["susan@gmail.com", "susan1@gmail.com", "susan2@gmail.com"];
+
+  const [bannedIpResults] = await conn.query(`SELECT * FROM BannedUser WHERE ip=?`, [bannedIps[0]]);
+  if (bannedIpResults.length === 0) {
     for (const ip of bannedIps) {
       await conn.query(`INSERT INTO BannedUser (ip) VALUES (?)`, [ip]);
+    }
+  }
+
+  const [bannedEmailsResult] = await conn.query(`SELECT * FROM BannedUser WHERE email=?`, [bannedEmails[0]]);
+  if (bannedEmailsResult.length === 0) {
+    for (const email of bannedEmails) {
+      await conn.query(`INSERT INTO BannedUser (email) VALUES (?)`, [email]);
     }
   }
 }

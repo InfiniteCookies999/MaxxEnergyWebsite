@@ -9,6 +9,8 @@ const router = express.Router();
 router.get('/banned',
   query('page').notEmpty().withMessage("The page cannot be empty")
     .isInt(),
+  query('email').optional(),
+  query('ip').optional(),
 
   validateLoggedIn,
   controller(async (req, res) => {
@@ -17,10 +19,12 @@ router.get('/banned',
     }
 
     const page = req.query.page;
+    const emailSearch = req.query.email || '';
+    const ipSearch = req.query.ip || '';
 
     const pageSize = 12;
-    const bans = await BannedRepository.getPageOfBans(page, pageSize, '', '');
-    const total = await BannedRepository.totalBans('', '');
+    const bans = await BannedRepository.getPageOfBans(page, pageSize, emailSearch, ipSearch);
+    const total = await BannedRepository.totalBans(emailSearch, ipSearch);
 
     res.json({
         bans,
