@@ -10,8 +10,10 @@ const {
   UserRoleRepository,
   AuditLogRepository,
   StoreRepository,  
+  BannedRepository,
 } = require('./database');
 const { EmailService } = require('./services');
+const BannedService = require('./services/banned.service');
 
 async function mockDatabase() {
   const conn = await getDBConnection();
@@ -139,8 +141,10 @@ async function mockDatabase() {
   await UserRoleRepository.initialize();
   await AuditLogRepository.initialize();
   await StoreRepository.initialize();  
+  await BannedRepository.initialize();
 
   await EmailService.initialize();
+  await BannedService.initialize();
 
   if (config.SHOULD_MOCK_DATABASE === "true") {
     mockDatabase();

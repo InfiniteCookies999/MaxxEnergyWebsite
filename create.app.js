@@ -14,6 +14,7 @@ const {
   emailSendRouter
 } = require('./routes');
 const { errorHandler, reroute, replaceImports } = require('./middleware');
+const BannedService = require('./services/banned.service');
 
 function createApp() {
 
@@ -39,6 +40,19 @@ function createApp() {
     cookie: { maxAge: 60000 * 1440 /* One day */ },
   }));
 
+  // Ban by ip address.
+  app.use((req, res, next) => {
+    
+    // Filter out ipv-6 mapping.
+    let ip = req.ip;
+    if (ip.startsWith('::ffff:')) {
+      ip = ip.split('::ffff:')[1];
+    }
+    if (BannedService.getBannedIps().includes(ip)) {
+      return res.send("you are banned!");
+    }
+    next();
+  });
   app.use((req, _, next) => {
     const host = req.get('host');
     const idx = host.indexOf(':');
