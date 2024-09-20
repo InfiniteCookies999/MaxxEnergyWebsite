@@ -129,6 +129,24 @@ async function mockDatabase() {
       VALUES ${placeholders}
       `, bulkUsers.flat());
   }
+
+
+  const bannedIps = [];
+  for (let i = 0; i < 50; i++) {
+    const octet1 = (i + 25) % 256;
+    const octet2 = i % 256;
+    const octet3 = (i + 35) % 256;
+    const octet4 = (i + 10) % 256;
+    const ip = `${octet1}.${octet2}.${octet3}.${octet4}`;
+    bannedIps.push(ip);
+  }
+
+  const [ipResults] = await conn.query(`SELECT * FROM BannedUser WHERE ip=?`, [bannedIps[0]]);
+  if (ipResults.length === 0) {
+    for (const ip of bannedIps) {
+      await conn.query(`INSERT INTO BannedUser (ip) VALUES (?)`, [ip]);
+    }
+  }
 }
 
 (async () => {

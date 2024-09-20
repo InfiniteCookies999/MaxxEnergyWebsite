@@ -271,6 +271,24 @@ router.get('/admin/user-management', controller(async (req, res) => {
   });
 }));
 
+router.get('/admin/bans', controller(async (req, res) => {
+  if (!(await isAdmin(req))) {
+    return res.redirect(`/${getReroute()}`);
+  }
+
+  const response = await axios.get(`http://${req.serverAddress}/api/banned?page=0`, {
+    headers: {
+      'Cookie': getSessionCookie(req)
+    }
+  });
+  const info = response.data;
+
+  res.render('banned-users', {
+    totalPages: info.totalPages,
+    initialBans: info.bans
+  });
+}));
+
 // security route
 router.get('/security', controller(async (req, res) => {
   let baseUrl = '';

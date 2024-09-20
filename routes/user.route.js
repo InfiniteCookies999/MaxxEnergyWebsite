@@ -261,7 +261,8 @@ router.get('/user/check-password-reset-token/:token',
 );
 
 router.get('/user/users',
-  query('page').notEmpty().withMessage("The page cannot be empty"),
+  query('page').notEmpty().withMessage("The page cannot be empty")
+    .isInt(),
   query('email').optional(),
   query('name').optional(),
   query('phone').optional(),

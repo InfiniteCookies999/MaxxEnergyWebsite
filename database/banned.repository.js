@@ -47,7 +47,64 @@ class BannedRepository {
     }
 
     return results.map(r => r.userId);
-  }  
+  }
+
+  getSearchFieldsWhereClause(emailSearch, ipSearch) {
+    
+    const checkValue = (searchValue) => {
+      return searchValue !== undefined && searchValue !== '';
+    };
+
+    let clause = '';
+    
+    let searchValues = [];
+    if (checkValue(emailSearch) || checkValue(ipSearch)) {
+          clause += "WHERE ";
+    }
+
+    let alreadyHasSearch = false;
+    const addSearch = (searchValue, filedName) => {
+      if (checkValue(searchValue)) {
+        if (alreadyHasSearch) {
+          clause += 'AND ';
+        }
+        clause += `${filedName} LIKE ? `;
+        searchValues.push(`%${searchValue}%`);
+        alreadyHasSearch = true;
+      }
+    };
+
+    addSearch(emailSearch, 'email');
+    addSearch(ipSearch, 'ip');
+
+    return [ clause, searchValues ];
+  }
+
+  async getPageOfBans(pageNumber, pageSize, emailSearch, ipSearch) {
+    const conn = await getDBConnection();
+    
+    let [ whereClause, searchValues ] = this.getSearchFieldsWhereClause(emailSearch, ipSearch);
+    
+    let sql = `SELECT * FROM BannedUser ${whereClause}
+               ORDER BY id ASC
+               LIMIT ? OFFSET ?`;
+    
+    const [ messages ] = await conn.query(sql,
+      [ ...searchValues, pageSize, pageNumber * pageSize ]);
+
+    return messages;
+  }
+
+  async totalBans(emailSearch, ipSearch) {
+    const conn = await getDBConnection();
+
+    let [ whereClause, searchValues ] = this.getSearchFieldsWhereClause(emailSearch, ipSearch);
+
+    let sql = `SELECT COUNT(*) AS total FROM BannedUser ${whereClause}`;
+    const [result] = await conn.query(sql, searchValues);
+
+    return result[0].total;
+  }
 };
 
 module.exports = new BannedRepository();

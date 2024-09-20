@@ -35,7 +35,8 @@ router.post('/contact/submit',
 }));
 
 router.get('/contact/messages',
-  query('page').notEmpty().withMessage("The page cannot be empty"),
+  query('page').notEmpty().withMessage("The page cannot be empty")
+    .isInt(),
   query('email').optional(),
   query('name').optional(),
   query('id').optional(),

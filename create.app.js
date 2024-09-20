@@ -11,7 +11,8 @@ const {
   viewsRouter,
   contactRouter,
   storeRouter,
-  emailSendRouter
+  emailSendRouter,
+  BannedRouter
 } = require('./routes');
 const { errorHandler, reroute, replaceImports } = require('./middleware');
 const BannedService = require('./services/banned.service');
@@ -103,6 +104,7 @@ function createApp() {
   app.use('/api/', contactRouter);
   app.use('/api/store', storeRouter);
   app.use('/api/', emailSendRouter);  
+  app.use('/api/', BannedRouter);
 
   app.use(viewsRouter);
   app.use(staticRouter);

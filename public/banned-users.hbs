@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Messages</title>
+    <title>Banned Users</title>
 
     <div base-url=""></div>
     <import value="/common-links"></import>
@@ -11,7 +11,7 @@
     <import value="form-links"></import>
     <link rel="stylesheet" href="/styles/admin.tables.style.css">
     <script src="/js/admin.tables.js"></script>
-    <script src="/js/contact.messages.code.js"></script>
+    <script src="/js/banned.users.code.js"></script>
 
 </head>
 <body>
@@ -20,7 +20,7 @@
     <div class="container">
         <div id="messages-container">
 
-            <h1 style="margin-bottom: 1rem;">Contact Messages</h1>
+            <h1 style="margin-bottom: 1rem;">Banned Users</h1>
             <div class="d-flex pagination-container">
                 <!-- Pagination Controls -->
                 <div class="pagination-controls">
@@ -58,10 +58,7 @@
                 <select id="search-dropdown" class="form-control">
                     <option value="" disabled>Search By</option>
                     <option value="email" selected>Email</option>
-                    <option value="name">Name</option>
-                    <option value="phone">Phone</option>
-                    <option value="messageText">Message Text</option>
-                    <option value="id">Id</option>
+                    <option value="email" selected>IP</option>
                 </select>
                 <input id="search-input"
                        type="text"
@@ -86,14 +83,12 @@
                     <tr>
                         <th scope="col">Sel</th>
                         <th scope="col">ID</th>
-                        <th scope="col">Name</th>
                         <th scope="col">Email</th>
-                        <th scope="col">Phone</th>
-                        <th scope="col">Message</th>
+                        <th scope="col">IP</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {{#each initialialMessages}}
+                    {{#each initialBans}}
                         <tr>
                             <td>
                                 <div class="form-group smaller-text better-checkbox">
@@ -102,14 +97,12 @@
                                 </div>
                             </td>
                             <td scope="row">{{id}}</td>
-                            <td>{{firstName}} {{lastName}}</td>
                             <td>{{email}}</td>
-                            <td>{{phone}}</td>
-                            <td>{{message}}</td>
+                            <td>{{ip}}</td>
                         </tr>
                     {{else}}
                         <tr>
-                            <td colspan="5">No messages found.</td>
+                            <td colspan="5">No bans found.</td>
                             <td></td>
                         </tr>
                     {{/each}}
