@@ -105,6 +105,13 @@ class BannedRepository {
 
     return result[0].total;
   }
+
+  async deleteBanById(banId) {
+    const conn = await getDBConnection();
+
+    await conn.query(`DELETE FROM BannedUser WHERE id=?`,
+      [banId]);    
+  }
 };
 
 module.exports = new BannedRepository();

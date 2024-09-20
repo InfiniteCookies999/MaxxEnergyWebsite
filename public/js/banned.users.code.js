@@ -17,7 +17,28 @@ $(document).ready(() => {
     }
   },
   (finishedCB) => {
+    $('#load-animation').css("display", "block");
+    $('#popup-confirm-btn').css("display", "none");
 
+    const banIds = getIds();
+    
+    const baseUrl = $('[base-url]').attr('base-url');
+
+    $.ajax({
+      type: 'DELETE',
+      url: baseUrl + '/api/banned',
+      contentType: 'application/json; charset=utf-8',
+      data: JSON.stringify({ banIds: banIds }),
+      success: () => {
+        finishedCB();
+      },
+      error: (res) => {
+        processServerErrorResponse(res);
+      },
+      complete: () => {
+        finishedCB();
+      }
+    });
   },
   () => {
      

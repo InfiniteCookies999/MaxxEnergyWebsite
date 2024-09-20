@@ -9,6 +9,12 @@ class BannedService {
   getBannedIps() {
     return this.bannedIps;
   }
+
+  async deleteBan(banId) {
+    await BannedRepository.deleteBanById(banId);
+    
+    this.bannedIps = await BannedRepository.getBannedIps();
+  }
 };
 
 module.exports = new BannedService();
