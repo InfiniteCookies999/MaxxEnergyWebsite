@@ -19,7 +19,7 @@ class BannedRepository {
   async getBannedIps() {
     const conn = await getDBConnection();
 
-    const [ results ] = await conn.query(`SELECT ip FROM BannedUser`);
+    const [ results ] = await conn.query(`SELECT ip FROM BannedUser WHERE ip IS NOT NULL`);
     if (results.length === 0) {
       return [];
     }
@@ -30,7 +30,7 @@ class BannedRepository {
   async getBannedEmails() {
     const conn = await getDBConnection();
 
-    const [ results ] = await conn.query(`SELECT email FROM BannedUser`);
+    const [ results ] = await conn.query(`SELECT email FROM BannedUser WHERE email IS NOT NULL`);
     if (results.length === 0) {
       return [];
     }

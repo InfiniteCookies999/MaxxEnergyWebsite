@@ -10,6 +10,7 @@ const {
 const FileService = require('./file.service');
 const EmailVerifyService = require('./email.verify.service');
 const PasswordResetService = require('./password.reset.service');
+const BannedService = require('./banned.service');
 
 const HASH_STRENGTH = 10
 
@@ -59,6 +60,12 @@ class UserService {
     if (!(await bcrypt.compare(password, hashedPassword))) {
       throw new HttpError(invalidMessage, 401);
     }
+
+    const bannedEmails = BannedService.getBannedEmails();
+    if (BannedService.getBannedEmails().includes(email.toLowerCase())) {
+      throw new HttpError("Account banned", 401);
+    }
+
     await AuditLogRepository.saveFunctionAuditLog(user.id, 'User logged into account');
 
     // The user provided correct credentials. Creating a user session.

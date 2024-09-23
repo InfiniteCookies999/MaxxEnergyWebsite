@@ -6,24 +6,29 @@ class BannedService {
   
   async initialize() {
     this.bannedIps = await BannedRepository.getBannedIps();
-    this.bannedEmails = [];
+    this.bannedEmails = await BannedRepository.getBannedEmails();
   }
 
   getBannedIps() {
     return this.bannedIps;
   }
 
+  getBannedEmails() {
+    return this.bannedEmails;
+  }
+
   async deleteBan(banId) {
     await BannedRepository.deleteBanById(banId);
     
     this.bannedIps = await BannedRepository.getBannedIps();
+    this.bannedEmails = await BannedRepository.getBannedEmails();
   }
 
   async addBan(banEmailOrIp) {
     if (EMAIL_PATTERN.test(banEmailOrIp)) {
       // banning email
-      await BannedRepository.saveEmailBan(banEmailOrIp);
-      this.bannedEmails.push(banEmailOrIp);
+      await BannedRepository.saveEmailBan(banEmailOrIp.toLowerCase());
+      this.bannedEmails.push(banEmailOrIp.toLowerCase());
     } else {
       // banning by ip
       await BannedRepository.saveIpBan(banEmailOrIp);
