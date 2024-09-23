@@ -54,6 +54,9 @@ $(document).ready(() => {
     }
   });
 
+  $('#cancel-ban-btn').click(() => {
+    $('#ban-user-popup').hide();
+  });
 
   const banInput = $('#ban-input');
   $('.add-ban-btn').click(() => {

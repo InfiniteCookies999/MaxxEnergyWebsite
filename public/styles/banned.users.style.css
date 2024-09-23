@@ -9,13 +9,13 @@
   width: 20rem;
 }
 
-.btn-primary {
-  margin-top: 1rem;
+#confirm-ban-btn, #ban-selection-type-dropdwon, #cancel-ban-btn, .ban-btns {
+  display: inline !important;
+  align-self: flex-start !important;
 }
 
-#confirm-ban-btn, #ban-selection-type-dropdwon {
-  display: block !important;
-  align-self: flex-start !important;
+.ban-btns {
+  margin-top: 1rem;
 }
 
 #ban-input {
