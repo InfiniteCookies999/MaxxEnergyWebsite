@@ -55,8 +55,10 @@ $(document).ready(() => {
   });
 
 
+  const banInput = $('#ban-input');
   $('.add-ban-btn').click(() => {
     $('#ban-user-popup').show();
+    banInput.val("");
   });
 
   $('#ban-selection-type-dropdwon').change(() => {
@@ -73,8 +75,39 @@ $(document).ready(() => {
     }
   });
 
-  $('#ban-input').keyup(() => {
-    const value = $('#ban-input').val();
+  const ipv4Pattern = /^((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])$/;
+  const ipv6Pattern = /^((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])$/;
+  banInput.keypress((event) => {
+    const selected = $('#ban-selection-type-dropdwon').val();
+    if (selected === 'ip') {
+      if (!((event.which >= 48 && event.which <= 57) || event.which === 46)) {
+        event.preventDefault();
+        return;
+      }
+    }
+
+    const value = banInput.val();
     $('#confirm-ban-btn').prop('disabled', value === '');
+  });
+
+  banInput.on('input', () => {
+    $('#ban-error').empty();
+  });
+
+  $('#confirm-ban-btn').click(() => {
+    const selected = $('#ban-selection-type-dropdwon').val();
+
+    if (selected === 'ip') {
+      const value = banInput.val();
+      if (!(ipv4Pattern.test(value) || ipv6Pattern.test(value))) {
+        appendErrorMessages($('#ban-error'), 1, (container, flags) => {
+          console.log("going to append the error!")
+          tryAppendError(container, "Expected a valid ip", flags, 1);
+        });
+        return;
+      }
+    }
+
+    // TODO: send ban off to server!
   });
 });
