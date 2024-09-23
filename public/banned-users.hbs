@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Banned Users</title>
+    <title>Bans</title>
 
     <div base-url=""></div>
     <import value="/common-links"></import>
     <link rel="stylesheet" href="/styles/shared.auth.style.css">
     <import value="form-links"></import>
     <link rel="stylesheet" href="/styles/admin.tables.style.css">
+    <link rel="stylesheet" href="/styles/banned.users.style.css">
     <script src="/js/admin.tables.js"></script>
     <script src="/js/banned.users.code.js"></script>
 
@@ -20,7 +21,15 @@
     <div class="container">
         <div id="messages-container">
 
-            <h1 style="margin-bottom: 1rem;">Banned Users</h1>
+            <h1 style="margin-bottom: 1rem;">Bans</h1>
+
+            <div class="d-flex pagination-container">
+                <button class="add-ban-btn btn">
+                    <i class='bx bx-envelope'></i>
+                    <span>Add ban</span>
+                </button>
+            </div>
+
             <div class="d-flex pagination-container">
                 <!-- Pagination Controls -->
                 <div class="pagination-controls">
@@ -75,6 +84,18 @@
                         <button id="popup-confirm-btn" class="btn btn-primary">Confirm</button>
                         <button id="popup-cancel-btn" class="btn">Cancel</button>
                     </div>
+                </div>
+            </div>
+
+            <div id="ban-user-popup" class="confirm-popup-background">
+                <div class="confirm-popup">
+                    <h5>Add Ban</h5>
+                    <select id="ban-selection-type-dropdwon" class="form-control">
+                        <option value="email" selected>Email</option>
+                        <option value="ip">IP</option>
+                    </select>
+                    <input id="ban-input" type="text" class="form-control" placeholder="susan@gmail.com">
+                    <button id="confirm-ban-btn" class="btn-primary btn" disabled="true">Confirm</button>
                 </div>
             </div>
 

@@ -53,4 +53,28 @@ $(document).ready(() => {
       break;
     }
   });
+
+
+  $('.add-ban-btn').click(() => {
+    $('#ban-user-popup').show();
+  });
+
+  $('#ban-selection-type-dropdwon').change(() => {
+    const selected = $('#ban-selection-type-dropdwon').val();
+    const banInput = $('#ban-input');
+    banInput.val("");
+    
+    if (selected === 'email') {
+      banInput.attr('placeholder', 'susan@gmail.com');
+      banInput.attr('maxlength', '320');
+    } else { // ip
+      banInput.attr('placeholder', '546.12.555.6');
+      banInput.attr('maxlength', '15');
+    }
+  });
+
+  $('#ban-input').keyup(() => {
+    const value = $('#ban-input').val();
+    $('#confirm-ban-btn').prop('disabled', value === '');
+  });
 });
