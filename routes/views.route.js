@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const { controller } = require('../middleware'); 
 const { UserService, FileService } = require('../services');
-const { UserRepository, UserRoleRepository, ContactRepository } = require('../database');
+const { UserRepository, UserRoleRepository, ContactRepository, AuditLogRepository } = require('../database');
 const config = require('../config');
 
 const router = express.Router();
@@ -261,10 +261,31 @@ router.get('/admin/user-management', controller(async (req, res) => {
   });
   const userInfo = response.data;
 
+  const user = await UserService.getUserById(req.session.user.id);
+
   res.render('user-management', {
     totalPages: userInfo.totalPages,
     initialialUsers: userInfo.users,
-    adminId: req.session.user.id
+    adminId: user.id,
+    adminEmail: user.email
+  });
+}));
+
+router.get('/admin/bans', controller(async (req, res) => {
+  if (!(await isAdmin(req))) {
+    return res.redirect(`/${getReroute()}`);
+  }
+
+  const response = await axios.get(`http://${req.serverAddress}/api/banned?page=0`, {
+    headers: {
+      'Cookie': getSessionCookie(req)
+    }
+  });
+  const info = response.data;
+
+  res.render('banned-users', {
+    totalPages: info.totalPages,
+    initialBans: info.bans
   });
 }));
 

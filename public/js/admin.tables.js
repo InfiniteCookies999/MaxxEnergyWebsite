@@ -6,12 +6,12 @@ function disableTrashcan(onCheckedCB) {
 }
 
 function addCheckboxBehavior(onCheckedCB) {
-  $('.better-checkbox input').change(function() {
+  $('.better-checkbox input:not(#send-to-all-checkbox)').change(function() {
     disableTrashcan(onCheckedCB);
     
     let allChecked = true;
     const trash = $('.bx-trash');
-    $('.better-checkbox input').each(function() {
+    $('.better-checkbox input:not(#send-to-all-checkbox)').each(function() {
       if ($(this).is(":checked")) {
         trash.css("color", "rgb(163, 24, 24)");
         trash.addClass('trash-can-delete');
@@ -169,7 +169,7 @@ function createTable(partialUrl, createNewElementsCB, onDeleteCB, onCheckedCB, o
   });
 
   function selOrDel(tof) {
-    $('.better-checkbox input').each(function() {
+    $('.better-checkbox input:not(#send-to-all-checkbox)').each(function() {
       $(this).prop('checked', tof).trigger('change');
     });
   }
@@ -181,7 +181,7 @@ function createTable(partialUrl, createNewElementsCB, onDeleteCB, onCheckedCB, o
 
 function getIds() {
   let ids = [];
-  $('.better-checkbox input').each(function() {
+  $('.better-checkbox input:not(#send-to-all-checkbox)').each(function() {
     
     const checkbox = $(this);
     if (checkbox.is(":checked")) {

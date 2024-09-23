@@ -4,6 +4,7 @@ const EmailService = require('./email.service');
 const EmailVerifyService = require('./email.verify.service');
 const PasswordResetService = require('./password.reset.service');
 const ContactService = require('./contact.service');
+const BannedService = require('./banned.service');
 
 module.exports = {
   UserService,
@@ -11,5 +12,6 @@ module.exports = {
   EmailService,
   EmailVerifyService,
   PasswordResetService,
-  ContactService
+  ContactService,
+  BannedService
 }

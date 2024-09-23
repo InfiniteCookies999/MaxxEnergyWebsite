@@ -306,6 +306,14 @@ class UserRepository {
     await conn.query(`DELETE FROM user WHERE id=?`,
       [userId]);
   }
+
+  async getAllEmails() {
+    const conn = await getDBConnection();
+
+    const [result] = await conn.query(`SELECT email FROM user`);
+
+    return result;
+  }
 }
 
 module.exports = new UserRepository();

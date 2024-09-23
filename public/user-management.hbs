@@ -23,6 +23,36 @@
         <div id="messages-container">
 
             <h1 style="margin-bottom: 1rem;">User Management</h1>
+            
+            <div class="d-flex pagination-container">
+                <button class="send-email-btn btn" disabled="true">
+                    <i class='bx bx-envelope'></i>
+                    <span>Send Email</span>
+                </button>
+                <div class="form-group smaller-text better-checkbox send-all-check-group">
+                    <input id="send-to-all-checkbox"
+                           type="checkbox"
+                           autocomplete="off"
+                           class="styled-checkbox">
+                    <label class="form-check-label" for="send-to-all-checkbox">
+                        send to all
+                    </label>
+                </div>
+                <div class="audit-log-group ml-auto mr-2">
+                    <div class="audit-log-send-msg" style="display: none;">
+                        <span>Audit logs send to: </span>
+                        <br/>
+                        <span>
+                            {{adminEmail}}
+                        </span>
+                    </div>
+                    <button class="req-audit-logs-btn btn" disabled="true">
+                        <i class='bx bx-envelope'></i>
+                        <span>Request Email Audit Logs</span>
+                    </button>
+                </div>
+            </div>
+            
             <div class="d-flex pagination-container">
                 <!-- Pagination Controls -->
                 <div class="pagination-controls">
@@ -39,9 +69,19 @@
                                aria-label="Page number">
                         <span id="total-page-span">of {{totalPages}}</span>
                     </div>
-                    <button id="next-page-btn" class="btn" aria-label="Next">
-                        <span aria-hidden="true">Next &raquo;</span>
-                    </button>
+                    {{#ifEquals totalPages 0}}
+                        <button id="next-page-btn" class="btn" aria-label="Next" disabled="true">
+                            <span aria-hidden="true">Next &raquo;</span>
+                        </button>
+                    {{else ifEquals ../totalPages 1}}
+                        <button id="next-page-btn" class="btn" aria-label="Next" disabled="true">
+                            <span aria-hidden="true">Next &raquo;</span>
+                        </button>
+                    {{else}}
+                        <button id="next-page-btn" class="btn" aria-label="Next">
+                            <span aria-hidden="true">Next &raquo;</span>
+                        </button>
+                    {{/ifEquals}}
                 </div>
                 <div class="edit-icons d-flex align-items-center mx-2">
                     <i id="sel-desel" class='bx bxs-select-multiple can-sel-all'></i>
@@ -137,6 +177,29 @@
                 </div>
             </div>
 
+            <div id="send-email-popup" class="confirm-popup-background">
+                <div class="confirm-popup">
+                    <div class="send-email-header-text">
+                        <h5>Sending email</h5>
+                    </div>
+                    <div class="email-input-group">
+                        <input id="to-email-input" class="email-input form-control" type="text" placeholder="susan@gmail.com">
+                        </input>
+                        <input id="email-subject-input" class="email-input form-control"
+                            placeholder="Subject"
+                        >
+                        <textarea id="email-body" class="form-control email-body-input" placeholder="body"
+                                  rows="12"
+                        ></textarea>
+                        <div id="email-send-or-cancel">
+                            <canvas id="load-animation3" width="30" height="30" style="display: none;"></canvas>
+                            <button class="btn send-off-emails" disabled="true">Send</button>
+                            <button id="popup-cancel-btn3" class="btn">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <table id="db-table" class="table table-striped">
                 <thead>
                     <tr>
@@ -147,6 +210,7 @@
                         <th scope="col">Phone</th>
                         <th scope="col">Address</th>
                         <th scope="col">Roles</th>
+                        <th scope="col">Email Verified</th>
                         <th scope="col">Audit Logs</th>
                     </tr>
                 </thead>
@@ -170,6 +234,13 @@
                                         <span>{{roleName}}</span>
                                     </div>
                                 {{/each}}
+                            </td>
+                            <td>
+                                {{#if emailVerified}}
+                                    <span class="email-verified-true">True</span>
+                                {{else}}
+                                    <span class="email-verified-false">False</span>
+                                {{/if}}
                             </td>
                             <td class="audit-log-col">
                                 <i class='bx bx-food-menu'></i>

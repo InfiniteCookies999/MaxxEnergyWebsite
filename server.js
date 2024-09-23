@@ -10,8 +10,10 @@ const {
   UserRoleRepository,
   AuditLogRepository,
   StoreRepository,  
+  BannedRepository,
 } = require('./database');
 const { EmailService } = require('./services');
+const BannedService = require('./services/banned.service');
 
 async function mockDatabase() {
   const conn = await getDBConnection();
@@ -127,6 +129,33 @@ async function mockDatabase() {
       VALUES ${placeholders}
       `, bulkUsers.flat());
   }
+
+
+  const bannedIps = [];
+  for (let i = 0; i < 50; i++) {
+    const octet1 = (i + 25) % 256;
+    const octet2 = i % 256;
+    const octet3 = (i + 35) % 256;
+    const octet4 = (i + 10) % 256;
+    const ip = `${octet1}.${octet2}.${octet3}.${octet4}`;
+    bannedIps.push(ip);
+  }
+
+  const bannedEmails = ["susan@gmail.com", "susan1@gmail.com", "susan2@gmail.com"];
+
+  const [bannedIpResults] = await conn.query(`SELECT * FROM BannedUser WHERE ip=?`, [bannedIps[0]]);
+  if (bannedIpResults.length === 0) {
+    for (const ip of bannedIps) {
+      await conn.query(`INSERT INTO BannedUser (ip) VALUES (?)`, [ip]);
+    }
+  }
+
+  const [bannedEmailsResult] = await conn.query(`SELECT * FROM BannedUser WHERE email=?`, [bannedEmails[0]]);
+  if (bannedEmailsResult.length === 0) {
+    for (const email of bannedEmails) {
+      await conn.query(`INSERT INTO BannedUser (email) VALUES (?)`, [email]);
+    }
+  }
 }
 
 (async () => {
@@ -139,8 +168,10 @@ async function mockDatabase() {
   await UserRoleRepository.initialize();
   await AuditLogRepository.initialize();
   await StoreRepository.initialize();  
+  await BannedRepository.initialize();
 
   await EmailService.initialize();
+  await BannedService.initialize();
 
   if (config.SHOULD_MOCK_DATABASE === "true") {
     mockDatabase();

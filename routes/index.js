@@ -3,6 +3,8 @@ const staticRouter = require('./static.router');
 const viewsRouter = require('./views.route');
 const contactRouter = require('./contact.route');  
 const storeRouter = require('./store.route'); 
+const emailSendRouter = require('./email.send.route');
+const BannedRouter = require('./banned.route');
 
 module.exports = {
   userRouter,
@@ -10,4 +12,6 @@ module.exports = {
   viewsRouter,
   contactRouter,  
   storeRouter,  
+  emailSendRouter,
+  BannedRouter
 };
