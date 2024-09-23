@@ -102,10 +102,16 @@ $(document).ready(() => {
 
     const value = banInput.val();
 
-    if (selected === 'ip') {
+    if (selected === 'email') {
+      if (!EMAIL_PATTERN.test(value)) {
+        appendErrorMessages($('#ban-error'), 1, (container, flags) => {
+          tryAppendError(container, "Expected a valid email", flags, 1);
+        });
+        return;
+      }
+    } else { // ip
       if (!(ipv4Pattern.test(value) || ipv6Pattern.test(value))) {
         appendErrorMessages($('#ban-error'), 1, (container, flags) => {
-          console.log("going to append the error!")
           tryAppendError(container, "Expected a valid ip", flags, 1);
         });
         return;

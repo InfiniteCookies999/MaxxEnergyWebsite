@@ -61,7 +61,6 @@ class UserService {
       throw new HttpError(invalidMessage, 401);
     }
 
-    const bannedEmails = BannedService.getBannedEmails();
     if (BannedService.getBannedEmails().includes(email.toLowerCase())) {
       throw new HttpError("Account banned", 401);
     }
