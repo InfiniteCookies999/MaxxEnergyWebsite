@@ -1,9 +1,8 @@
 const express = require('express');
 const { BannedRepository, UserRoleRepository } = require('../database');
 const { validateLoggedIn, controller, validateBody } = require('../middleware');
-const { UserService } = require('../services');
+const { UserService, BannedService } = require('../services');
 const { query, body } = require('express-validator');
-const bannedService = require('../services/banned.service');
 
 const router = express.Router();
 
@@ -52,11 +51,25 @@ router.delete('/banned',
     const banIds = req.body.banIds;
 
     for (const banId of banIds) {
-      await bannedService.deleteBan(banId);
+      await BannedService.deleteBan(banId);
     }
 
     res.send();
 }));
 
+router.post('/banned/ban',
+  body('banEmailOrIp').notEmpty(),
+  
+  validateLoggedIn,
+  controller(async (req, res) => {
+
+    if (!(await UserService.userSessionHasRole(req.session, UserRoleRepository.adminRole()))) {
+      throw new HttpError("Only admins can access", 401);
+    }
+    
+    await BannedService.addBan(req.body.banEmailOrIp);
+
+  res.send();
+}));
 
 module.exports = router;

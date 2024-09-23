@@ -73,7 +73,7 @@ $(document).ready(() => {
       banInput.attr('placeholder', 'susan@gmail.com');
       banInput.attr('maxlength', '320');
     } else { // ip
-      banInput.attr('placeholder', '546.12.555.6');
+      banInput.attr('placeholder', '123.12.255.6');
       banInput.attr('maxlength', '15');
     }
   });
@@ -100,8 +100,9 @@ $(document).ready(() => {
   $('#confirm-ban-btn').click(() => {
     const selected = $('#ban-selection-type-dropdwon').val();
 
+    const value = banInput.val();
+
     if (selected === 'ip') {
-      const value = banInput.val();
       if (!(ipv4Pattern.test(value) || ipv6Pattern.test(value))) {
         appendErrorMessages($('#ban-error'), 1, (container, flags) => {
           console.log("going to append the error!")
@@ -111,6 +112,19 @@ $(document).ready(() => {
       }
     }
 
-    // TODO: send ban off to server!
+    const baseUrl = $('[base-url]').attr('base-url');
+
+    $.ajax({
+      type: 'POST',
+      url: baseUrl + '/api/banned/ban',
+      contentType: 'application/json; charset=utf-8',
+      data: JSON.stringify({ banEmailOrIp: value }),
+      success: () => {
+        $('#ban-user-popup').hide();
+      },
+      error: (res) => {
+        processServerErrorResponse(res);
+      }
+    });
   });
 });

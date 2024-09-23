@@ -112,6 +112,16 @@ class BannedRepository {
     await conn.query(`DELETE FROM BannedUser WHERE id=?`,
       [banId]);    
   }
+
+  async saveEmailBan(email) {
+    const conn = await getDBConnection();
+    await conn.execute(`INSERT INTO BannedUser (email) VALUES (?)`, [ email ]);
+  }
+
+  async saveIpBan(ip) {
+    const conn = await getDBConnection();
+    await conn.execute(`INSERT INTO BannedUser (ip) VALUES (?)`, [ ip ]);
+  }
 };
 
 module.exports = new BannedRepository();
