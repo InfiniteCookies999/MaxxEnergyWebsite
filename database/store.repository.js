@@ -21,7 +21,8 @@ class StoreRepository {
       { id: '3', name: 'Solar-Powered Fan', price: 3099, description: 'Enjoy a cool breeze powered by the sun, great for outdoors and emergencies.', quantity: 50, image: "store-images/solar-fan.jpg" },
       { id: '4', name: 'Reusable Smart Battery', price: 4999, description: 'Rechargeable battery for everyday use, eco-friendly and cost-effective.', quantity: 45, image: "store-images/eco-battery.jpg" },
       { id: '5', name: 'Smart Plug', price: 1999, description: 'Control appliances remotely, save energy and reduce bills effortlessly.', quantity: 65, image: "store-images/smart-plug.jpg" },
-      { id: '6', name: 'Reusable Water Bottle', price: 1499, description: 'Durable, insulated bottle to keep drinks hot or cold, reusable and stylish.', quantity: 48, image: "store-images/water-bottle.jpg" },
+      { id: '6', name: 'Reusable Water Bottle', price: 1599, description: 'Stay hydrated on the go with this eco-friendly, reusable water bottle.', quantity: 65, image: "store-images/water-bottle.jpg" },
+      
     ];
 
     // Using a regular for loop to check and insert items
@@ -44,6 +45,22 @@ class StoreRepository {
     const conn = await getDBConnection();
     const [results] = await conn.query('SELECT * FROM store');
     return results;
+  }
+
+  // Method to get an item by ID from the database
+  static async getItemById(itemId) {
+    const conn = await getDBConnection();
+    const [results] = await conn.query('SELECT * FROM store WHERE id = ?', [itemId]);
+    return results[0];
+  }
+
+  // Method to update the quantity of an item in the database
+  static async updateItemQuantity(itemId, purchasedQuantity) {
+    const conn = await getDBConnection();
+    await conn.query(
+      'UPDATE store SET quantity = quantity - ? WHERE id = ?',
+      [purchasedQuantity, itemId]
+    );
   }
 }
 

@@ -1,3 +1,4 @@
+// create.app.js
 const express = require('express');
 const session = require('express-session');
 const Handlebars = require('handlebars');
@@ -10,7 +11,7 @@ const {
   staticRouter,
   viewsRouter,
   contactRouter,
-  storeRouter,  
+  storeRouter,
 } = require('./routes');
 const { errorHandler, reroute, replaceImports } = require('./middleware');
 
@@ -57,7 +58,7 @@ function createApp() {
   app.use(replaceImports);
   app.use(reroute);
 
-  // Custom handlebar handlers that we can use in our hbs files!
+  // Custom Handlebars helpers
   Handlebars.registerHelper('ifEquals', (value1, value2, options) => {
     if (value1 === value2) {
       return options.fn(this); // Render the block if true
@@ -72,12 +73,20 @@ function createApp() {
       return options.inverse(this); // Render the inverse block if false
     }
   });
+  Handlebars.registerHelper('formatDate', function (datetime, format) {
+    const date = new Date(datetime);
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+  });
+  Handlebars.registerHelper('formatPrice', function (price) {
+    return parseFloat(price).toFixed(2);
+  });
 
   // Set the view engine.
   app.engine('hbs', engine({
     extname: '.hbs',
     layoutsDir: path.join(__dirname, 'public'),
-    defaultLayout: false, // Stop it from having defualt layouts.
+    defaultLayout: false, // Stop it from having default layouts.
     helpers: Handlebars.helpers
   }));
   app.set('view engine', 'hbs');
@@ -86,7 +95,7 @@ function createApp() {
   // Routers
   app.use('/api/', userRouter);
   app.use('/api/', contactRouter);
-  app.use('/api/store', storeRouter);  
+  app.use('/api/store', storeRouter);
   app.use(viewsRouter);
   app.use(staticRouter);
 

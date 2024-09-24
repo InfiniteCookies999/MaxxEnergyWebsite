@@ -2,7 +2,6 @@ let items = [];
 
 async function loadStoreItems() {
   try {
-    // Fetch items from the server
     const response = await fetch('/api/store/items');
     items = await response.json();
 
@@ -18,19 +17,18 @@ async function loadStoreItems() {
               <h5 class="card-title">${item.name}</h5>
               <p class="card-text">${item.description}</p>
               <p class="text-success fs-1">$${(item.price / 100).toFixed(2)}</p>
-              <button class="btn btn-primary mt-auto buy-now-btn" data-id="${item.id}">Buy Now</button>
+              <p class="card-text" style="color: gray;">Stock: ${item.quantity}</p>
+              <button class="btn btn-primary mt-auto buy-now-btn" data-id="${item.id}">Add Item To Cart</button>
             </div>
           </div>
         </div>`;
       storeContainer.innerHTML += itemHTML;
     }
 
-    // Add event listeners to "Buy Now" buttons
     const buyNowButtons = document.getElementsByClassName('buy-now-btn');
     for (let i = 0; i < buyNowButtons.length; i++) {
       buyNowButtons[i].addEventListener('click', addToCart);
     }
-
   } catch (error) {
     console.error('Error loading store items:', error);
   }
@@ -53,6 +51,7 @@ function addToCart(event) {
 
     localStorage.setItem('cart', JSON.stringify(cart));
     alert(`${item.name} has been added to your cart!`);
+    loadCartItems();  
   }
 }
 
