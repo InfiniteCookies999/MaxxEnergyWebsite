@@ -1,0 +1,27 @@
+.add-ban-btn {
+  margin-left: 1rem;
+  font-size: 1.2rem;
+  background-color: var(--site-blue-color);
+  color: white;
+}
+
+#ban-user-popup .confirm-popup {
+  width: 20rem;
+}
+
+#confirm-ban-btn, #ban-selection-type-dropdwon, #cancel-ban-btn, .ban-btns {
+  display: inline !important;
+  align-self: flex-start !important;
+}
+
+.ban-btns {
+  margin-top: 1rem;
+}
+
+#ban-input {
+  margin-top: 1rem;
+}
+
+#ban-selection-type-dropdwon {
+  margin-top: 1rem;
+}

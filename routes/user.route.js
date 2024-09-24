@@ -5,7 +5,8 @@ const {
   validateBody,
   validateLoggedIn,
   validateFileExists,
-  fileFilter
+  fileFilter,
+  validateUserIds
 } = require('../middleware'); 
 const { body, query } = require('express-validator');
 const COUNTIES = require('./counties');
@@ -260,7 +261,8 @@ router.get('/user/check-password-reset-token/:token',
 );
 
 router.get('/user/users',
-  query('page').notEmpty().withMessage("The page cannot be empty"),
+  query('page').notEmpty().withMessage("The page cannot be empty")
+    .isInt(),
   query('email').optional(),
   query('name').optional(),
   query('phone').optional(),
@@ -330,15 +332,6 @@ router.get('/user/users',
     totalPages: Math.ceil(total / pageSize)
   });
 }));
-
-function validateUserIds(fieldName) {
-  return body(fieldName).notEmpty().withMessage("userIds cannot be empty")
-  .isArray({ min: 1 }).withMessage("Expected an array")
-  .bail()
-  .custom((arr) => {
-    return arr.every(e => Number.isInteger(e));
-  }).withMessage("All elements must be integers");
-}
 
 router.delete('/user',
   validateUserIds('userIds'),

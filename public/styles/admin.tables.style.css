@@ -130,3 +130,20 @@ body {
   color: rgb(73, 73, 73) !important;
   cursor: pointer;
 }
+
+.send-all-check-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.send-all-check-group label::before,
+.send-all-check-group input[type='checkbox']:checked + label::before {
+  margin-left: 1rem;
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.send-all-check-group label {
+  color: gray;
+}

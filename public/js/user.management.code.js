@@ -34,6 +34,19 @@ function addToRoleGroup(group, role, userId) {
     `);
 }
 
+function getEmails() {
+  const emails = [];
+  $('.better-checkbox input:not(#send-to-all-checkbox)').each(function() {
+    
+    const checkbox = $(this);
+    if (checkbox.is(":checked")) {
+      const email = checkbox.closest("tr").attr('user-email');
+      emails.push(email);
+    }
+  });
+  return emails;
+}
+
 $(document).ready(() => {
   createTable('/user/users', (tableBody, res) => {
     for (const user of res.users) {
@@ -56,6 +69,10 @@ $(document).ready(() => {
                   <span>${role.roleName}</span>
                 </div>
               `).join('')}
+            </td>
+            <td>
+              ${user.emailVerified ? `<span class="email-verified-true">True</span>`
+                                   : `<span class="email-verified-false">False</span>`}
             </td>
             <td class="audit-log-col">
                 <i class='bx bx-food-menu'></i>
@@ -91,6 +108,8 @@ $(document).ready(() => {
   (enable) => {
     const roleAddBtn = $('.bxs-shield-plus');
     const passResetBtn = $('#password-reset-btn');
+    const reqAuditLogsBtn = $('.req-audit-logs-btn');
+    reqAuditLogsBtn.prop('disabled', !enable);
     if (enable) {
       roleAddBtn.css("color", "var(--site-blue-color)");
       roleAddBtn.addClass('role-can-add');
@@ -186,7 +205,7 @@ $(document).ready(() => {
     $('#added-roles-group').empty();
 
     let checkedUserCount = 0;
-    $('.better-checkbox input').each(function() {
+    $('.better-checkbox input:not(#send-to-all-checkbox)').each(function() {
       
       const checkbox = $(this);
       if (checkbox.is(":checked")) {
@@ -385,15 +404,7 @@ $(document).ready(() => {
     $('#popup-confirm-btn2').css("display", "none");
     $('#popup-cancel-btn2').prop('disabled', true);
 
-    const emails = [];
-    $('.better-checkbox input').each(function() {
-      
-      const checkbox = $(this);
-      if (checkbox.is(":checked")) {
-        const email = checkbox.closest("tr").attr('user-email');
-        emails.push(email);
-      }
-    });
+    const emails = getEmails();
     
     const baseUrl = $('[base-url]').attr('base-url');
 
@@ -418,4 +429,145 @@ $(document).ready(() => {
         console.error('One or more requests failed', textStatus, errorThrown);
       });
   });
+
+  // Sending emails.
+  createLoadAnimation(document.getElementById("load-animation3"));
+
+  const areEmailsValid = () => {
+    const toEmails = $('#to-email-input').val()
+      .split(',')
+      .map(e => e.trim());
+    const areValid = toEmails.filter(e => !e.toLowerCase().match(EMAIL_PATTERN)).length === 0;
+    return areValid;
+  };
+
+  $(document).on('change', '.better-checkbox input', () =>{
+    let oneChecked = false;
+    $('.better-checkbox input').each(function() {
+      if ($(this).is(":checked")) {
+        oneChecked = true;
+      }
+    });
+    if (oneChecked) {
+      $('.send-email-btn').prop('disabled', false);
+    } else {
+      $('.send-email-btn').prop('disabled', true);
+    }
+  });
+  
+  $('#send-to-all-checkbox').change(function() {
+    const sendEmailBtn = $('.send-email-btn');
+    if ($(this).is(":checked")) {
+      sendEmailBtn.prop("disabled", false);
+    } else {
+      sendEmailBtn.prop("disabled", true);
+    }
+  });
+
+  $('.send-email-btn').click(() => {
+    const toInput = $('#to-email-input');
+
+    if ($('#send-to-all-checkbox').is(":checked")) {
+      toInput.val("to all users");
+      toInput.prop('disabled', true);
+    } else {
+      const emails = getEmails();
+
+      toInput.prop('disabled', false);
+      toInput.val(emails.join(', '));
+    }
+    
+    $('#email-subject-input').val("");
+    $('#email-body').val("");
+
+    $('#send-email-popup').show();
+  });
+
+  $('#email-subject-input, #to-email-input, #email-body').keyup(() => {
+    const toAllEmails = $('#send-to-all-checkbox').is(":checked");
+    
+    const sendOffBtn = $('.send-off-emails');
+    const emailSubject = $('#email-subject-input').val();
+    const toEmails = $('#to-email-input').val();
+    const emailBody = $('#email-body').val();
+    const emailsValid = toAllEmails ? true : areEmailsValid();
+    if (!emailsValid) {
+      $('#to-email-input').addClass('is-invalid');
+    } else {
+      $('#to-email-input').removeClass('is-invalid');
+    }
+
+    
+    if (emailSubject === '' || toEmails === '' ||
+        emailBody === '' || !emailsValid) {
+      // cannot send
+      sendOffBtn.prop("disabled", true);
+    } else {
+      // can send!
+      sendOffBtn.prop("disabled", false);
+    }
+  });
+
+  $('#popup-cancel-btn3').click(() => {
+    $('#send-email-popup').hide();
+  });
+
+  $('.send-off-emails').click(() => {
+    const emailSubject = $('#email-subject-input').val();
+
+    let sendToAll = $('#send-to-all-checkbox').is(":checked");
+    const toEmails = !sendToAll ? $('#to-email-input').val().split(',').map(e => e.trim()) : null;
+    const emailBody = $('#email-body').val();
+
+    const baseUrl = $('[base-url]').attr('base-url');
+    
+    $('#load-animation3').css("display", "inline");
+    $('.send-off-emails').css("display", "none");
+    $('#popup-cancel-btn3').prop('disabled', true);
+
+    $.ajax({
+      type: 'POST',
+      url: baseUrl + '/api/send-email',
+      contentType: 'application/json; charset=utf-8',
+      data: JSON.stringify({
+        ...(!sendToAll && { emails: toEmails }),
+        sendToAll: sendToAll,
+        subject: emailSubject,
+        body: emailBody
+      }),
+      success: () => {
+        $('#load-animation3').css("display", "none");
+        $('.send-off-emails').css("display", "inline");
+        $('#popup-cancel-btn3').prop('disabled', false);
+        $('#send-email-popup').hide();
+      },
+      error: (res) => {
+        processServerErrorResponse(res);
+      }
+    });
+  });
+
+  // Requesting audit logs.
+  $('.req-audit-logs-btn').click(() => {
+
+    const ids = getIds();
+
+    const baseUrl = $('[base-url]').attr('base-url');
+
+    $.ajax({
+      type: 'POST',
+      url: baseUrl + '/api/send-audit-logs',
+      contentType: 'application/json; charset=utf-8',
+      data: JSON.stringify({
+        userIds: ids
+      }),
+      success: () => {
+        $('.audit-log-send-msg').show();
+      },
+      error: (res) => {
+        processServerErrorResponse(res);
+      }
+    });
+  });
+
 });
