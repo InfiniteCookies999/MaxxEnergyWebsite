@@ -1,3 +1,4 @@
+// server.js
 const bcrypt = require('bcryptjs');
 const createApp = require('./create.app');
 const config = require('./config');
@@ -9,7 +10,8 @@ const {
   PasswordResetRepository,
   UserRoleRepository,
   AuditLogRepository,
-  StoreRepository,  
+  StoreRepository,
+  PurchasesRepository,
   BannedRepository,
 } = require('./database');
 const { EmailService } = require('./services');
@@ -167,7 +169,8 @@ async function mockDatabase() {
   await PasswordResetRepository.initialize();
   await UserRoleRepository.initialize();
   await AuditLogRepository.initialize();
-  await StoreRepository.initialize();  
+  await StoreRepository.initialize();
+  await PurchasesRepository.initialize();
   await BannedRepository.initialize();
 
   await EmailService.initialize();

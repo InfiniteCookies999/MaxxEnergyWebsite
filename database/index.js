@@ -1,3 +1,4 @@
+// database/index.js
 const getDBConnection = require('./connection');
 const UserRepository = require('./user.repository');
 const User = require('./user.model');
@@ -10,6 +11,7 @@ const UserRole = require('./user.role.model');
 const UserRoleRepository = require('./user.role.repository');
 const AuditLogRepository = require('./audit.log.repository');
 const StoreRepository = require('./store.repository');
+const PurchasesRepository = require('./purchases.repository');
 const BannedRepository = require('./banned.repository.js');
 
 module.exports = {
@@ -26,5 +28,6 @@ module.exports = {
   UserRoleRepository,
   AuditLogRepository,
   StoreRepository,
+  PurchasesRepository,
   BannedRepository
 };

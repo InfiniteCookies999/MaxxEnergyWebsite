@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const { controller } = require('../middleware'); 
 const { UserService, FileService } = require('../services');
-const { UserRepository, UserRoleRepository, ContactRepository, AuditLogRepository } = require('../database');
+const { UserRepository, UserRoleRepository, ContactRepository, PurchasesRepository } = require('../database');
 const config = require('../config');
 
 const router = express.Router();
@@ -45,10 +45,22 @@ router.get('/contact', controller(async (_, res) => {
   });
 }));
 
+// Admin purchases route (New)
+router.get('/admin/purchases', controller(async (req, res) => {
+  if (!(await isAdmin(req))) {
+    return res.redirect(`/${getReroute()}`);
+  }
+
+  const purchases = await PurchasesRepository.getAllPurchases();
+
+  res.render('purchases', {
+    purchases: purchases
+  });
+}));
+
 // User profile route
 router.get('/user-profile', controller(async (req, res) => {
   if (!req.session.user) {
-    // Cannot display the user's profile page if the user is not even logged in
     return res.redirect(`/${getReroute()}`);
   }
 
@@ -64,7 +76,6 @@ router.get('/user-profile', controller(async (req, res) => {
     .substring(1);
 
   res.render('user-profile', {
-    // User information
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,
@@ -78,7 +89,6 @@ router.get('/user-profile', controller(async (req, res) => {
     acceptedMimeTypes: acceptedMimeTypes,
     emailVerified: user.emailVerified,
 
-    // Form restrictions
     maxNameLength: UserRepository.maxNameLength(),
     maxAddressLineLength: UserRepository.maxAddressLineLength(),
     maxPasswordLength: UserRepository.maxPasswordLength()
@@ -88,7 +98,6 @@ router.get('/user-profile', controller(async (req, res) => {
 // Login route
 router.get('/login', controller(async (req, res) => {
   if (req.session.user) {
-    // The user is already logged in, so redirect them to the home page
     return res.redirect(`/${getReroute()}`);
   }
 
@@ -98,7 +107,6 @@ router.get('/login', controller(async (req, res) => {
 // Register route
 router.get('/register', controller(async (req, res) => {
   if (req.session.user) {
-    // The user is already logged in, so redirect them to the home page
     return res.redirect(`/${getReroute()}`);
   }
 
